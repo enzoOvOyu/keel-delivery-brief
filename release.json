@@ -1,0 +1,33 @@
+{
+  "version": "v1.4.0",
+  "release_date": "2026-10-26",
+  "repository": "https://github.com/enzoOvOyu/keel-delivery-brief",
+  "git_tag": "v1.4.0",
+  "reading_version": "1.4-actions",
+  "model_version": "1.1-collection-review",
+  "environment": {
+    "node": "22.23.3",
+    "alpine": "3.24.2",
+    "docker_engine": "29.9.0",
+    "python": "3.14.4",
+    "container_name": "keel-delivery-brief-web",
+    "port": 8080,
+    "base_image": "node:22-alpine@sha256:0a7108bf6c7bf5de370ffb1a3ed6be93d405b43ff159f681a8d18c0e2bc2e402",
+    "image": "keel-delivery-brief:v1.4.0"
+  },
+  "contents": {
+    "flows": 32,
+    "substeps": 13,
+    "data_categories": 42,
+    "diagrams": 6
+  },
+  "validation": {
+    "status": "passed",
+    "fixed_cases": 47,
+    "structural_checks": 15,
+    "action_cmdb_checks": 48,
+    "detected_mutations": 6,
+    "browser_check": "45 cards; 42 data categories; 6 diagrams; desktop and 390px; links, field switching, deep links and load failure verified locally",
+    "scope": "Static guide and finite review models; simulated hardware data; no production device or TLC verification"
+  }
+}

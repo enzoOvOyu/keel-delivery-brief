@@ -1,0 +1,6467 @@
+{
+  "version": "1.4-actions",
+  "stages": [
+    {
+      "id": "1",
+      "name": "网络底座",
+      "summary": "建立物料、配置与网络证据",
+      "flows": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "brief": {
+        "owner": "客户与网络工程师商定方案；平台执行开通与核验。配置由网络工程师、交付工程师审批，关键变更追加网络负责人。",
+        "admission": "物料、型号与商定基线可引用；各流程分别核对介质、权限、管理通道和审批条件。",
+        "scope": "本次实施批次内的交换机、物理端口、线缆、光模块及配置版本。",
+        "evidence": "开通回执、接线预校验、配置比对、健康与无损证据，以及网络交付包。",
+        "consumers": "3.3 使用接线与配置证据；3.5 核对网络配置意图；第 4、5 步按范围使用健康与无损证据。",
+        "recovery": "定位到受影响设备或端口，登记工单并定向复验；配置结果不明时先对账，新计划重新审批。",
+        "boundary": "网络方案由客户与网络工程师提供。各项产物按需交接；网络侧与装机可以并行。"
+      }
+    },
+    {
+      "id": "2",
+      "name": "装机",
+      "summary": "安装系统、验证通道并收集硬件清单",
+      "flows": [
+        "H01",
+        "H07"
+      ],
+      "brief": {
+        "owner": "交付工程师组织装机与异常处理，平台执行安装、身份注册和 SSH 首次连接验证。",
+        "admission": "物料绑定型号，镜像已审批且兼容，命名规则确定，安装前硬件检查与执行权限满足。",
+        "scope": "本次装机请求选定的服务器，以及绑定的镜像、驱动和身份注册记录。",
+        "evidence": "2.1 提供系统、注册与 SSH 证明；2.2 提供 BMC／OS 分源硬件清单、采集时间与质量。",
+        "consumers": "2.2 使用执行通道采集；3.1 按物料和型号核验清单；0.2 CMDB 接收装机与采集记录。",
+        "recovery": "预检失败先补齐条件；互信失败进入受控修复。重装保留物理身份，并重新核验相关后续证据。",
+        "boundary": "2.1 安装与互信 → 2.2 采集原始清单；收集完成与 3.1 硬件核验通过分别记录。"
+      }
+    },
+    {
+      "id": "3",
+      "name": "验机与基线配置",
+      "summary": "核验硬件、接线、映射和配置",
+      "flows": [
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H06"
+      ],
+      "brief": {
+        "owner": "平台执行采集、比对与配置验证；网络工程师处理接线差异；交付组长完成接线最终确认。",
+        "admission": "从已安装且通道可用的服务器开始；拓扑、接线、映射与配置分别核对各自的输入及有效版本。",
+        "scope": "服务器的 GPU、网卡、稳定物理端口、机内拓扑、外部接线与基线配置。",
+        "evidence": "硬件与拓扑快照、四步接线确认、不可变映射，以及配置应用、读回与验证证明。",
+        "consumers": "3.4 消费接线确认，3.5 消费映射；4.1 使用适用于本次目标的映射和基线配置证明。",
+        "recovery": "按差异进入 0.1；接线重采从 3.3.2 开始，拓扑变化先回 3.2，配置失败按组件能力恢复并验证。",
+        "boundary": "3.3 的端口对通过、交付组长最终确认和 3.4 映射发布是三个不同的完成事实。"
+      }
+    },
+    {
+      "id": "4",
+      "name": "网络测试",
+      "summary": "按范围验证链路与负载表现",
+      "flows": [
+        "T00",
+        "T01",
+        "T02",
+        "T03",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "brief": {
+        "owner": "平台执行分层检查与证据汇总；交付工程师组织测试，网络工程师处理网络差异，交付组长确认允许的豁免。",
+        "admission": "本次范围内映射、基线配置和网络证明有效，就绪状态新鲜；权限、资源及普通测试的阻断检查满足。",
+        "scope": "明确目标、网卡配对与路径、测试档位、流量类及对应负载和观测窗口。",
+        "evidence": "链路、IP、RDMA、多流与无损检查结果，以及绑定范围、版本和期限的网络测试证明。",
+        "consumers": "5.1 按通信组所需路径和档位核验准入；5.6 使用网络基线和观测追踪失败原因。",
+        "recovery": "保留失败和缺测明细，只复测受影响范围；补齐覆盖与观测后重新汇总，豁免保留批准范围和原结论。",
+        "boundary": "4.2～4.6 表示检查维度。层间调度、覆盖算法、窗口与部分判据仍待确认。"
+      }
+    },
+    {
+      "id": "5",
+      "name": "NCCL 测试与评审",
+      "summary": "运行通信组并评审交付证据",
+      "flows": [
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "N05",
+        "N06",
+        "N07",
+        "N08"
+      ],
+      "brief": {
+        "owner": "平台按通信组执行测试与结果回收；交付工程师组织分析，相关工程师处置差异，交付组长评审报告与调优清单。",
+        "admission": "交付测试所需网络证据适用，软件、介质、参数与基线齐备；全组资源、成员和启动条件一致。",
+        "scope": "冻结成员、GPU／网卡、rank、算子、消息大小、软件版本和档位的一次通信组及其执行尝试。",
+        "evidence": "整组原始结果、检测场景矩阵、报告、失败分析、调优清单与报告评审证明。",
+        "consumers": "报告供工程师定位和交付组长评审；评审通过解锁后续优雅退出，清理、撤权和归档继续单独完成。",
+        "recovery": "执行失败创建新的整组尝试，补测后评审新报告；纯机内诊断不能代替交付评审通过。",
+        "boundary": "分组覆盖与全域单通信组分别报告；网络路径吞吐和 NCCL 通信组带宽分别解释。"
+      }
+    }
+  ],
+  "common": {
+    "id": "0",
+    "name": "公共流程",
+    "summary": "修复按需进入；CMDB 全过程消费源记录",
+    "flows": [
+      "R01",
+      "C01"
+    ]
+  },
+  "flows": [
+    {
+      "purpose": "建立可引用的稳定对象与期望连接。",
+      "resources": "导入包、字段映射、型号版本、凭据引用；凭据值不入报告。",
+      "guards": "包完整、引用可唯一解析、格式／一致性／工程校验无BLOCK；不得用单文件宽表冒充网络物料准备。",
+      "actions": "只读预览→确认提交；标准包服务器与网络物料同事务提交；生成稳定实体与差异清单。",
+      "post": "同版本同摘要幂等；同号异摘要不能覆盖；端口和breakout子口可在映射发布验收前被引用。",
+      "failure": "BLOCK阻断提交，WARN进入问题清单；不写半套服务器／网络关系。",
+      "retry": "修正后以新版本重导，不覆盖历史。",
+      "invalidation": "BOM／型号／位置关系变化影响下游相应对象。",
+      "note": "",
+      "code": "1.1",
+      "stage": "1",
+      "title": "导入物料与连接计划",
+      "id": "F01",
+      "inputs": [
+        "project",
+        "model",
+        "auth"
+      ],
+      "outputs": [
+        "bom"
+      ],
+      "decisions": [],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "客户提供清单；网络工程师确认；平台建模",
+        "action": "导入两台 B300、一台 SN5610 及端口接线计划，为设备、部件和端口分配稳定身份。",
+        "raw": [
+          {
+            "name": "machine_id / model_version_ref",
+            "type": "ID / VersionRef",
+            "value": "A、B → DGX-B300 r1；SW → SN5610 r1",
+            "source": "批准物料表与独立型号"
+          },
+          {
+            "name": "port_pairs",
+            "type": "PortPair[]",
+            "value": "A.c1↔SW.c01 … B.c8↔SW.c16，共 16 对",
+            "source": "批准连接计划"
+          },
+          {
+            "name": "serial_number / rack_position",
+            "type": "string / object",
+            "value": "SIM-A、SIM-B、SIM-SW；机柜与 U 位按物料记录",
+            "source": "客户清单；模拟序列号"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "设备与连接数量",
+            "expected": "3 台设备；16 条线缆；32 个启用端点",
+            "observed": "3 / 16 / 32，按稳定 ID 去重",
+            "result": "PASS",
+            "rule": "不能按导入行数直接计数"
+          },
+          {
+            "item": "引用质量",
+            "expected": "每个端点唯一绑定设备和物理端口",
+            "observed": "32/32 可解析，无重复或悬空",
+            "result": "PASS",
+            "rule": "位置／角色符合型号，禁止从待测接线反写期望"
+          }
+        ],
+        "output": "BOM r1：设备／部件／端口实体、型号版本、期望连接。未采集的数据仍标待观测。",
+        "use": "后续步骤使用稳定 ID 和期望集合；CMDB 建立资产索引。",
+        "recovery": "重复身份或悬空端点先修导入包，发布新物料修订。",
+        "output_refs": [
+          "bom"
+        ],
+        "routes": [
+          {
+            "artifact_id": "bom",
+            "consumers": [
+              "F02",
+              "F04",
+              "F05",
+              "F06",
+              "F07",
+              "F08",
+              "H01",
+              "H07",
+              "H02",
+              "H04",
+              "H05",
+              "R01",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "把已经商定的网络方案转换成可执行批次和配置输入。",
+      "resources": "已发布模板、变量、IPAM规则、角色与breakout方案。",
+      "guards": "商定基线可引用；模板和变量匹配，版本依赖齐备。",
+      "actions": "按导入规则绑定地址、命名、模板、角色与实施批次；不替客户设计网络。",
+      "post": "每个配置变量可追溯到商定基线或允许的默认值；设备集合和顺序可解释。",
+      "failure": "缺方案／变量拒绝渲染；禁止猜测DSCP或rail。",
+      "retry": "修正模板或绑定后重新渲染新版本。",
+      "invalidation": "模板／意图／角色／参数版本变化使相关渲染失效。",
+      "note": "",
+      "code": "1.2",
+      "stage": "1",
+      "title": "制定网络实施计划",
+      "id": "F02",
+      "inputs": [
+        "project",
+        "model",
+        "bom",
+        "policy"
+      ],
+      "outputs": [
+        "plan"
+      ],
+      "decisions": [],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "网络工程师制定；有权角色审批",
+        "action": "把案例接线方案转换成交换机端口、地址、角色和配置批次。",
+        "raw": [
+          {
+            "name": "enabled_ports / unused_ports",
+            "type": "ID[] / ID[]",
+            "value": "SW.c01…c16 / SW.c17…c64",
+            "source": "BOM r1"
+          },
+          {
+            "name": "rail / address_plan",
+            "type": "object[]",
+            "value": "8 个 rail；每个 rail 关联 A、B 各一端点",
+            "source": "批准网络设计"
+          },
+          {
+            "name": "config_intent_ref",
+            "type": "VersionRef",
+            "value": "network-intent r1",
+            "source": "批准模板与变量"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "端口覆盖",
+            "expected": "64 个集群端口分类明确",
+            "observed": "16 enabled + 48 unused = 64",
+            "result": "PASS",
+            "rule": "管理口、存储口单独分类；不能混入计算端口分母"
+          },
+          {
+            "item": "配置质量",
+            "expected": "同 rail 地址、VLAN、MTU 与 QoS 意图无冲突",
+            "observed": "已批准计划内无重复地址或角色冲突",
+            "result": "PASS",
+            "rule": "具体值由项目策略决定，不能靠硬件型号猜测"
+          }
+        ],
+        "output": "plan r1：实施批次、地址与角色表、模板摘要、批准意图。",
+        "use": "开通与配置按批次执行，验机与测试按端口角色选择对象；CMDB 保存计划引用。",
+        "recovery": "冲突时退回网络工程师修订并重新审批受影响范围。",
+        "output_refs": [
+          "plan"
+        ],
+        "routes": [
+          {
+            "artifact_id": "plan",
+            "consumers": [
+              "F03",
+              "F04",
+              "F06",
+              "F08",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "证明引导、采集和分发依赖可用。",
+      "resources": "Kea、引导服务、采集器、仓库与管理通道。",
+      "guards": "目标批次和已审批介质确定。",
+      "actions": "执行环境自检，记录每个依赖的结果及时间。",
+      "post": "必需自检项全绿才可进入交换机开通；检查完成不代表设备已开通。",
+      "failure": "缺服务／凭据／介质则阻断对应开通批次。",
+      "retry": "修复依赖后重查；不缓存永久ready。",
+      "invalidation": "环境／凭据／介质变化需重新检查。",
+      "note": "",
+      "code": "1.3",
+      "stage": "1",
+      "title": "检查开通环境",
+      "id": "F03",
+      "inputs": [
+        "plan",
+        "media",
+        "auth"
+      ],
+      "outputs": [
+        "env"
+      ],
+      "decisions": [],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台检查；交付工程师补齐环境",
+        "action": "从执行节点探测引导、镜像下载、名称解析、时间同步和采集入口。",
+        "raw": [
+          {
+            "name": "checks",
+            "type": "object[]",
+            "value": "引导／HTTP／DNS／时钟／采集通道，共 5 项示例检查",
+            "source": "执行节点探测"
+          },
+          {
+            "name": "response / checked_at",
+            "type": "object / Time",
+            "value": "HTTP 200；摘要匹配；时间戳已保存",
+            "source": "探测原始回执"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "检查覆盖",
+            "expected": "本批计划定义的 5 项必需检查",
+            "observed": "5/5 有回执",
+            "result": "PASS",
+            "rule": "生产检查清单由所选引导方式决定"
+          },
+          {
+            "item": "结果质量",
+            "expected": "服务可达且内容、时钟满足已批准要求",
+            "observed": "5/5 符合本案例配置",
+            "result": "PASS",
+            "rule": "仅有 ping 或 HTTP 200 不证明镜像内容正确"
+          }
+        ],
+        "output": "env：各探测项、目标、时间、响应摘要与失败原因。",
+        "use": "交换机开通消费实际可用的引导与分发能力；CMDB 关联实施环境证据。",
+        "recovery": "按失败项修环境并复测，不伪装为设备故障。",
+        "output_refs": [
+          "env"
+        ],
+        "routes": [
+          {
+            "artifact_id": "env",
+            "consumers": [
+              "F04",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "使交换机身份可信且具备最小管理能力。",
+      "resources": "Kea／ZTP／SZTP、批准的引导脚本、网络设备凭据。",
+      "guards": "环境就绪；身份匹配，无SN／MAC冲突；引导仅包含批准的最小隔离／管理配置。",
+      "actions": "识别身份→下发引导数据→记录各步回执与可管理状态；ZTP完成与业务配置同步分开记录。",
+      "post": "ZTP 开通完成证明设备已开通；配置就绪还须有预期与实际配置的比对证据。管理可达的中间事实可以供后续预检读取，不等于整个开通流程通过。",
+      "failure": "未命中隔离、冲突拒绝；失败保留阶段原因。",
+      "retry": "按引导策略有限重试；换SN走批准的换件身份流程。",
+      "invalidation": "身份／介质／设备替换影响后续证明。",
+      "note": "",
+      "code": "1.4",
+      "stage": "1",
+      "title": "开通交换机管理通道",
+      "id": "F04",
+      "inputs": [
+        "bom",
+        "plan",
+        "env",
+        "media",
+        "auth"
+      ],
+      "outputs": [
+        "bootstrap"
+      ],
+      "decisions": [],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台开通；网络工程师确认设备身份",
+        "action": "给 SN5610 下发最小管理配置，读取序列号并验证管理通道。",
+        "raw": [
+          {
+            "name": "machine_id / serial_number",
+            "type": "ID / string",
+            "value": "machine-sn5610-1 / SIM-SW",
+            "source": "设备回读与批准物料"
+          },
+          {
+            "name": "boot_receipt / management_probe",
+            "type": "object / object",
+            "value": "开通完成；管理地址可达；认证通过",
+            "source": "引导器与独立管理探测"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "开通覆盖",
+            "expected": "1 台目标交换机",
+            "observed": "1/1 身份确认并有回执",
+            "result": "PASS",
+            "rule": "收到回调还要核对请求与设备绑定"
+          },
+          {
+            "item": "可用性边界",
+            "expected": "管理配置读回一致",
+            "observed": "管理通道可用；生产端口尚未证明",
+            "result": "PASS",
+            "rule": "管理可达不能自动判计算网络通过"
+          }
+        ],
+        "output": "bootstrap：身份绑定、开通回执、管理探测及配置版本。",
+        "use": "接线采集与生产配置使用管理通道；CMDB 关联交换机身份与开通历史。",
+        "recovery": "失败先核对实际配置与回执；避免超时后盲目重放初始化。",
+        "output_refs": [
+          "bootstrap"
+        ],
+        "routes": [
+          {
+            "artifact_id": "bootstrap",
+            "consumers": [
+              "F05",
+              "F06",
+              "F08",
+              "H04",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "检查当前可观测网络连接，保留尚未出现的服务器观测缺口。",
+      "resources": "交换机LLDP／FDB／ARP／接口／DDM读取能力。",
+      "guards": "BOM端口存在；本次应可观测交换机互联的采集能力可用。",
+      "actions": "对已可观测链路与BOM比较；未装OS的服务器接入口保持pending。",
+      "post": "服务器端口对不能在此获得已确认接线关系 PASS；FDB／ARP不是三方LLDP的替代。",
+      "failure": "明确差异按分类故障开单；必需证据缺失标unknown。",
+      "retry": "受影响链路增量复采，不扩大到所有设备。",
+      "invalidation": "接线／端口／BOM改变使受影响预校验失效。",
+      "note": "",
+      "code": "1.5",
+      "stage": "1",
+      "title": "预校验网络侧接线",
+      "id": "F05",
+      "inputs": [
+        "bom",
+        "bootstrap",
+        "observations"
+      ],
+      "outputs": [
+        "pre_cable"
+      ],
+      "decisions": [],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台读取；现场工程师处理差异",
+        "action": "读取 SN5610 的 LLDP 邻居与端口状态，对照计划标记已观察和待服务器上线的连接。",
+        "raw": [
+          {
+            "name": "neighbors / source",
+            "type": "object[] / enum",
+            "value": "16 个计算端口中 8 个读到邻居；source=switch",
+            "source": "SN5610 LLDP 回读"
+          },
+          {
+            "name": "collection_status",
+            "type": "enum",
+            "value": "success；另外 8 个当前窗口没有邻居",
+            "source": "有效采集回执"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "观测覆盖",
+            "expected": "16 个计划连接",
+            "observed": "已观测 8，待观测 8",
+            "result": "BLOCKED",
+            "rule": "未上线端口保留缺口，不产生最终接线通过"
+          },
+          {
+            "item": "采集质量",
+            "expected": "超时与成功但无邻居分别记录",
+            "observed": "成功读取后无邻居，不是采集超时",
+            "result": "PASS",
+            "rule": "这条质量检查通过不等于接线通过"
+          }
+        ],
+        "output": "pre_cable：每端口的期望、交换机实测、差异及待核验列表。",
+        "use": "3.3 补齐主机与交换机双侧证据后正式比对；CMDB 收录包括缺口在内的预校验记录。",
+        "recovery": "待服务器上线后重采；确认接错才登记接线差异，不能凭无邻居猜断线。",
+        "output_refs": [
+          "pre_cable"
+        ],
+        "routes": [
+          {
+            "artifact_id": "pre_cable",
+            "consumers": [
+              "F08",
+              "H04",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "证明批准配置已在交换机生效。",
+      "resources": "配置预校验、快照、结构化diff、分析／预演、审批、配置下发任务与独占设备租约。",
+      "guards": "设备管理通道可用；首次开通检查身份与隔离态，不要求未装机服务器LLDP完整；未批准不得下发。",
+      "actions": "渲染→配置预校验→备份／比对→修复计划→分析／预演→预检与审批→灰度下发→复采验证。",
+      "post": "结合交换机开通记录与配置复采结果判断配置就绪。命令成功不等于配置同步；Major／Minor 级漂移是否允许，仍待确认。",
+      "failure": "任一复核失败阻断；变更失败按能力恢复并保留真实设备状态。",
+      "retry": "新计划或修改后的范围需要新审批；结果不明先对账，不盲重放。",
+      "invalidation": "意图／设备配置／规则变化影响物理接线验收准入及相关基线配置验收／网络测试验收／NCCL 报告评审证据。",
+      "note": "",
+      "code": "1.6",
+      "stage": "1",
+      "title": "应用并核对网络配置",
+      "id": "F06",
+      "inputs": [
+        "bom",
+        "plan",
+        "bootstrap",
+        "media",
+        "auth"
+      ],
+      "outputs": [
+        "net_config"
+      ],
+      "decisions": [
+        "Q7"
+      ],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "网络工程师审批；平台应用并读回",
+        "action": "应用 SN5610 生产配置，再独立读取运行配置和硬件生效状态。",
+        "raw": [
+          {
+            "name": "intended_ref / running_ref",
+            "type": "VersionRef / RecordRef",
+            "value": "network-intent r1 / running-snapshot r1",
+            "source": "批准意图与设备读回"
+          },
+          {
+            "name": "enabled_ports / qos_bindings",
+            "type": "ID[] / object[]",
+            "value": "16 个计算端口的 MTU、速率、队列、PFC／ECN 绑定",
+            "source": "配置解析与硬件回读"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "应用覆盖",
+            "expected": "计划中的 16 个启用端口",
+            "observed": "16/16 有应用及读回记录",
+            "result": "PASS",
+            "rule": "48 个 unused 不当作本次失败端口"
+          },
+          {
+            "item": "意图一致性",
+            "expected": "批准值 = 运行值 = 适用硬件状态",
+            "observed": "16/16 本案例一致",
+            "result": "PASS",
+            "rule": "意图、配置、硬件必须来自相应证据，不能重复读取同一份模板"
+          }
+        ],
+        "output": "net_config：预期／实际快照、差异、应用回执与版本。",
+        "use": "3.3 核对配置就绪；3.5 核对主机与网络 QoS 意图；CMDB 保留配置版本链。",
+        "recovery": "按端口与字段定位漂移；配置同步时序未决项仍保留，不增加隐含门禁。",
+        "output_refs": [
+          "net_config"
+        ],
+        "routes": [
+          {
+            "artifact_id": "net_config",
+            "consumers": [
+              "F07",
+              "F08",
+              "H04",
+              "H06",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "提供网络准入事实和可被测试消费的观测证据。",
+      "resources": "BGP／PTP／DDM、PFC／ECN／CNP／队列／缓冲／丢包能力与规则版本。",
+      "guards": "配置闭环有效；目标fabric／pod范围已定义；采集来源与能力可识别。",
+      "actions": "检查BGP100%Up／光功率阈内／PTP锁定；评估无损能力和无损规则结论，记录unknown与新鲜度。",
+      "post": "健康未过使网络测试验收／NCCL 报告评审准入BLOCKED；明确降级不是自动允许PASS。运行期新观测仍须绑定本次测试。",
+      "failure": "不可采集为unknown，不能补0；全网范围、PTP适用性、降级规则仍需策略。",
+      "retry": "恢复采集或处理异常后复核；不以规则停用消除unknown。",
+      "invalidation": "网络拓扑／配置／规则变化和新鲜度过期影响下游。",
+      "note": "运行期采集持续进行，观测需要与本次测试关联。具体窗口绑定与采样编排方式仍待确认。",
+      "code": "1.7",
+      "stage": "1",
+      "title": "检查网络健康与无损能力",
+      "id": "F07",
+      "inputs": [
+        "bom",
+        "net_config",
+        "observations",
+        "policy"
+      ],
+      "outputs": [
+        "health",
+        "lossless"
+      ],
+      "decisions": [
+        "Q3",
+        "Q5",
+        "Q6",
+        "Q10"
+      ],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台持续采集；网络工程师核验",
+        "action": "读取端口健康、告警和无损能力，形成测试前能力与状态证据。",
+        "raw": [
+          {
+            "name": "port_state / negotiated_speed",
+            "type": "enum / Metric",
+            "value": "16 个端口 up；800 Gb/s",
+            "source": "SN5610 端口回读"
+          },
+          {
+            "name": "capabilities / samples",
+            "type": "object / object[]",
+            "value": "ECN、PFC、队列深度等分别标 supported／unsupported",
+            "source": "设备能力发现与遥测"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "基础链路",
+            "expected": "16 个启用端口",
+            "observed": "16/16 up 且速率符合案例计划",
+            "result": "PASS",
+            "rule": "up 不证明带负载无损"
+          },
+          {
+            "item": "能力完整性反例",
+            "expected": "被启用规则需要队列深度",
+            "observed": "采集器不支持队列深度",
+            "result": "BLOCKED",
+            "rule": "unsupported 留作能力缺口；不补 0，不自动判正常"
+          }
+        ],
+        "output": "health 与 lossless 分别记录基础健康、能力矩阵、观测窗口、质量与规则结论。",
+        "use": "4.1 消费准入能力；4.6 结合实际负载判定；CMDB 索引观测与趋势。",
+        "recovery": "缺能力时按已批准替代或豁免策略处理；不存在策略则保留阻断范围。",
+        "output_refs": [
+          "health",
+          "lossless"
+        ],
+        "routes": [
+          {
+            "artifact_id": "health",
+            "consumers": [
+              "F08",
+              "T00",
+              "N01",
+              "C01"
+            ],
+            "terminal": ""
+          },
+          {
+            "artifact_id": "lossless",
+            "consumers": [
+              "F08",
+              "T00",
+              "T03",
+              "T05",
+              "N01",
+              "N06",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "生成可核对的网络交付证据包。",
+      "resources": "快照索引、审批豁免、导出一致性复核。",
+      "guards": "适用网络阶段证据完成或有有效豁免；引用和快照一致。",
+      "actions": "先确认网络验收证据，再导出设备、端口、连接、地址、状态与配置版本。",
+      "post": "逐项引用一致率 100%；豁免保留原始结论。本交付包不是启动物理接线核验的额外总门禁。",
+      "failure": "缺引用／版本不一致则拒绝导出完成。",
+      "retry": "补齐同一快照链后重生成新导出版本。",
+      "invalidation": "包保持历史不可变，新状态产生新版本。",
+      "note": "",
+      "code": "1.8",
+      "stage": "1",
+      "title": "验收并导出网络交付包",
+      "id": "F08",
+      "inputs": [
+        "bom",
+        "plan",
+        "bootstrap",
+        "pre_cable",
+        "net_config",
+        "health",
+        "lossless",
+        "human"
+      ],
+      "outputs": [
+        "network_export"
+      ],
+      "decisions": [],
+      "substeps": [
+        {
+          "code": "1.8.1",
+          "title": "确认网络验收证据",
+          "description": "核对适用阶段的完成证据及有效豁免，保留原始结论。",
+          "walkthrough": {
+            "actor": "交付组长核对",
+            "action": "检查所有适用网络阶段证据及有效豁免。",
+            "raw": [
+              {
+                "name": "evidence_refs / waiver_refs",
+                "type": "RecordRef[]",
+                "value": "逐项当前修订与审批范围",
+                "source": "网络域与审批记录"
+              }
+            ],
+            "comparisons": [
+              {
+                "item": "适用项覆盖",
+                "expected": "批准清单内全部必需项",
+                "observed": "无缺项、无过期引用",
+                "result": "PASS",
+                "rule": "清单为空或未批准不能视为完成"
+              }
+            ],
+            "output": "网络验收确认记录，原结论与豁免分列。",
+            "use": "1.8.2 生成导出包；CMDB 收确认记录。",
+            "recovery": "补齐对应阶段缺口后重新核对。"
+          }
+        },
+        {
+          "code": "1.8.2",
+          "title": "导出并移交",
+          "description": "导出设备、端口、互联、地址、状态及配置快照索引，逐项核对引用一致性。",
+          "walkthrough": {
+            "actor": "平台导出并复核",
+            "action": "生成交付包，逐项复核源对象、修订与快照摘要。",
+            "raw": [
+              {
+                "name": "manifest / references",
+                "type": "object[] / RecordRef[]",
+                "value": "交换机 1 台、16 条启用连接及全部端口角色清单",
+                "source": "验收确认与源表"
+              }
+            ],
+            "comparisons": [
+              {
+                "item": "引用一致率",
+                "expected": "100%",
+                "observed": "匹配数等于应核数，分母非零",
+                "result": "PASS",
+                "rule": "少一条或版本错一条均不满足"
+              }
+            ],
+            "output": "network_export 及一致性复核回执。",
+            "use": "客户交接与 CMDB 查询消费。",
+            "recovery": "修复引用后生成新导出修订。"
+          }
+        }
+      ],
+      "checks": [],
+      "walkthrough": {
+        "actor": "网络工程师组织；交付组长确认",
+        "action": "汇总网络设备、端口、接线、地址、配置与健康证据，生成可追溯交付包。",
+        "raw": [
+          {
+            "name": "device_refs / cable_refs",
+            "type": "ObjectRef[]",
+            "value": "SW 1 台、16 条启用连接",
+            "source": "BOM 与网络域源记录"
+          },
+          {
+            "name": "snapshot_refs / waiver_refs",
+            "type": "RecordRef[]",
+            "value": "每项引用明确修订；豁免原样保留",
+            "source": "配置／健康／审批记录"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "清单数量",
+            "expected": "1 台交换机、16 条启用连接",
+            "observed": "1/1；16/16",
+            "result": "PASS",
+            "rule": "设备全部端口清单仍保留角色与 unused 状态"
+          },
+          {
+            "item": "引用一致率",
+            "expected": "全部导出引用都能解析到指定快照",
+            "observed": "匹配引用数 / 应核引用数 = 100%",
+            "result": "PASS",
+            "rule": "分母不得为空；有豁免也不改写原始 FAIL 或 BLOCKED"
+          }
+        ],
+        "output": "network_export：交付基线、清单、快照索引、审批与一致性复核结果。",
+        "use": "客户交接及 CMDB 维护查询消费；不是装机和测试的统一前置。",
+        "recovery": "修复缺失引用或补齐适用证据，再生成新的导出修订。",
+        "output_refs": [
+          "network_export"
+        ],
+        "routes": [
+          {
+            "artifact_id": "network_export",
+            "consumers": [
+              "C01"
+            ],
+            "terminal": "客户移交（外部读者）"
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "把裸机变成身份已确认、可执行采集的服务器。",
+      "resources": "UEFI HTTP Boot／Legacy PXE、HTTP分发、cloud-init、平台SSH公钥、回调令牌。",
+      "guards": "BOM绑定型号、镜像已审批且兼容、hostname规则确定、装机硬件预检通过。",
+      "actions": "安装→启动→绑定请求与身份的注册回调→SSH首连验证。",
+      "post": "OS启动与SSH信任分开确认；只有具备已验证执行通道才进入硬件采集验收。",
+      "failure": "预检失败中断；互信失败进入受控修复，不能冒充装机后可执行。",
+      "retry": "重装保留物理身份但使旧交付证据失效；bootstrap／repair只允许限定初始化动作。",
+      "invalidation": "重装、镜像、主机身份和信任变化影响后续。",
+      "note": "",
+      "code": "2.1",
+      "stage": "2",
+      "title": "安装系统并建立 SSH 互信",
+      "id": "H01",
+      "inputs": [
+        "bom",
+        "model",
+        "project",
+        "media",
+        "auth"
+      ],
+      "outputs": [
+        "host_ready"
+      ],
+      "decisions": [],
+      "substeps": [
+        {
+          "code": "2.1.1",
+          "title": "安装前检查",
+          "description": "核对目标身份、已审批镜像、兼容性和硬件预检结果；预检失败时中断安装。",
+          "walkthrough": {
+            "actor": "交付工程师核对；平台检查",
+            "action": "核对 A、B 身份、镜像兼容性、安装盘与安装前硬件状态。",
+            "raw": [
+              {
+                "name": "machine_id / image_hash / disk_id",
+                "type": "ID / string / ID",
+                "value": "2 台明确身份、批准镜像摘要、目标启动盘",
+                "source": "BOM、介质与安装前探测"
+              }
+            ],
+            "comparisons": [
+              {
+                "item": "预检",
+                "expected": "2/2 身份与兼容性满足",
+                "observed": "2/2",
+                "result": "PASS",
+                "rule": "目标盘不明不得执行安装"
+              }
+            ],
+            "output": "装机请求内的 precheck 记录，保留检查项与版本。",
+            "use": "2.1.2 消费预检；通过装机源记录同步 CMDB。",
+            "recovery": "缺兼容依据或身份冲突先补齐。"
+          }
+        },
+        {
+          "code": "2.1.2",
+          "title": "安装系统并首次启动",
+          "description": "执行镜像安装，保留操作系统与驱动版本；系统启动后进入注册。",
+          "walkthrough": {
+            "actor": "平台安装；现场处理引导异常",
+            "action": "按已核对的目标盘安装镜像并等待首次启动。",
+            "raw": [
+              {
+                "name": "install_receipt / os_version / boot_time",
+                "type": "object / string / Time",
+                "value": "A、B 均返回安装与首次启动回执",
+                "source": "引导器和主机"
+              }
+            ],
+            "comparisons": [
+              {
+                "item": "安装覆盖",
+                "expected": "2 台",
+                "observed": "2/2 启动",
+                "result": "PASS",
+                "rule": "启动只完成安装，不意味着已注册或可信"
+              }
+            ],
+            "output": "安装与首次启动记录，固定镜像和驱动版本。",
+            "use": "2.1.3 用启动回执绑定注册；CMDB 留装机历史。",
+            "recovery": "超时先核对是否已安装，不能直接重复擦盘。"
+          }
+        },
+        {
+          "code": "2.1.3",
+          "title": "完成身份注册",
+          "description": "注册回执绑定装机请求、设备序列号／MAC 与项目，校验一次性令牌。",
+          "walkthrough": {
+            "actor": "主机回调；平台注册",
+            "action": "用一次性令牌校验注册请求、设备身份与项目。",
+            "raw": [
+              {
+                "name": "request_id / serial_number / token_ref",
+                "type": "ID / string / ID",
+                "value": "install-a / SIM-A / 一次性凭据引用",
+                "source": "装机请求与注册回调"
+              }
+            ],
+            "comparisons": [
+              {
+                "item": "注册一致性",
+                "expected": "2 个请求各对应唯一设备",
+                "observed": "2/2 匹配，令牌不重复使用",
+                "result": "PASS",
+                "rule": "凭据值不入清单、报告或 CMDB"
+              }
+            ],
+            "output": "注册回执、稳定 machine_id 与请求绑定。",
+            "use": "2.1.4 按绑定身份验证 SSH；CMDB 收注册回执。",
+            "recovery": "拒绝身份冲突或重复令牌，回到可信注册。"
+          }
+        },
+        {
+          "code": "2.1.4",
+          "title": "验证 SSH 互信",
+          "description": "完成首次连接验证后才允许硬件采集；失败进入受控互信修复。",
+          "walkthrough": {
+            "actor": "平台验证 SSH",
+            "action": "校验主机指纹与执行身份，运行已授权只读探测。",
+            "raw": [
+              {
+                "name": "host_key / ssh_probe / checked_at",
+                "type": "string / object / Time",
+                "value": "2 台指纹已核对且探测成功",
+                "source": "SSH 实际连接"
+              }
+            ],
+            "comparisons": [
+              {
+                "item": "可执行通道",
+                "expected": "2 台身份正确且可执行",
+                "observed": "2/2",
+                "result": "PASS",
+                "rule": "端口 22 可达不等于认证与执行成功"
+              }
+            ],
+            "output": "host_ready 中的 SSH 验证记录。",
+            "use": "2.2 开始 OS 采集；CMDB 记录通道验证历史。",
+            "recovery": "互信失败进入受控初始化修复。"
+          }
+        }
+      ],
+      "checks": [],
+      "walkthrough": {
+        "actor": "交付工程师发起；平台执行",
+        "action": "对 A、B 安装批准镜像，完成首次启动、身份注册与 SSH 信任验证。",
+        "raw": [
+          {
+            "name": "install_request_id / machine_id",
+            "type": "ID / ID",
+            "value": "install-a → A；install-b → B",
+            "source": "装机请求"
+          },
+          {
+            "name": "image_ref / boot_receipt / ssh_verified",
+            "type": "VersionRef / object / boolean",
+            "value": "批准镜像 r1；启动成功；true",
+            "source": "介质库、注册回调、SSH 实测"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "装机数量",
+            "expected": "2 台目标服务器",
+            "observed": "2/2 启动与注册完成",
+            "result": "PASS",
+            "rule": "回调须绑定请求、项目、序列号和一次性令牌"
+          },
+          {
+            "item": "通道质量",
+            "expected": "两台均完成独立 SSH 验证",
+            "observed": "2/2 verified",
+            "result": "PASS",
+            "rule": "系统启动成功不能代替 SSH 成功"
+          }
+        ],
+        "output": "host_ready：镜像与驱动版本、注册回执、主机身份和 SSH 验证结果。",
+        "use": "2.2 凭通道采集硬件；3.1 继续核对执行条件；CMDB 保留装机历史。",
+        "recovery": "身份冲突先隔离；通道失败走受控修复，重装不更换设备 ID。",
+        "output_refs": [
+          "host_ready"
+        ],
+        "routes": [
+          {
+            "artifact_id": "host_ready",
+            "consumers": [
+              "H07",
+              "H02",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "将 BMC 与操作系统看到的硬件分别留存，给验机提供可追溯的原始清单。",
+      "resources": "已授权 BMC Redfish／IPMI 与 SSH 只读采集；凭据仅保存引用。",
+      "guards": "目标身份、执行权限及采集通道已核对；按通道记录可用性，不要求尚未产生的验机 PASS。",
+      "actions": "按设备采集身份、位置、CPU、内存、GPU、网卡、磁盘、电源、固件和端口；保存原始响应、能力与缺失原因。",
+      "post": "每个预期对象都有成功或缺失回执；清单已留存不代表硬件验收通过。",
+      "failure": "单设备或单来源失败保留部分快照；缺失不补零；身份冲突隔离，不能自动合并。",
+      "retry": "仅重采缺失或变化的对象，产生新采集修订；设备稳定 ID 不因重采变化。",
+      "invalidation": "换件、重装、采集过期或型号变更要求重新核验相关记录。",
+      "note": "",
+      "code": "2.2",
+      "stage": "2",
+      "title": "收集装机硬件信息",
+      "id": "H07",
+      "inputs": [
+        "bom",
+        "host_ready",
+        "model",
+        "observations",
+        "auth"
+      ],
+      "outputs": [
+        "inventory"
+      ],
+      "decisions": [],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "交付工程师发起；平台分源采集",
+        "action": "对 A、B 读 BMC 静态资产，再读 OS、GPU 与网卡清单；保留两个来源及冲突，不提前做验机验收。",
+        "raw": [
+          {
+            "name": "serial_number / location / firmware",
+            "type": "string / object / object[]",
+            "value": "SIM-A；机柜 U 位；BMC、BIOS 与部件固件版本",
+            "source": "BMC Redfish／IPMI；位置以批准资产记录为准"
+          },
+          {
+            "name": "cpu / memory / storage / psu",
+            "type": "object[]",
+            "value": "逐部件保存槽位、型号、序列号、容量／额定值及状态",
+            "source": "BMC；OS 可读项作为独立来源"
+          },
+          {
+            "name": "gpus / compute_nics",
+            "type": "object[]",
+            "value": "A：8 GPU + 8 集群 NIC；B：8 GPU + 8 集群 NIC",
+            "source": "OS、GPU 驱动与网卡工具"
+          },
+          {
+            "name": "permanent_mac / bdf / interface_name",
+            "type": "string",
+            "value": "永久 MAC、PCIe 地址、当前接口别名分别记录",
+            "source": "NIC 身份与 OS 回读"
+          },
+          {
+            "name": "quality / collected_at / raw_ref",
+            "type": "enum / Time / RecordRef",
+            "value": "known；08:00:00Z；原始响应引用",
+            "source": "各次采集回执"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "对象覆盖",
+            "expected": "2 台设备；16 GPU；16 集群 NIC",
+            "observed": "2/2；16/16；16/16，稳定键去重",
+            "result": "PASS",
+            "rule": "存储／管理 NIC 另列，不能塞入 16 个计算 NIC 的分母"
+          },
+          {
+            "item": "采集质量反例",
+            "expected": "GPU 必需身份字段可读",
+            "observed": "16 条记录中 1 条 UUID 缺失",
+            "result": "BLOCKED",
+            "rule": "收到 16 不等于有效 16；保存 15 known + 1 unknown，交 3.1 判定"
+          },
+          {
+            "item": "其他部件",
+            "expected": "CPU、内存、磁盘、电源按批准整机 BOM",
+            "observed": "全部记录槽位；未知预期明确列出",
+            "result": "待确认",
+            "rule": "B300 是 GPU 型号，不能据此推定所有 OEM 的其他部件数量"
+          }
+        ],
+        "output": "inventory：每设备／部件的原始值、来源、采集修订、能力、质量、缺失原因。允许部分采集记录发布，不生成验机 PASS。",
+        "use": "3.1 比较批准期望与实测；0.2 将完整、部分、失败采集都索引到设备。",
+        "recovery": "按缺失字段重采并新建修订；BMC 与 OS 冲突并列保存，不能互相覆盖。",
+        "output_refs": [
+          "inventory"
+        ],
+        "routes": [
+          {
+            "artifact_id": "inventory",
+            "consumers": [
+              "H02",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "记录硬件与系统事实，为拓扑和线序提供输入。",
+      "resources": "SSH或Agent采集；BMC为独立来源。",
+      "guards": "装机回调和SSH信任有效；必需字段与能力策略已定义。 装机采集记录可定位；部分采集不自动通过验机。",
+      "actions": "复用装机硬件清单，按 BOM 与独立型号核对数量、身份、版本与质量；仅补采缺失或过期字段，保留来源差异。",
+      "post": "采集字段完整率 100%，永久 MAC 与物料清单一致。光模块遥测不可读时保留降级标记；接受范围仍待确认。",
+      "failure": "缺必需数据BLOCKED；明确不一致FAIL；允许的豁免由交付组长记录。",
+      "retry": "按对象重采；不在此应用正式GPUrail／RoCE配置。",
+      "invalidation": "部件、OS、BOM／型号及策略变化影响拓扑和后续。",
+      "note": "",
+      "code": "3.1",
+      "stage": "3",
+      "title": "核验硬件与系统信息",
+      "id": "H02",
+      "inputs": [
+        "bom",
+        "host_ready",
+        "model",
+        "observations",
+        "inventory"
+      ],
+      "outputs": [
+        "g1"
+      ],
+      "decisions": [
+        "Q6"
+      ],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台比对；交付工程师处理差异",
+        "action": "读取 2.2 快照，对照批准 BOM／型号；仅对过期、变化或缺失字段补采。",
+        "raw": [
+          {
+            "name": "inventory_ref / bom_ref / model_ref",
+            "type": "RecordRef / VersionRef / VersionRef",
+            "value": "inventory r2 / BOM r1 / DGX-B300 r1",
+            "source": "2.2 清单与批准目录"
+          },
+          {
+            "name": "gpu_ids / nic_ids / permanent_mac",
+            "type": "ID[] / ID[] / string[]",
+            "value": "16 GPU、16 集群 NIC，各自身份可解析",
+            "source": "分源采集快照"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "硬件数量",
+            "expected": "2×8 GPU；2×8 集群 NIC",
+            "observed": "16/16；16/16",
+            "result": "PASS",
+            "rule": "按唯一实体计数；重复行和额外部件分别报出"
+          },
+          {
+            "item": "质量与符合性",
+            "expected": "必需字段完整、新鲜、身份与 BOM 一致",
+            "observed": "16/16 GPU、16/16 NIC 有效且匹配",
+            "result": "PASS",
+            "rule": "缺字段 BLOCKED；有效实测证明型号／数量不符则 FAIL"
+          }
+        ],
+        "output": "g1：引用清单修订的硬件核验结果、字段缺口、身份差异与可消费范围。",
+        "use": "3.2 使用有效硬件集合；3.3 使用稳定端口与永久 MAC；CMDB 区分原始采集与验收结论。",
+        "recovery": "缺测回 2.2 补采；换件新建部件身份并重验，不从实测修改预期。",
+        "output_refs": [
+          "g1"
+        ],
+        "routes": [
+          {
+            "artifact_id": "g1",
+            "consumers": [
+              "H03",
+              "H04",
+              "H05",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "证明GPU-NIC内部关系符合独立预期。",
+      "resources": "sysfs／lspci／nvidia-smi；审批的厂商或金样拓扑。",
+      "guards": "有效硬件采集验收与独立型号预期在位。",
+      "actions": "核对上游路径、NUMA、NVLink、LnkCap／LnkSta；保留原始输出与差异。",
+      "post": "实际拓扑不能反推“预期”再自证；型号槽位设计是判定基准。",
+      "failure": "差异机内拓扑异常；缺预期BLOCKED；不能一律刷BIOS。",
+      "retry": "按证据修复后定向重验；两次仍失败升级交付组长／厂商。",
+      "invalidation": "换卡、BIOS／固件、机型定义或拓扑变化影响物理接线验收／映射发布验收／基线配置验收／NCCL 报告评审。",
+      "note": "",
+      "code": "3.2",
+      "stage": "3",
+      "title": "验证机内 GPU–NIC 拓扑",
+      "id": "H03",
+      "inputs": [
+        "g1",
+        "model",
+        "observations"
+      ],
+      "outputs": [
+        "topology"
+      ],
+      "decisions": [],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台采集；工程师确认独立型号基线",
+        "action": "读取机内 GPU、NIC、PCIe 路径、NUMA 和 NVLink 关系，与批准整机拓扑比较。",
+        "raw": [
+          {
+            "name": "gpu_id / nic_id / pcie_path / numa",
+            "type": "ID / ID / string[] / integer",
+            "value": "逐 GPU、NIC 保存上游桥路径和 NUMA",
+            "source": "sysfs／lspci／nvidia-smi"
+          },
+          {
+            "name": "expected_topology_ref",
+            "type": "VersionRef",
+            "value": "approved-oem-topology r1",
+            "source": "厂商或经批准金样"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "设备覆盖",
+            "expected": "2 台共 16 GPU 与 16 集群 NIC",
+            "observed": "16/16 GPU、16/16 NIC 有路径证据",
+            "result": "PASS",
+            "rule": "有记录不代表 GPU 与 NIC 必然一对一"
+          },
+          {
+            "item": "拓扑质量",
+            "expected": "独立批准的槽位与连接关系",
+            "observed": "若未提供 OEM 拓扑则无法比较",
+            "result": "BLOCKED",
+            "rule": "不从 PCIe 排序或本次实测构造预期再自证"
+          }
+        ],
+        "output": "topology：机内路径快照、差异、批准基线引用及核验结果。",
+        "use": "3.3.1 确认 GPU–NIC 关系；3.4 发布关联映射；CMDB 保存拓扑历史。",
+        "recovery": "缺基线由负责人补齐；差异按部件／固件定位，修复后重新采集。",
+        "output_refs": [
+          "topology"
+        ],
+        "routes": [
+          {
+            "artifact_id": "topology",
+            "consumers": [
+              "H04",
+              "H05",
+              "N01",
+              "N03",
+              "N06",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "证明期望物理端口连接与两侧实测一致，并获最终确认。",
+      "resources": "lldpd／交换机回读／DOM；逐目标握手；交付组长确认。",
+      "guards": "硬件采集验收和拓扑有效，交换机与端口已建模、交换机开通与配置就绪、新鲜的网络就绪证明满足，网络域在线；已确认接线关系不是启动条件。",
+      "actions": "按下方四个子步骤执行：确认 GPU–NIC 关系 → 采集双侧邻居与 MAC → 三方按物理端口对比对 → 交付组长最终确认。每步保存版本化报告。",
+      "post": "3.3.3 的单个端口对通过，只代表该连接已确认；完整四步通过并完成最终确认后，才能进入 3.4 发布已验证映射。",
+      "failure": "任一步发现问题阻断后续；明确线缆差异断链～配置异常，缺测BLOCKED。",
+      "retry": "通常从 3.3.2 增量重采。机内拓扑发生变化时，先重新完成 3.2 验证机内 GPU–NIC 拓扑，再更新 3.3.1；工单关闭仍须复验通过。",
+      "invalidation": "端口／线缆／部件／BOM／拓扑变化影响端口对及下游映射。",
+      "note": "",
+      "code": "3.3",
+      "stage": "3",
+      "title": "核对并确认物理接线",
+      "id": "H04",
+      "inputs": [
+        "bom",
+        "g1",
+        "topology",
+        "pre_cable",
+        "net_config",
+        "bootstrap",
+        "readiness",
+        "observations",
+        "human"
+      ],
+      "outputs": [
+        "g2"
+      ],
+      "decisions": [
+        "Q7",
+        "Q9"
+      ],
+      "substeps": [
+        {
+          "code": "3.3.1",
+          "title": "确认 GPU–NIC 关系",
+          "description": "使用已通过的机内拓扑结果，保存每个 GPU 对应的网卡、PCIe 路径和 NUMA 归属。",
+          "walkthrough": {
+            "actor": "平台引用；交付工程师核对",
+            "action": "引用 3.2 的独立拓扑核验，确认本次 GPU–NIC 关系集合。",
+            "raw": [
+              {
+                "name": "topology_ref / gpu_nic_relations",
+                "type": "RecordRef / object[]",
+                "value": "2 台、16 GPU 与 16 集群 NIC 的关联集合",
+                "source": "3.2 有效拓扑证据"
+              }
+            ],
+            "comparisons": [
+              {
+                "item": "关系覆盖",
+                "expected": "全部参与 GPU、NIC 的关系有依据",
+                "observed": "16/16 GPU、16/16 NIC 被覆盖",
+                "result": "PASS",
+                "rule": "关系数量由型号决定，不强制一 GPU 对一 NIC"
+              }
+            ],
+            "output": "接线 step1 报告，固定拓扑修订。",
+            "use": "3.3.2 使用端口集合；CMDB 索引步骤报告。",
+            "recovery": "缺独立拓扑则回 3.2，不能继续猜接线。"
+          }
+        },
+        {
+          "code": "3.3.2",
+          "title": "采集双侧邻居与 MAC",
+          "description": "采集主机和交换机两侧 LLDP 邻居，并核对永久 MAC。采集缺失与真实无邻居分别记录。",
+          "walkthrough": {
+            "actor": "平台双侧采集",
+            "action": "在有效观测时间内读取主机 LLDP、永久 MAC 与交换机邻居表。",
+            "raw": [
+              {
+                "name": "host_rows / switch_rows / collection_status",
+                "type": "object[] / object[] / enum",
+                "value": "16 条主机记录、16 条交换机记录，分别成功",
+                "source": "主机与 SN5610 两个来源"
+              }
+            ],
+            "comparisons": [
+              {
+                "item": "双侧覆盖",
+                "expected": "16 对、32 个端点",
+                "observed": "32/32 有有效观测",
+                "result": "PASS",
+                "rule": "一侧 timeout 与成功但无邻居是不同事实"
+              }
+            ],
+            "output": "接线 step2 报告，保留原始值、端口身份、时间与采集质量。",
+            "use": "3.3.3 做三方比对；CMDB 索引两侧原始记录。",
+            "recovery": "缺哪一侧补哪一侧；不以单侧观测替代。"
+          }
+        },
+        {
+          "code": "3.3.3",
+          "title": "进行三方比对",
+          "description": "按物理端口对比较物料连接计划、主机实测与交换机回读；保存差异、工单及已确认关系。",
+          "walkthrough": {
+            "actor": "平台按稳定端点比对",
+            "action": "逐对比较 BOM 期望、主机看到的对端和交换机看到的对端。",
+            "raw": [
+              {
+                "name": "expected / host_seen / switch_seen",
+                "type": "PortPair / PortPair / PortPair",
+                "value": "期望 A.c1↔SW.c01；两侧均报告 A.c1↔SW.c02",
+                "source": "独立期望与双侧实测"
+              }
+            ],
+            "comparisons": [
+              {
+                "item": "明确接错",
+                "expected": "三方同一端口对",
+                "observed": "15/16 匹配，1/16 双侧一致但接错",
+                "result": "FAIL",
+                "rule": "两侧相互吻合不能替代与 BOM 匹配"
+              }
+            ],
+            "output": "接线 step3 逐对结果、差异与候选确认关系。",
+            "use": "3.3.4 仅在所需结果通过后确认；CMDB 保存差异；0.1 处理明确接错。",
+            "recovery": "改线后重做 3.3.2、3.3.3，不能手改结论。"
+          }
+        },
+        {
+          "code": "3.3.4",
+          "title": "交付组长最终确认",
+          "description": "前三项通过且差异完成复验与关闭确认后，保存完整步骤记录、关系版本、确认人和时间。",
+          "walkthrough": {
+            "actor": "交付组长确认",
+            "action": "核对前三步、差异复验与关系修订，在当前有效版本上确认。",
+            "raw": [
+              {
+                "name": "step_refs / relation_ref / reviewer_id",
+                "type": "RecordRef[] / VersionRef / ID",
+                "value": "3 份步骤报告；关系 r2；DL 身份",
+                "source": "步骤记录与人工确认"
+              }
+            ],
+            "comparisons": [
+              {
+                "item": "最终完成",
+                "expected": "16/16 所需连接通过且当前修订获确认",
+                "observed": "16/16，通过；DL 已确认",
+                "result": "PASS",
+                "rule": "未确认或确认后依赖变化均不能放行旧证明"
+              }
+            ],
+            "output": "最终接线证明与四步链、确认人、确认时间。",
+            "use": "3.4 才可发布映射；CMDB 索引不可变确认链。",
+            "recovery": "确认前变化回到受影响步骤，重新确认新修订。"
+          }
+        }
+      ],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台三方比对；现场工程师改线；交付组长确认",
+        "action": "按四个子步骤核验 16 条线缆：先确认机内关系，再读双侧邻居，三方比对，最后人工确认。",
+        "raw": [
+          {
+            "name": "expected_pairs",
+            "type": "PortPair[]",
+            "value": "A.c1↔SW.c01 … B.c8↔SW.c16，共 16 对",
+            "source": "BOM r1"
+          },
+          {
+            "name": "host_neighbors / switch_neighbors",
+            "type": "object[] / object[]",
+            "value": "主机 16 条；交换机 16 条，均绑定采样时间与稳定端口",
+            "source": "两侧 LLDP 与永久 MAC"
+          },
+          {
+            "name": "confirmation_ref",
+            "type": "RecordRef",
+            "value": "DL 对本次四步报告与关系版本的确认",
+            "source": "交付组长"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "三方覆盖",
+            "expected": "16 个期望端口对双侧都有有效观测",
+            "observed": "16/16 端口对、32/32 端点可核对",
+            "result": "PASS",
+            "rule": "不能将一侧 16 行当作双侧完整"
+          },
+          {
+            "item": "明确接错反例",
+            "expected": "A.c1 ↔ SW.c01",
+            "observed": "双侧一致证明 A.c1 ↔ SW.c02",
+            "result": "FAIL",
+            "rule": "双侧相互一致仍可能与物料期望不符"
+          },
+          {
+            "item": "最终确认反例",
+            "expected": "三步通过且 DL 确认当前修订",
+            "observed": "端口对通过，未确认",
+            "result": "BLOCKED",
+            "rule": "局部 PASS 不生成最终接线通过"
+          }
+        ],
+        "output": "g2：四步报告、逐对差异、确认连接与 DL 确认；各报告固定依赖版本。",
+        "use": "3.4 仅消费最终有效确认；CMDB 保留双侧原始数据、差异与确认链。",
+        "recovery": "缺测补采；接错修线后从 3.3.2 重验；拓扑变化先重做 3.2。",
+        "output_refs": [
+          "g2"
+        ],
+        "routes": [
+          {
+            "artifact_id": "g2",
+            "consumers": [
+              "H05",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "发布所有后续配置和定位使用的同一映射版本。",
+      "resources": "端口模型查询视图、角色方案、版本化发布。",
+      "guards": "物理接线验收有效、已确认接线关系存在；启用角色所需映射100%覆盖且无冲突。",
+      "actions": "关联物理端口、OS接口、永久MAC、BDF、交换机端口及GPU亲和。",
+      "post": "稳定实体不在此首次创建；批准后发布不可变映射，消费者冻结明确版本。",
+      "failure": "覆盖缺失／冲突阻断基线配置验收；不按BDF排序猜物理连接。",
+      "retry": "修正来源／关系后发布新版本，保留旧版。",
+      "invalidation": "新映射只使依赖旧关系的下游证据失效，不篡改历史。",
+      "note": "",
+      "code": "3.4",
+      "stage": "3",
+      "title": "发布已验证映射",
+      "id": "H05",
+      "inputs": [
+        "bom",
+        "model",
+        "g1",
+        "topology",
+        "g2"
+      ],
+      "outputs": [
+        "mapping"
+      ],
+      "decisions": [],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台生成；按批准流程发布",
+        "action": "把已确认物理端口与当前 OS 接口、永久 MAC、PCIe 地址、GPU 亲和和对端交换机端口关联。",
+        "raw": [
+          {
+            "name": "physical_port_uid / interface_name / bdf",
+            "type": "ID / string / string",
+            "value": "port-a-c1 / 本次 OS 别名 / 本次 PCIe 地址",
+            "source": "3.1、3.2 与 3.3 确认结果"
+          },
+          {
+            "name": "mapping_revision",
+            "type": "VersionRef",
+            "value": "mapping r1",
+            "source": "不可变映射发布记录"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "映射覆盖",
+            "expected": "16 个启用主机端口及各自对端",
+            "observed": "16/16 完整；无端口身份冲突",
+            "result": "PASS",
+            "rule": "稳定端口早已存在，本步骤只发布关联"
+          },
+          {
+            "item": "版本质量",
+            "expected": "连接确认、硬件与拓扑均适用于当前范围",
+            "observed": "引用明确修订且仍可消费",
+            "result": "PASS",
+            "rule": "接口改名更新关联修订，不换物理端口 ID"
+          }
+        ],
+        "output": "mapping r1：稳定实体间关系、当前接口别名、所依据证据与发布记录。",
+        "use": "3.5 根据映射配置；第 4、5 步定位实际接口和路径；CMDB 查询映射历史。",
+        "recovery": "冲突退回来源步骤修正，再发布新修订，不能覆盖旧版。",
+        "output_refs": [
+          "mapping"
+        ],
+        "routes": [
+          {
+            "artifact_id": "mapping",
+            "consumers": [
+              "H06",
+              "T00",
+              "T01",
+              "T02",
+              "T03",
+              "T04",
+              "N01",
+              "N03",
+              "N06",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "把确认后的关系转换为真实服务器配置并验证。",
+      "resources": "配置版本、参数快照、角色绑定、恢复方案、设备独占。",
+      "guards": "有效映射发布验收；型号／角色／介质兼容；主机RoCE意图与网络意图一致。",
+      "actions": "GPUrail／分割／绑定／RoCE／驱动等配置→读回→按已确认策略抽检。",
+      "post": "下发回执和配置验证分开；有效基线配置验收范围须可证明覆盖本次网络测试验收目标。",
+      "failure": "意图不一致拒绝导入；失败按组件能力恢复；不假定固件总可回滚。",
+      "retry": "新配置新版本；失联先用回执和设备实况对账。",
+      "invalidation": "影响网络／拓扑的变更触发相应重新验证及网络测试验收／NCCL 报告评审失效。",
+      "note": "",
+      "code": "3.5",
+      "stage": "3",
+      "title": "应用并验证服务器基线配置",
+      "id": "H06",
+      "inputs": [
+        "mapping",
+        "project",
+        "model",
+        "media",
+        "net_config",
+        "policy",
+        "auth"
+      ],
+      "outputs": [
+        "g4"
+      ],
+      "decisions": [
+        "Q8"
+      ],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "工程师审批；平台应用、读回与验证",
+        "action": "按映射对 A、B 应用基线，核对驱动、端口角色、MTU 与 RoCE/QoS 意图，并记录验证范围。",
+        "raw": [
+          {
+            "name": "config_set_ref / mapping_ref",
+            "type": "VersionRef / VersionRef",
+            "value": "host-config r1 / mapping r1",
+            "source": "批准配置与 3.4 映射"
+          },
+          {
+            "name": "apply_receipts / readback",
+            "type": "object[] / object[]",
+            "value": "2 台主机、16 个计算端口逐项回执",
+            "source": "执行器与独立读回"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "应用与读回",
+            "expected": "2 台主机及所需 16 端口",
+            "observed": "2/2、16/16 有回执并一致",
+            "result": "PASS",
+            "rule": "下发成功不替代读回正确"
+          },
+          {
+            "item": "验证范围",
+            "expected": "覆盖策略批准的验证对象",
+            "observed": "示例抽检 2/16 端口",
+            "result": "待确认",
+            "rule": "仅测 2 个不能声称 16 个全通过，外推规则未批准则不发布全范围证明"
+          }
+        ],
+        "output": "g4：ConfigSet、逐项应用／读回／抽检报告，分别保存目标与实际验证集合。",
+        "use": "4.1 核对所需范围是否被有效基线覆盖；CMDB 保存配置历史和回执。",
+        "recovery": "失败按组件恢复能力处理；变更新建配置版本并重验受影响证据。",
+        "output_refs": [
+          "g4"
+        ],
+        "routes": [
+          {
+            "artifact_id": "g4",
+            "consumers": [
+              "T00",
+              "T02",
+              "T03",
+              "T04",
+              "N01",
+              "N02",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "固定本次测试范围和证明义务，避免范围在执行中漂移。",
+      "resources": "测试工具、NIC／路径／rail、测试窗口及资源约束。",
+      "guards": "有效基线配置验收、映射和角色在位；新鲜的网络就绪证明、网络健康证明、无损能力与基线有效；无阻断本次普通任务的告警。",
+      "actions": "冻结目标／路径／档位／版本，输出需要哪些层、哪些配对、哪些时间窗口的计划。",
+      "post": "冻结计划是建议的数据组织方式。调度、阈值、观测窗口与路径覆盖策略仍待确认；缺少定义时不能默认满足。",
+      "failure": "缺前置BLOCKED；工单诊断只有限定例外。",
+      "retry": "仅对显式合格子集重新提交；不静默扩大。",
+      "invalidation": "版本／成员／资源／就绪变化需在消费时复核。",
+      "note": "这里将准入条件与测试范围集中说明；计划对象的组织方式属于实现建议。",
+      "code": "4.1",
+      "stage": "4",
+      "title": "确认准入并冻结测试计划",
+      "id": "T00",
+      "inputs": [
+        "g4",
+        "mapping",
+        "health",
+        "lossless",
+        "readiness",
+        "policy",
+        "auth"
+      ],
+      "outputs": [
+        "test_plan"
+      ],
+      "decisions": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "交付工程师选择范围；平台准入",
+        "action": "冻结本轮两机、八 rail 的 IPv4 有向检查集合，核对版本、就绪、权限和资源。",
+        "raw": [
+          {
+            "name": "required_pairs / directions",
+            "type": "TestPair[] / enum[]",
+            "value": "8 个 A.ci↔B.ci 配对；A→B、B→A 共 16 项",
+            "source": "案例测试计划"
+          },
+          {
+            "name": "mapping_ref / config_ref / readiness",
+            "type": "VersionRef / VersionRef / object",
+            "value": "均为 r1；派发时就绪未过期",
+            "source": "3.4、3.5 与网络域"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "计划数量",
+            "expected": "2 台、8 rail、1 地址族、2 方向",
+            "observed": "16 项唯一有向检查",
+            "result": "PASS",
+            "rule": "不是 16 条物理线缆的另一种叫法；不能据此声称所有 ECMP 路径"
+          },
+          {
+            "item": "准入质量",
+            "expected": "当前版本、范围、权限、租约与就绪均满足",
+            "observed": "所有必需项有明确引用",
+            "result": "PASS",
+            "rule": "空计划、缺版本、过期就绪不得自动通过"
+          }
+        ],
+        "output": "test_plan：冻结目标、配对、方向、档位、依赖版本与证明义务。",
+        "use": "4.2～4.6 按各自维度执行；4.7 按同一计划汇总；CMDB 保存计划。",
+        "recovery": "补齐缺口后创建新尝试；层间是否严格串行仍需决策。",
+        "output_refs": [
+          "test_plan"
+        ],
+        "routes": [
+          {
+            "artifact_id": "test_plan",
+            "consumers": [
+              "T01",
+              "T02",
+              "T03",
+              "T04",
+              "T05",
+              "T06",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "核对所需端口的基础链路事实。",
+      "resources": "端口模型／网口面板数据；host与switch的DOM分开。",
+      "guards": "本次端口和角色范围确定；必需观测新鲜。",
+      "actions": "检查up、协商速率、DOM基线，复用现有采集源。",
+      "post": "按本次必需角色判定；unused不误报，必需compute不能关闭绕过。",
+      "failure": "已观测到的明确异常为 FAIL；必需观测缺失为 BLOCKED。光模块遥测降级的具体接受范围仍待确认。",
+      "retry": "复采或修复后定向复测。",
+      "invalidation": "端口／角色／配置／采样过期影响有效性。",
+      "note": "",
+      "code": "4.2",
+      "stage": "4",
+      "title": "检查链路、速率与光模块",
+      "id": "T01",
+      "inputs": [
+        "test_plan",
+        "mapping",
+        "observations",
+        "policy"
+      ],
+      "outputs": [
+        "l1"
+      ],
+      "decisions": [
+        "Q6"
+      ],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台读取双侧链路",
+        "action": "检查 16 条线缆的 32 个启用端点，分别读取 up 状态、协商速率和光模块诊断。",
+        "raw": [
+          {
+            "name": "physical_port_uid / link_state / speed",
+            "type": "ID / enum / Metric",
+            "value": "32 个端点 up；800 Gb/s",
+            "source": "主机与 SN5610 端口回读"
+          },
+          {
+            "name": "dom / quality / capability",
+            "type": "object / enum / enum",
+            "value": "模块温度、光功率等；缺能力标 unsupported",
+            "source": "模块诊断；按介质是否适用"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "端点覆盖",
+            "expected": "32 个必需端点",
+            "observed": "32/32 有链路与速率读数",
+            "result": "PASS",
+            "rule": "unused 端口不进入分母"
+          },
+          {
+            "item": "速率差异反例",
+            "expected": "案例批准速率 800 Gb/s",
+            "observed": "port-a-c1 为 400 Gb/s",
+            "result": "FAIL",
+            "rule": "有效观测与批准值不同；不能只看 up"
+          },
+          {
+            "item": "诊断质量",
+            "expected": "适用模块的必需 DOM 数据",
+            "observed": "1 个必需项 unknown",
+            "result": "BLOCKED",
+            "rule": "不适用需由介质能力说明，未知不能伪装不适用"
+          }
+        ],
+        "output": "l1：每端点链路、速率、DOM、能力、时间与判据版本。",
+        "use": "4.7 消费端点覆盖和结果；CMDB 索引链路与模块观测。",
+        "recovery": "按端点查模块／介质／协商配置，修复后复测受影响集合。",
+        "output_refs": [
+          "l1"
+        ],
+        "routes": [
+          {
+            "artifact_id": "l1",
+            "consumers": [
+              "T06",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "证明计划中的同rail NIC配对可达。",
+      "resources": "IPv4／IPv6档位、ping、配对抽样与批次策略。",
+      "guards": "有可执行配对计划与已确认超时／丢包等判据。",
+      "actions": "per-NIC网状探测；快速默认32对端/NIC，全量分批；保留实际测试集合。",
+      "post": "结果只证明已测配对；具体ARP检查与探测阈值不由开发猜测。",
+      "failure": "明确不可达FAIL；策略缺失／未覆盖项不能PASS。",
+      "retry": "只复测受影响的网卡配对；配对是否区分方向及对应覆盖策略仍待确认。",
+      "invalidation": "地址／VLAN／映射／档位改变影响结果。",
+      "note": "",
+      "code": "4.3",
+      "stage": "4",
+      "title": "验证 IP 可达性",
+      "id": "T02",
+      "inputs": [
+        "test_plan",
+        "mapping",
+        "g4",
+        "policy"
+      ],
+      "outputs": [
+        "l2"
+      ],
+      "decisions": [
+        "Q1",
+        "Q2",
+        "Q4"
+      ],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台按指定源接口发探测",
+        "action": "针对冻结计划逐方向进行 IPv4、ARP／邻居及可达性测试。",
+        "raw": [
+          {
+            "name": "src / dst / rail / address_family",
+            "type": "ID / ID / ID / enum",
+            "value": "A.c1→B.c1；rail-1；IPv4",
+            "source": "冻结计划与映射"
+          },
+          {
+            "name": "sent / received / loss",
+            "type": "integer / integer / Metric",
+            "value": "每项发 10 收 10；丢包 0%（案例数据）",
+            "source": "探测工具原始结果"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "方向覆盖",
+            "expected": "16 个有向检查",
+            "observed": "16/16 完成",
+            "result": "PASS",
+            "rule": "A→B 的成功不能替代 B→A"
+          },
+          {
+            "item": "通信质量",
+            "expected": "案例批准策略：探测无丢包且走指定接口",
+            "observed": "16/16 满足",
+            "result": "PASS",
+            "rule": "策略值是示例；ping 成功不证明 RDMA 或性能"
+          }
+        ],
+        "output": "l2：实际配对、源接口、方向、地址族、包数与结论。",
+        "use": "4.7 使用可达覆盖集合；CMDB 保留配对结果与原始引用。",
+        "recovery": "缺方向补测；已确认失败按地址、邻居或网络路径定位。",
+        "output_refs": [
+          "l2"
+        ],
+        "routes": [
+          {
+            "artifact_id": "l2",
+            "consumers": [
+              "T06",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "证明RDMA写读与流量类／无损队列条件。",
+      "resources": "ib_write_bw／ib_read_bw、无损计数与证据接口计数。",
+      "guards": "RDMA目标与已批准流量类配置确定；能获得所需计数能力。",
+      "actions": "per-rail、per-NIC-pair写／读；核对RoCE v2映射及无损队列丢包；默认full，可选matrix-sample。",
+      "post": "队列无丢包需要可用证据；写读连通不自动证明性能合格。",
+      "failure": "映射错／实际无损drop／读写失败为异常；计数缺失unknown，必需证据不足BLOCKED。",
+      "retry": "按配对定向复测；读写结果分别保留。",
+      "invalidation": "配置／路径／规则／工具及档位变化使相关证据失效。",
+      "note": "",
+      "code": "4.4",
+      "stage": "4",
+      "title": "验证 RDMA 写读通路",
+      "id": "T03",
+      "inputs": [
+        "test_plan",
+        "mapping",
+        "g4",
+        "lossless",
+        "policy",
+        "observations"
+      ],
+      "outputs": [
+        "l3"
+      ],
+      "decisions": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台执行 RDMA 工具并关联遥测",
+        "action": "按 16 个方向分别执行 RDMA 写、读，核对实际接口、流量类和无损队列。",
+        "raw": [
+          {
+            "name": "pair / operation / traffic_class",
+            "type": "TestPair / enum / integer",
+            "value": "16 方向 × write/read = 32 项",
+            "source": "冻结计划与 RDMA 工具"
+          },
+          {
+            "name": "throughput / duration / raw_ref",
+            "type": "Metric / Metric / RecordRef",
+            "value": "每项保存数值和 Gb/s 或 GB/s 单位",
+            "source": "工具原始输出"
+          },
+          {
+            "name": "queue_deltas / window_ref",
+            "type": "object / RecordRef",
+            "value": "同负载窗口的队列／丢包变化",
+            "source": "交换机与主机观测"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "读写覆盖",
+            "expected": "32 项：方向与操作的组合",
+            "observed": "32/32 有工具回执",
+            "result": "PASS",
+            "rule": "仅 write 完成不能代替 read"
+          },
+          {
+            "item": "性能判定",
+            "expected": "同条件且经批准的性能下限",
+            "observed": "有吞吐值但未提供批准基线",
+            "result": "BLOCKED",
+            "rule": "800Gb/s 线速不是 RDMA 合格阈值"
+          },
+          {
+            "item": "无损数据质量",
+            "expected": "窗口重合、计数未重置、能力足够",
+            "observed": "示例 1 项发生计数重置",
+            "result": "BLOCKED",
+            "rule": "不能把负差值取绝对值或填零"
+          }
+        ],
+        "output": "l3：逐配对与操作的执行结果、性能、队列、丢包与窗口引用。",
+        "use": "4.6 关联负载与无损观测；4.7 汇总；CMDB 保存摘要与原始引用。",
+        "recovery": "缺基线补批准条件；计数重置需新窗口重测，保留原失败记录。",
+        "output_refs": [
+          "l3"
+        ],
+        "routes": [
+          {
+            "artifact_id": "l3",
+            "consumers": [
+              "T05",
+              "T06",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "验证面向集合通信热点的多流网络表现。",
+      "resources": "iperf3／ib_send_bw、多流、DSCP／流量类、受控窗口与批次。",
+      "guards": "GPU-NIC映射与热点覆盖计划有效；互斥与测试资源满足。",
+      "actions": "按per-GPU关联NIC打流；快速30s／全量5min；记录负载计划与实际覆盖。",
+      "post": "“全带宽打流”是负载目标，不是合格百分比；性能合格值需策略提供。",
+      "failure": "执行错误或已定义阈值不达标为FAIL；无阈值或缺覆盖不伪造通过。",
+      "retry": "按受影响批次／路径重测，保留真实重试范围。",
+      "invalidation": "映射／流量矩阵／参数／网络配置变化影响基线。",
+      "note": "",
+      "code": "4.5",
+      "stage": "4",
+      "title": "验证多流负载与热点覆盖",
+      "id": "T04",
+      "inputs": [
+        "test_plan",
+        "mapping",
+        "g4",
+        "policy",
+        "auth"
+      ],
+      "outputs": [
+        "l4"
+      ],
+      "decisions": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台打流；工程师确认负载计划",
+        "action": "按计划在八 rail 同时产生多流负载，记录 GPU–NIC 选择、持续时间、并发和热点。",
+        "raw": [
+          {
+            "name": "load_id / rail / stream_count",
+            "type": "ID / ID / integer",
+            "value": "load-demo；8 rail；每 rail 4 流，共 32 流",
+            "source": "案例负载计划"
+          },
+          {
+            "name": "elapsed / throughput / selected_interfaces",
+            "type": "Metric / Metric / ID[]",
+            "value": "实际运行 60 s；逐流保存吞吐及接口",
+            "source": "负载工具原始输出"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "负载覆盖",
+            "expected": "8 rail × 4 流 = 32 流，60 s",
+            "observed": "32/32；实际 60 s",
+            "result": "PASS",
+            "rule": "这些是示例执行参数，不是性能及长窗口验收阈值"
+          },
+          {
+            "item": "性能质量",
+            "expected": "同规模／拓扑／软件／参数的批准基线",
+            "observed": "尚无可比基线",
+            "result": "BLOCKED",
+            "rule": "达到发流目标不等于性能达标，60 s 不能代替 3600 s"
+          }
+        ],
+        "output": "l4：实际流集合、热点、吞吐、映射与负载窗口。",
+        "use": "4.6 消费负载上下文，4.7 消费覆盖与性能结论；CMDB 索引结果。",
+        "recovery": "只补测缺失或不满足条件的负载范围；不能把短窗结果外推长窗。",
+        "output_refs": [
+          "l4"
+        ],
+        "routes": [
+          {
+            "artifact_id": "l4",
+            "consumers": [
+              "T05",
+              "T06",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "将负载上下文与网络规则观测合并为可解释结论。",
+      "resources": "watchdog状态、PFC／ECN／CNP／队列／缓冲／WJH、规则版本。",
+      "guards": "所需窗口、能力、路径和规则匹配；不能把缺采样补0。",
+      "actions": "核对 watchdog 状态；交叉核查持续暂停、暂停风暴／死锁、ECN 恒不标记和 ECN 过度标记规则，同时保留配置意图、无损丢包与缓冲余量的相关证据。",
+      "post": "结果同时声明已判定内容和不可判定内容；无损规则告警级别到门禁映射待确认。",
+      "failure": "明确违反已定义判据时FAIL；必需窗口不完整或能力不足时BLOCKED。仅出现拥塞不能直接推定网络测试验收失败，warning是否阻断由策略决定。",
+      "retry": "先补能力或观测窗口再评估；不通过关闭规则“恢复正常”。",
+      "invalidation": "规则、配置、负载上下文、样本新鲜度变化影响可消费性。",
+      "note": "RDMA 写读和多流负载向本步骤提供判定数据；观测需要覆盖负载窗口。具体采样编排仍待确认。",
+      "code": "4.6",
+      "stage": "4",
+      "title": "交叉验证无损与拥塞",
+      "id": "T05",
+      "inputs": [
+        "test_plan",
+        "l3",
+        "l4",
+        "lossless",
+        "window",
+        "policy"
+      ],
+      "outputs": [
+        "l5"
+      ],
+      "decisions": [
+        "Q1",
+        "Q3",
+        "Q5",
+        "Q6"
+      ],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台按规则版本交叉判定",
+        "action": "关联同一负载、端口、优先级和时间窗的 PFC、ECN、CNP、队列与丢包。",
+        "raw": [
+          {
+            "name": "load_ref / priority / window",
+            "type": "ID / integer / Window",
+            "value": "load-demo；批准优先级；连续 3600 s",
+            "source": "负载记录与观测窗口"
+          },
+          {
+            "name": "ecn_delta / pfc_delta / queue_depth",
+            "type": "Metric",
+            "value": "ECN 全窗为 0；PFC 增量 > 0；队列峰值 > 0",
+            "source": "能力充分且未重置的计数与队列观测"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "窗口完整性",
+            "expected": "规则要求 3600 s 且所有必需样本齐备",
+            "observed": "3600 s，缺样 0，重置 0",
+            "result": "PASS",
+            "rule": "持续时长和采样完整性分别核对"
+          },
+          {
+            "item": "ECN 规则反例",
+            "expected": "拥塞条件下按规则应有 ECN 响应",
+            "observed": "全窗 ECN=0 且同窗有拥塞证据",
+            "result": "命中异常",
+            "rule": "这是单项规则结果；不自动当作整体门禁结论"
+          },
+          {
+            "item": "缺测反例",
+            "expected": "该规则要求的计数能力可用",
+            "observed": "ECN 不可采集",
+            "result": "BLOCKED",
+            "rule": "unknown 不能被当作数值 0"
+          }
+        ],
+        "output": "l5：每条适用规则的结果、观测引用、质量、严重度与降级原因。",
+        "use": "4.7 按批准汇总策略判断；CMDB 保存规则结果与趋势引用。",
+        "recovery": "补齐同窗观测或按批准替代策略处理；混合主状态待决时显式留空。",
+        "output_refs": [
+          "l5"
+        ],
+        "routes": [
+          {
+            "artifact_id": "l5",
+            "consumers": [
+              "T06",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "发布本次范围可以支持哪些后续通信任务的证明。",
+      "resources": "按路径／档位的覆盖计算、规则聚合与交付组长豁免记录。",
+      "guards": "各必需结果持久化、引用版本有效、覆盖达到要求。",
+      "actions": "核对必需项与本次所需路径覆盖；保留逐项FAIL／BLOCKED与豁免；形成报告。",
+      "post": "所需有效结果全PASS才为PASS；网络测试验收自身必需项被豁免则WAIVED；抽样不可外推。",
+      "failure": "混合结论优先级未定，保留明细；无覆盖和无证据禁止PASS。",
+      "retry": "修复后产生新结果与新证据；不改旧报告。",
+      "invalidation": "目标／版本／路径／档位／规则变化或证据过期阻断后续消费。",
+      "note": "",
+      "code": "4.7",
+      "stage": "4",
+      "title": "汇总网络测试并发布证明",
+      "id": "T06",
+      "inputs": [
+        "test_plan",
+        "l1",
+        "l2",
+        "l3",
+        "l4",
+        "l5",
+        "policy",
+        "human"
+      ],
+      "outputs": [
+        "g5"
+      ],
+      "decisions": [
+        "Q4",
+        "Q5",
+        "Q11",
+        "Q12"
+      ],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台汇总；交付组长审批允许的豁免",
+        "action": "核对五类结果是否满足本轮计划，再发布限定范围、版本和有效期的网络证明。",
+        "raw": [
+          {
+            "name": "layer_refs / required_pairs",
+            "type": "RecordRef[] / TestPair[]",
+            "value": "5 类结果引用；16 个有向检查的覆盖义务",
+            "source": "4.1 与 4.2～4.6"
+          },
+          {
+            "name": "coverage / missing / verdict",
+            "type": "object / ID[] / Result",
+            "value": "有效覆盖 15/16；缺 B.c8→A.c8",
+            "source": "按稳定配对键汇总"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "覆盖反例",
+            "expected": "16/16 必需方向有效",
+            "observed": "15/16 = 93.75%",
+            "result": "BLOCKED",
+            "rule": "五份报告齐全不代表计划覆盖齐全"
+          },
+          {
+            "item": "证据质量",
+            "expected": "版本、时间、规则与范围均一致",
+            "observed": "旧配置下 PASS 仍保留历史，但当前不可消费",
+            "result": "BLOCKED",
+            "rule": "不将旧报告和新报告随意拼成全覆盖"
+          }
+        ],
+        "output": "g5：适用目标／路径、分层引用、结果、豁免、版本与有效期。",
+        "use": "5.1 按通信组重新核对适用性；5.6 用于溯源；CMDB 保存历史证明。",
+        "recovery": "补测缺口再汇总；有效豁免保留 WAIVED 与审批范围，不改 PASS。",
+        "output_refs": [
+          "g5"
+        ],
+        "routes": [
+          {
+            "artifact_id": "g5",
+            "consumers": [
+              "N01",
+              "N06",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "证明这一个通信组可安全、可解释地发起测试。",
+      "resources": "通信组成员／GPU／rank与网络接口，基线与软件版本。",
+      "guards": "跨机档要求网络测试验收覆盖组所需路径和档位；网络健康证明、无损能力与基线复验；GPU／驱动／RAS／P2P／NUMA／NVLink检查。",
+      "actions": "按冻结组逐项校验并建立准入记录。",
+      "post": "纯机内 NVLink 诊断在有效基线配置证明与资源条件满足时可先行；它只提供机内诊断证据，不能作为 NCCL 交付评审通过的依据。",
+      "failure": "缺基线、覆盖或必需诊断证据BLOCKED；不按机器状态放行。",
+      "retry": "只对新准入快照执行；修复组成员后重新预检。",
+      "invalidation": "组成员／接口／软件／配置／基线变化影响准入。",
+      "note": "",
+      "code": "5.1",
+      "stage": "5",
+      "title": "检查通信组运行条件",
+      "id": "N01",
+      "inputs": [
+        "g5",
+        "mapping",
+        "topology",
+        "g4",
+        "health",
+        "lossless",
+        "readiness",
+        "media",
+        "policy",
+        "auth"
+      ],
+      "outputs": [
+        "nccl_admission"
+      ],
+      "decisions": [
+        "Q4",
+        "Q10",
+        "Q12"
+      ],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "交付工程师选通信组；平台核对",
+        "action": "冻结 A、B 的 16 个 GPU rank 及所用接口，核对适用的网络证据和资源。",
+        "raw": [
+          {
+            "name": "members / ranks / world_size",
+            "type": "ID[] / object[] / integer",
+            "value": "2 台；rank 0…15；world_size=16",
+            "source": "通信组计划与实际 GPU 清单"
+          },
+          {
+            "name": "required_paths / network_evidence_ref",
+            "type": "TestPair[] / RecordRef",
+            "value": "本组需用路径；当前可消费的网络证明",
+            "source": "映射、运行参数与 4.7"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "参与者数量",
+            "expected": "16 个唯一 rank 覆盖 0…15",
+            "observed": "16/16，GPU 身份不重复",
+            "result": "PASS",
+            "rule": "不能只看 world_size 字段"
+          },
+          {
+            "item": "准入质量",
+            "expected": "本组所需路径、版本、期限与档位全部匹配",
+            "observed": "案例正向分支全部匹配",
+            "result": "PASS",
+            "rule": "机器 tested 字符串或无关网络 PASS 不能替代"
+          }
+        ],
+        "output": "nccl_admission：冻结成员、rank、GPU/NIC、参数、证据和准入记录。",
+        "use": "5.2 准备同一环境；5.3 以整组启动；CMDB 关联通信组与设备。",
+        "recovery": "缺一成员或必要路径即补齐；不自动退化成单机交付测试。",
+        "output_refs": [
+          "nccl_admission"
+        ],
+        "routes": [
+          {
+            "artifact_id": "nccl_admission",
+            "consumers": [
+              "N02",
+              "N03",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "使组内使用冻结且一致的软件环境。",
+      "resources": "已审批NCCL／nccl-tests包、缓存与校验和。",
+      "guards": "准确兼容组合确定；分发对象在当前组内。",
+      "actions": "分发／校验缓存，核对各节点驱动、NCCL和参数一致性。",
+      "post": "缓存命中不省略内容身份核验；准备成功不是测试通过。",
+      "failure": "分发或一致性失败阻断组启动。",
+      "retry": "同摘要幂等分发；损坏介质不能无限重传。",
+      "invalidation": "介质／参数／组成员变化需重新核验。",
+      "note": "",
+      "code": "5.2",
+      "stage": "5",
+      "title": "准备一致的测试环境",
+      "id": "N02",
+      "inputs": [
+        "nccl_admission",
+        "media",
+        "g4",
+        "auth"
+      ],
+      "outputs": [
+        "nccl_environment"
+      ],
+      "decisions": [],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台准备；工程师维护批准介质",
+        "action": "给 A、B 准备兼容且一致的 CUDA、NCCL、驱动、测试工具与运行参数。",
+        "raw": [
+          {
+            "name": "software_manifest / media_hash",
+            "type": "object / string",
+            "value": "驱动、CUDA、NCCL、nccl-tests 均固定版本与摘要",
+            "source": "批准介质与节点实测"
+          },
+          {
+            "name": "node_receipts",
+            "type": "object[]",
+            "value": "A、B 各一份实际环境清单",
+            "source": "执行器回执"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "环境覆盖",
+            "expected": "2 台均有实际清单",
+            "observed": "2/2",
+            "result": "PASS",
+            "rule": "镜像标签相同不代表内容相同"
+          },
+          {
+            "item": "兼容与一致",
+            "expected": "满足批准兼容矩阵及本轮冻结参数",
+            "observed": "A、B 清单与批准修订匹配",
+            "result": "PASS",
+            "rule": "仅比较两台相等仍不足，可能两台都装错"
+          }
+        ],
+        "output": "nccl_environment：逐节点软件版本、介质摘要、环境参数及验证回执。",
+        "use": "5.3 依据本次环境启动；5.6 对比失败条件；CMDB 保留测试环境历史。",
+        "recovery": "差异节点修复后重验整组环境一致性。",
+        "output_refs": [
+          "nccl_environment"
+        ],
+        "routes": [
+          {
+            "artifact_id": "nccl_environment",
+            "consumers": [
+              "N03",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "按机型和coverage_mode执行机内到跨机的通信测试。",
+      "resources": "整组GPU／NIC资源预留、启动屏障、rank/world_size、rendezvous。",
+      "guards": "整组资源齐备；组成员、算子、消息大小、基线和coverage_mode已冻结。",
+      "actions": "按下方三个子步骤，从机内到跨机，再到选定的全目标档执行。每个通信组统一启动；分组覆盖与全域单通信组分别报告。",
+      "post": "grouped_coverage与single_communicator分别报告；完整组尝试才可用于对应组结论。",
+      "failure": "组内失败结束其余参与者并回收诊断；断线不能当终止成功。",
+      "retry": "创建新的整组执行尝试，重建全部成员；不能只重跑失败的参与者。",
+      "invalidation": "成员／软件／基线／网络与配置变化使对比前提改变。",
+      "note": "",
+      "code": "5.3",
+      "stage": "5",
+      "title": "执行通信组测试",
+      "id": "N03",
+      "inputs": [
+        "nccl_admission",
+        "nccl_environment",
+        "mapping",
+        "topology",
+        "policy",
+        "auth"
+      ],
+      "outputs": [
+        "group_results"
+      ],
+      "decisions": [],
+      "substeps": [
+        {
+          "code": "5.3.1",
+          "title": "运行机内通信档",
+          "description": "按型号定义执行机内通信域测试，保留本次通信组与尝试的原始结果。",
+          "walkthrough": {
+            "actor": "平台运行机内诊断",
+            "action": "分别对 A、B 的 8 GPU 运行机内通信档，检查正确性与机内连接。",
+            "raw": [
+              {
+                "name": "members / world_size / mode",
+                "type": "ID[] / integer / enum",
+                "value": "2 个独立的 8-rank 组；intra-node",
+                "source": "型号允许的机内计划"
+              }
+            ],
+            "comparisons": [
+              {
+                "item": "机内覆盖",
+                "expected": "2 台各 8 GPU",
+                "observed": "2/2 组，各 8/8 rank",
+                "result": "PASS",
+                "rule": "两个组结果不能拼成一个 16-rank 结果"
+              }
+            ],
+            "output": "各自的机内 GroupAttempt 原始结果。",
+            "use": "5.4 单独标机内诊断；CMDB 按设备关联。",
+            "recovery": "失败整组重试；机内通过不能取代跨机交付证明。"
+          }
+        },
+        {
+          "code": "5.3.2",
+          "title": "运行跨机通信档",
+          "description": "按型号定义运行小通信组及机柜档位；每个通信组统一启动，失败按整组恢复。",
+          "walkthrough": {
+            "actor": "平台启动跨机通信组",
+            "action": "将 A、B 的 GPU 按批准计划组成 16-rank 组，使用确认的网络接口。",
+            "raw": [
+              {
+                "name": "ranks / interfaces / operator",
+                "type": "object[] / ID[] / enum",
+                "value": "rank 0…15；冻结接口集合；all_reduce",
+                "source": "运行计划与映射"
+              }
+            ],
+            "comparisons": [
+              {
+                "item": "跨机参与者",
+                "expected": "2 台、16 rank",
+                "observed": "16/16 就绪并统一启动",
+                "result": "PASS",
+                "rule": "缺节点不能静默降成单机"
+              }
+            ],
+            "output": "跨机尝试、rank 回执、原始输出和诊断。",
+            "use": "5.4 计算本组指标；CMDB 保留组与设备关系。",
+            "recovery": "任何 rank 失败均确认全组停止后新建尝试。"
+          }
+        },
+        {
+          "code": "5.3.3",
+          "title": "运行全目标档",
+          "description": "按选定模式执行分组覆盖或全域单通信组；两类覆盖分别报告，组内不能滚动启动。",
+          "walkthrough": {
+            "actor": "平台执行批准覆盖模式",
+            "action": "对当前全部交付目标执行计划；本案例全目标仅为 A、B 两台。",
+            "raw": [
+              {
+                "name": "coverage_mode / planned_members / actual_members",
+                "type": "enum / ID[] / ID[]",
+                "value": "single_communicator；计划 16 GPU；实际 16 GPU",
+                "source": "冻结交付范围和执行回执"
+              }
+            ],
+            "comparisons": [
+              {
+                "item": "全目标覆盖",
+                "expected": "当前批准目标 16 GPU",
+                "observed": "16/16，单一通信组",
+                "result": "PASS",
+                "rule": "若改为分组覆盖，必须另报 grouped_coverage，不能叫全域单组"
+              }
+            ],
+            "output": "全目标模式、实际成员与对应尝试结果。",
+            "use": "5.4、5.5 保持覆盖模式；CMDB 关联交付范围。",
+            "recovery": "未覆盖目标明确列出，不从子组通过推导其他规模通过。"
+          }
+        }
+      ],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台统一启动并管理全组",
+        "action": "全组资源齐备后，通过启动屏障运行集合通信；冻结算子、消息大小和覆盖模式。",
+        "raw": [
+          {
+            "name": "group_run_id / group_attempt_id",
+            "type": "ID / ID",
+            "value": "run-demo / attempt-01",
+            "source": "执行调度记录"
+          },
+          {
+            "name": "rank_ready / operator / message_bytes",
+            "type": "object[] / enum / integer",
+            "value": "16 ranks；all_reduce；1073741824 B（1 GiB）",
+            "source": "案例运行计划与参与者回执"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "启动屏障",
+            "expected": "16 个 rank 同轮就绪",
+            "observed": "16/16，全部租约有效",
+            "result": "PASS",
+            "rule": "15/16 就绪不能启动部分通信组"
+          },
+          {
+            "item": "运行完整性反例",
+            "expected": "16 个 rank 正常结束且结果正确",
+            "observed": "rank 7 退出；其余需停止并确认",
+            "result": "FAIL",
+            "rule": "新 GroupAttempt 整组重试，不能只重跑 rank 7"
+          }
+        ],
+        "output": "group_results：每次整组尝试、rank 日志、工具原始结果、退出码和诊断。",
+        "use": "5.4 从原始结果取指标；CMDB 保留失败尝试及重试关系。",
+        "recovery": "确认所有参与进程终止后释放资源，重新核验并启动新尝试。",
+        "output_refs": [
+          "group_results"
+        ],
+        "routes": [
+          {
+            "artifact_id": "group_results",
+            "consumers": [
+              "N04",
+              "N05",
+              "N06",
+              "N08",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "将原始结果转换为保持测量粒度的指标。",
+      "resources": "结果JSON、对象存储、DCGM及独立节点探针。",
+      "guards": "结果来源、单位、规模／算子／消息等对比条件可核对。",
+      "actions": "回收原始数据；对同条件通信组聚合P10／P50／P90；独立节点测量单独保存。",
+      "post": "组级busbw不能复制为节点指标；独立数据缺失为unavailable；链路Gb/s与组级GB/s不混比较。",
+      "failure": "缺必需场景基线或独立数据按策略BLOCKED／显式豁免。",
+      "retry": "补测或重新回收有来源的数据；不从聚合结果伪造明细。",
+      "invalidation": "聚合规则／基线版本变化产生新计算版本，不覆盖原始观测。",
+      "note": "",
+      "code": "5.4",
+      "stage": "5",
+      "title": "回收结果并核对检测场景",
+      "id": "N04",
+      "inputs": [
+        "group_results",
+        "policy",
+        "observations"
+      ],
+      "outputs": [
+        "metrics"
+      ],
+      "decisions": [],
+      "substeps": [],
+      "checks": [
+        {
+          "name": "机内通信带宽",
+          "description": "AllReduce 总线带宽至少达到同配置、同规模实测基线的 92%。不达标按规定重测两次，仍失败时检查机内链路并建单。"
+        },
+        {
+          "name": "机内互联链路",
+          "description": "型号要求的 NVLink 链路全部处于 active；缺失时进入机内拓扑故障处理。"
+        },
+        {
+          "name": "节点性能差异",
+          "description": "有独立来源的同条件节点指标，相对同组中位数的落后偏差不超过 15%。缺节点测量时标 unavailable；该检查为必需项时阻断或按批准豁免处理。"
+        },
+        {
+          "name": "GPU–NIC 亲和",
+          "description": "满足已审批的 GPU–NIC 路径与 NUMA 亲和方案；不符时进入配置修复。"
+        },
+        {
+          "name": "显存带宽",
+          "description": "单 GPU 实测显存带宽至少达到同型号、工具与参数基线的 85%；缺基线时阻断或批准豁免。"
+        },
+        {
+          "name": "显存纠错",
+          "description": "测试窗口内不可纠正错误为零；可纠正错误增量默认不超过 10。超限时进入 GPU 个体故障评估。"
+        },
+        {
+          "name": "温度与功耗",
+          "description": "按型号登记的厂商温度阈值、功率上限与测量窗口判断；缺阈值按基线缺失处理。"
+        },
+        {
+          "name": "跨机通信带宽",
+          "description": "相对同规模、拓扑、软件与参数的跨机实测基线，衰减不超过 30%。超限时结合网络路径基线与无损规则溯源。"
+        },
+        {
+          "name": "计算结果正确性",
+          "description": "结果校验失败数为零。失败时保存证据并终止该通信组；重试创建新的整组尝试。"
+        },
+        {
+          "name": "初始化时长",
+          "description": "初始化默认不超过 60 秒；超时后按诊断配置重跑采集并分析原因。"
+        }
+      ],
+      "walkthrough": {
+        "actor": "平台解析；工程师核对场景适用性",
+        "action": "按工具版本提取指标与正确性结果，保持组级、节点级、消息档位和检测场景的粒度。",
+        "raw": [
+          {
+            "name": "algbw / busbw / unit",
+            "type": "number / number / enum",
+            "value": "模拟 all_reduce：algbw=100；busbw=187.5；GB/s",
+            "source": "16 ranks 的工具原始输出"
+          },
+          {
+            "name": "sample_key / correctness",
+            "type": "object / object",
+            "value": "group_attempt + operator + bytes + mode；错误数=0",
+            "source": "解析器与工具输出"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "样本覆盖",
+            "expected": "本次计划的算子×消息档位×模式",
+            "observed": "示例 1×1×1=1 条组级样本",
+            "result": "PASS",
+            "rule": "生产按完整计划统计，不能把单样本说成全场景通过"
+          },
+          {
+            "item": "单位与粒度",
+            "expected": "all_reduce 因子 2×(16−1)/16",
+            "observed": "100×1.875=187.5 GB/s",
+            "result": "PASS",
+            "rule": "这是组 busbw，不是每节点带宽；不能与 800 Gb/s 线速直接验收"
+          },
+          {
+            "item": "性能质量",
+            "expected": "条件可比的批准基线",
+            "observed": "没有批准基线时仅可报告测量",
+            "result": "BLOCKED",
+            "rule": "正确性与性能分别判定"
+          }
+        ],
+        "output": "metrics：组级指标、单位、原始行引用、适用场景、缺项与比较基线。",
+        "use": "5.5 生成报告；5.6 定位异常；CMDB 保留指标摘要与原始引用。",
+        "recovery": "解析失败保留工具原始输出；节点指标 unavailable 不可从组指标复制。",
+        "output_refs": [
+          "metrics"
+        ],
+        "routes": [
+          {
+            "artifact_id": "metrics",
+            "consumers": [
+              "N05",
+              "N06",
+              "N07",
+              "N08",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "生成可追溯到具体测试规模和尝试的报告。",
+      "resources": "HTML／PDF／CSV报告生成与持久化。",
+      "guards": "报告所有引用可解析，coverage_mode与实际执行一致。",
+      "actions": "生成报告及原始数据索引，标注失败、缺失和场景判定。",
+      "post": "报告生成后仍须完成评审；后续溯源与调优章节引用同一证据链，汇编为完整报告。",
+      "failure": "缺结果／悬空引用不得标完整。",
+      "retry": "可从已冻结原始数据重生成，版本可追溯。",
+      "invalidation": "后续新尝试或新基线生成新报告，不修改旧报告事实。",
+      "note": "",
+      "code": "5.5",
+      "stage": "5",
+      "title": "生成测试报告",
+      "id": "N05",
+      "inputs": [
+        "metrics",
+        "group_results",
+        "policy"
+      ],
+      "outputs": [
+        "report"
+      ],
+      "decisions": [],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台生成；交付工程师核对",
+        "action": "将本次成员、实际覆盖、性能、正确性和未完成项组合为可复核报告。",
+        "raw": [
+          {
+            "name": "report_version_ref / metric_refs",
+            "type": "VersionRef / RecordRef[]",
+            "value": "report r1；绑定 attempt-02 的结果",
+            "source": "5.3 与 5.4"
+          },
+          {
+            "name": "planned / completed / missing",
+            "type": "object",
+            "value": "每个测试场景分别列计划数、完成数和缺口",
+            "source": "冻结测试计划与实际结果"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "引用完整性",
+            "expected": "每个报告结论有原始证据",
+            "observed": "本次全部结论可定位",
+            "result": "PASS",
+            "rule": "来源修订和样本键必须精确"
+          },
+          {
+            "item": "覆盖诚实性",
+            "expected": "分组覆盖与单通信组分别说明",
+            "observed": "示例仅证明 2 台 / 16 GPU",
+            "result": "PASS",
+            "rule": "不得外推到未参与的机柜或集群"
+          }
+        ],
+        "output": "report r1：范围、版本、原始证据、基线、测量、差异及缺口。后续分析另发修订。",
+        "use": "5.6 溯源、5.7 调优与 5.8 评审使用；CMDB 将报告关联每台参与设备。",
+        "recovery": "缺引用先补数据，不能靠补一句结论修复证明链。",
+        "output_refs": [
+          "report"
+        ],
+        "routes": [
+          {
+            "artifact_id": "report",
+            "consumers": [
+              "N06",
+              "N07",
+              "N08",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "将异常关联到可处置对象及历史基线。",
+      "resources": "端口模型、DCGM、工单、网络证据接口无损与日志证据。",
+      "guards": "失败来源与端口／组身份可关联；比较指标语义一致。",
+      "actions": "关联端口、网络测试验收同路径历史、NUMA／HBM／温度和交换机无损规则证据。",
+      "post": "找出交换机根因仍保留发现环节为 NCCL 测试，另记责任域为网络侧；证据不足不宣称已确诊。",
+      "failure": "无法定位保留unknown与需补数据，不强制选硬件坏。",
+      "retry": "补诊断后添加新分析记录与引用。",
+      "invalidation": "映射／证据版本变化时按历史上下文解释旧异常。",
+      "note": "",
+      "code": "5.6",
+      "stage": "5",
+      "title": "追踪失败原因",
+      "id": "N06",
+      "inputs": [
+        "report",
+        "group_results",
+        "metrics",
+        "mapping",
+        "topology",
+        "g5",
+        "lossless",
+        "observations"
+      ],
+      "outputs": [
+        "trace"
+      ],
+      "decisions": [],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "平台关联证据；对应工程师确认根因",
+        "action": "从失败组和 rank 定位 GPU、NIC、物理端口，再查看同窗网络与硬件证据。",
+        "raw": [
+          {
+            "name": "failure_ref / object_refs / window_ref",
+            "type": "RecordRef / ObjectRef[] / RecordRef",
+            "value": "rank 7 → GPU → 相关 NIC → 交换机端口",
+            "source": "报告、映射与遥测"
+          },
+          {
+            "name": "source / responsible_domain / confidence",
+            "type": "enum / enum / enum",
+            "value": "发现环节=NCCL；责任域=fabric；待证实或已证实",
+            "source": "原始失败事件与处置证据"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "关联覆盖",
+            "expected": "本次全部失败事件",
+            "observed": "示例 1/1 有原始事件与对象链",
+            "result": "PASS",
+            "rule": "无法定位到唯一对象时明确候选集合"
+          },
+          {
+            "item": "根因质量",
+            "expected": "因果证据足以支持结论",
+            "observed": "仅同窗端口告警",
+            "result": "待确认",
+            "rule": "时间相关不等于因果；不能直接判交换机损坏"
+          }
+        ],
+        "output": "trace：现象、假设、支持／反驳证据、责任域、工单与待补采项。",
+        "use": "0.1 定向修复、5.7 调优与 5.8 评审消费；CMDB 保存发现来源与责任域。",
+        "recovery": "缺因果证据安排受控复验；不改写最早发现环节。",
+        "output_refs": [
+          "trace"
+        ],
+        "routes": [
+          {
+            "artifact_id": "trace",
+            "consumers": [
+              "N07",
+              "N08",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "形成可审查且能回流版本化配置的改进建议。",
+      "resources": "当前值、建议值、依据、风险、责任角色。",
+      "guards": "建议具有实测或规则依据，适用于当前型号／版本。",
+      "actions": "生成参数建议；服务器落地走配置版本，网络建议进入负责人修复计划。",
+      "post": "建议生成不直接改设备；建议被采纳后重新评估受影响证据。",
+      "failure": "无依据的值标待验证，不作为自动修复。",
+      "retry": "修改建议产生版本；实际变更复用3.5 应用并验证服务器基线配置／1.6 应用并核对网络配置，不另开旁路。",
+      "invalidation": "变更后旧网络测试验收／NCCL 报告评审依赖按影响范围失效。",
+      "note": "",
+      "code": "5.7",
+      "stage": "5",
+      "title": "汇总调优建议",
+      "id": "N07",
+      "inputs": [
+        "report",
+        "metrics",
+        "trace",
+        "policy"
+      ],
+      "outputs": [
+        "tuning"
+      ],
+      "decisions": [],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "工程师提出；授权角色评审",
+        "action": "把已支持的瓶颈转成明确参数、目标、预期改善与验证计划。",
+        "raw": [
+          {
+            "name": "recommendation_id / proposed_change",
+            "type": "ID / object",
+            "value": "recommendation-01；明确字段的旧值与建议值",
+            "source": "溯源证据"
+          },
+          {
+            "name": "applicable_scope / review_status",
+            "type": "object / enum",
+            "value": "指定设备／配置修订；pending 或已确认",
+            "source": "审批与适用范围"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "建议数量",
+            "expected": "每项异常均有处置状态",
+            "observed": "示例 1 个建议、1 个明确负责人",
+            "result": "PASS",
+            "rule": "无建议也应记录确认无待办，而非漏填"
+          },
+          {
+            "item": "变更质量",
+            "expected": "依据、影响、回退能力及验证计划明确",
+            "observed": "尚未批准实施",
+            "result": "待确认",
+            "rule": "形成建议不直接下发设备"
+          }
+        ],
+        "output": "tuning：建议、依据、范围、负责人、采纳／拒绝／待定及版本化变更入口。",
+        "use": "5.8 核对清单；采纳后按配置变更流程重验；CMDB 保存调优案例。",
+        "recovery": "证据不足退回溯源；参数修改后旧性能证明按依赖重新判断可用性。",
+        "output_refs": [
+          "tuning"
+        ],
+        "routes": [
+          {
+            "artifact_id": "tuning",
+            "consumers": [
+              "N08",
+              "C01"
+            ],
+            "terminal": ""
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "确认本次交付测试达标并完成调优清单确认。",
+      "resources": "交付组长评审、完整报告和检测场景判据。",
+      "guards": "必需场景有有效结论；报告覆盖与目标一致；调优清单已确认。",
+      "actions": "评审冻结报告版本，记录通过／失败／阻断／允许的豁免。",
+      "post": "报告评审通过只解锁优雅退出；后续仍须完成清理、撤权、归档等交付步骤。",
+      "failure": "不达标定向重测；缺证据不可凭签字改PASS。",
+      "retry": "补测／调整后评审新报告版本；通信组仍整组恢复。",
+      "invalidation": "配置／软件／范围／基线变化影响后续使用。",
+      "note": "",
+      "code": "5.8",
+      "stage": "5",
+      "title": "评审报告与退出条件",
+      "id": "N08",
+      "inputs": [
+        "report",
+        "metrics",
+        "trace",
+        "tuning",
+        "group_results",
+        "policy",
+        "human"
+      ],
+      "outputs": [
+        "g6"
+      ],
+      "decisions": [
+        "Q11",
+        "Q12"
+      ],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "交付组长评审并确认",
+        "action": "核对报告覆盖、基线、豁免与调优清单，决定本次范围是否允许进入优雅退出。",
+        "raw": [
+          {
+            "name": "report_ref / tuning_ref / approval",
+            "type": "RecordRef / RecordRef / object",
+            "value": "冻结 report r2；调优清单；DL 确认人和时间",
+            "source": "报告、调优与人工评审"
+          },
+          {
+            "name": "required_scope / evidence_refs",
+            "type": "object / RecordRef[]",
+            "value": "2 台 / 16 GPU；适用交付场景有有效证明",
+            "source": "交付计划与验证记录"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "交付覆盖",
+            "expected": "本次全部必需场景与目标",
+            "observed": "逐场景核对，未执行项不能计通过",
+            "result": "待确认",
+            "rule": "现场性能基线与必要场景未批准前不能给真实交付 PASS"
+          },
+          {
+            "item": "出口边界",
+            "expected": "评审通过后才允许清理退出",
+            "observed": "评审确认 ≠ cleanup 已完成",
+            "result": "PASS",
+            "rule": "维护态转换必须另有清理核验与归档回执"
+          }
+        ],
+        "output": "g6：报告修订、评审人、时间、结论、豁免与允许退出的范围。",
+        "use": "外部退出流程消费准入；CMDB 先保存评审，待 cleanup 核验事件再归档。",
+        "recovery": "不通过则回到缺口所属步骤；不能跳过清理直接标维护态。",
+        "output_refs": [
+          "g6"
+        ],
+        "routes": [
+          {
+            "artifact_id": "g6",
+            "consumers": [
+              "C01"
+            ],
+            "terminal": "优雅退出（边界外消费者）"
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "让失败可以被修复，同时不绕过无关门禁。",
+      "resources": "issue.repair／issue.verify、原失败证据、冻结修复目标与动作。",
+      "guards": "工单、批准范围、信任、兼容与资源条件满足；只允许针对本故障的恢复例外。",
+      "actions": "登记实物或配置处理 → 按故障类别定向复验 → 通过后提议关闭 → 网络工程师／交付组长确认。",
+      "post": "维修登记不代表恢复完成。复验由原生产流程生成新版本证明；发现故障的环节与定位后的责任域分别保留。",
+      "failure": "复验失败reopened；两次失败升级；不能提前关闭工单消除告警。",
+      "retry": "修复后回到原来的生产步骤重新核验，并生成新版本证明。公共流程按故障范围调用，不加入正常前向依赖链。",
+      "invalidation": "换件和配置变化触发相关拓扑／映射／测试失效。",
+      "note": "",
+      "code": "0.1",
+      "stage": "0",
+      "title": "修复与定向复验",
+      "id": "R01",
+      "inputs": [
+        "human",
+        "auth",
+        "bom"
+      ],
+      "outputs": [
+        "repair"
+      ],
+      "decisions": [
+        "Q9",
+        "Q11"
+      ],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "现场工程师修复；网络工程师或交付组长确认关闭",
+        "action": "对工单指定端口修线或换件，保存实际动作，然后由原验证流程生成新证据。",
+        "raw": [
+          {
+            "name": "issue_id / scope / action_receipt",
+            "type": "ID / object / object",
+            "value": "issue-01；A.c1↔SW.c01；重新插线回执",
+            "source": "工单与现场操作"
+          },
+          {
+            "name": "verification_ref / closure_record",
+            "type": "RecordRef / object",
+            "value": "3.3.2～3.3.4 新记录；确认人和时间",
+            "source": "定向复验与人工确认"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "复验范围",
+            "expected": "本次受影响连接及其依赖",
+            "observed": "1/1 目标连接已复验，其余依赖重新核对",
+            "result": "PASS",
+            "rule": "本故障复验例外不豁免无关阻断"
+          },
+          {
+            "item": "关闭质量",
+            "expected": "复验 PASS 后提议并确认关闭",
+            "observed": "仅填‘已修复’，没有复验",
+            "result": "BLOCKED",
+            "rule": "登记修复不等于修复完成"
+          }
+        ],
+        "output": "repair：动作、换件、新旧身份、复验尝试、证据与关闭确认分别保存。",
+        "use": "原步骤重建受影响证明；CMDB 保存完整工单与换件历史。",
+        "recovery": "复验不通过仍保持工单开放；按新证据继续处置。",
+        "output_refs": [
+          "repair"
+        ],
+        "routes": [
+          {
+            "artifact_id": "repair",
+            "consumers": [
+              "C01"
+            ],
+            "terminal": "原生产流程的受控恢复（显式回流）"
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "每次源记录发布即更新资产索引；把五步数据连成设备档案，供维护查询。",
+      "resources": "源记录发布事件、源表只读访问、稳定对象目录、同步回执与可重放事件队列。",
+      "guards": "每次只接收一种已落库源记录；核对项目、对象与不可变修订。无需等五步全部完成。",
+      "actions": "按源记录身份幂等建索引；关联设备、部件、端口及项目；保留历史与质量。cleanup 已验证事件另行触发归档快照。",
+      "post": "收到数=新建数+重复数+拒收数；每条索引可回到源修订。归档完成另有清单与引用一致性证明。",
+      "failure": "未知对象、跨项目或同版本内容冲突隔离；同步延迟可见。同步成功不是业务 PASS，也不阻塞所有业务步骤。",
+      "retry": "以原事件身份重放；迟到版本仅入历史，不覆盖较新投影；断链修复后对账。",
+      "invalidation": "新采集更新索引可用性但不覆盖历史；cleanup 后停止带内动态监控，仅按需带外刷新静态资产。",
+      "note": "",
+      "code": "0.2",
+      "stage": "0",
+      "title": "CMDB 自动沉淀与维护查询",
+      "id": "C01",
+      "inputs": [
+        "bom",
+        "plan",
+        "env",
+        "bootstrap",
+        "pre_cable",
+        "net_config",
+        "health",
+        "lossless",
+        "network_export",
+        "host_ready",
+        "inventory",
+        "g1",
+        "topology",
+        "g2",
+        "mapping",
+        "g4",
+        "test_plan",
+        "l1",
+        "l2",
+        "l3",
+        "l4",
+        "l5",
+        "g5",
+        "nccl_admission",
+        "nccl_environment",
+        "group_results",
+        "metrics",
+        "report",
+        "trace",
+        "tuning",
+        "g6",
+        "repair",
+        "observations",
+        "window",
+        "readiness",
+        "human"
+      ],
+      "outputs": [
+        "cmdb"
+      ],
+      "decisions": [],
+      "substeps": [],
+      "checks": [],
+      "walkthrough": {
+        "actor": "各模块自动发布；平台同步；维护人员查询",
+        "action": "每收到一条源记录便核对对象并建立索引。BMC、OS、邻居、配置、窗口和测试原始明细继续由源模块保存。",
+        "raw": [
+          {
+            "name": "event_id / source_kind / source_ref",
+            "type": "ID / enum / RecordRef",
+            "value": "evt-inventory-a-r2；inventory；snapshot-a r2",
+            "source": "源记录落库后的发布事件"
+          },
+          {
+            "name": "project_id / subject_refs / source_sequence",
+            "type": "ID / ObjectRef[] / integer",
+            "value": "project-demo；A 与其部件；2",
+            "source": "源模块提供的作用域与单调修订序号"
+          },
+          {
+            "name": "source_quality / source_hash / received_at",
+            "type": "enum / string / Time",
+            "value": "known 或 unknown；内容摘要；接收时间",
+            "source": "源采集质量与同步回执"
+          },
+          {
+            "name": "archive_trigger / archive_refs",
+            "type": "enum / RecordRef[]",
+            "value": "仅清理已核验事件触发最终快照；带上清理回执",
+            "source": "外部退出生命周期"
+          }
+        ],
+        "comparisons": [
+          {
+            "item": "同步数量",
+            "expected": "每条事件都有确定回执",
+            "observed": "收到 3：新建 2 + 重复 1 + 拒收 0",
+            "result": "PASS",
+            "rule": "2 个源记录不代表只有 2 个资产；对象数另算"
+          },
+          {
+            "item": "引用质量",
+            "expected": "项目、对象、修订、摘要都可核对",
+            "observed": "全部索引能返回源记录",
+            "result": "PASS",
+            "rule": "跨项目、未知对象、同修订不同内容必须隔离"
+          },
+          {
+            "item": "乱序与缺测",
+            "expected": "迟到不覆盖新版；unknown 不变正常",
+            "observed": "r2 后到 r1：r1 入历史；当前仍 r2",
+            "result": "PASS",
+            "rule": "新 unknown 记录必须显示当前未知及最后一次有效值的时间，不能保留旧绿色"
+          },
+          {
+            "item": "维护态",
+            "expected": "cleanup 核验后才归档并停止带内动态采集",
+            "observed": "仅有 5.8 评审通过",
+            "result": "BLOCKED",
+            "rule": "仅阻断归档完成标记，不阻断其他源模块发布"
+          }
+        ],
+        "output": "cmdb：联邦索引、逐事件回执、同步水位、隔离原因、源记录与归档快照引用。自动与人工字段分列。",
+        "use": "设备 360°、项目资料与 API 导出按身份追到原始证据；维护态只按需带外刷新静态资产。",
+        "recovery": "同步失败保留待同步状态，以原事件重放；源记录不丢失，CMDB 不成为全流程串行门禁。",
+        "output_refs": [
+          "cmdb"
+        ],
+        "routes": [
+          {
+            "artifact_id": "cmdb",
+            "consumers": [],
+            "terminal": "设备与项目查询／维护人员／AIOps（外部读者）"
+          }
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "project",
+      "producer": "external",
+      "consumers": [
+        "F01",
+        "F02",
+        "H01",
+        "H06"
+      ],
+      "name": "项目模板与商定基线",
+      "owner": "客户与网络工程师商定，项目模板保存版本。",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "项目与配置基线",
+        "rule": "消费已批准的具体模板和商定基线版本。",
+        "fields": [
+          {
+            "name": "project_id",
+            "type": "ID",
+            "label": "项目",
+            "rule": "与当前业务范围一致。",
+            "required": "必填",
+            "status": "已有"
+          },
+          {
+            "name": "profile_version_ref",
+            "type": "VersionRef",
+            "label": "项目模板",
+            "rule": "绑定型号、角色、字段映射与参数差异。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "baseline_refs",
+            "type": "VersionRef[]",
+            "label": "商定基线",
+            "rule": "网络和服务器配置分别引用。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "parameter_bindings",
+            "type": "object[]",
+            "label": "参数绑定",
+            "rule": "每项包含名称、值、单位及取值依据。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model",
+      "producer": "external",
+      "consumers": [
+        "F01",
+        "F02",
+        "H01",
+        "H07",
+        "H02",
+        "H03",
+        "H05",
+        "H06"
+      ],
+      "name": "独立型号与拓扑基线",
+      "owner": "已审批的设备型号版本；预期拓扑独立于本次待验数据。",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "独立型号基线",
+        "rule": "预期来自已审批型号，不从本次待验观测反推。",
+        "fields": [
+          {
+            "name": "model_version_ref",
+            "type": "VersionRef",
+            "label": "型号版本",
+            "rule": "对象类别与目标设备匹配。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "slots",
+            "type": "object[]",
+            "label": "槽位与角色",
+            "rule": "稳定槽位、允许部件、端口和能力。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "expected_topology",
+            "type": "object",
+            "label": "预期拓扑",
+            "rule": "GPU–NIC 关系、NUMA、PCIe／NVLink 设计。",
+            "required": "适用时",
+            "status": "建议"
+          },
+          {
+            "name": "baseline_refs",
+            "type": "RecordRef[]",
+            "label": "基线依据",
+            "rule": "保留厂商规格或批准金样的依据。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "media",
+      "producer": "external",
+      "consumers": [
+        "F03",
+        "F04",
+        "F06",
+        "H01",
+        "H06",
+        "N01",
+        "N02"
+      ],
+      "name": "已审批介质与兼容矩阵",
+      "owner": "介质库与参数目录提供已审批版本及兼容关系。",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "介质与兼容性",
+        "rule": "使用已审批内容和兼容组合，不只核对文件名。",
+        "fields": [
+          {
+            "name": "media_version_ref",
+            "type": "VersionRef",
+            "label": "介质版本",
+            "rule": "明确镜像、驱动、固件或工具版本。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "content_hash",
+            "type": "string",
+            "label": "内容摘要",
+            "rule": "建议 sha256: 加 64 位十六进制摘要。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "compatibility",
+            "type": "object[]",
+            "label": "兼容组合",
+            "rule": "型号、系统、驱动和固件条件。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "approval_ref",
+            "type": "RecordRef",
+            "label": "审批记录",
+            "rule": "范围与当前介质版本一致。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "policy",
+      "producer": "external",
+      "consumers": [
+        "F02",
+        "F07",
+        "H06",
+        "T00",
+        "T01",
+        "T02",
+        "T03",
+        "T04",
+        "T05",
+        "T06",
+        "N01",
+        "N03",
+        "N04",
+        "N05",
+        "N07",
+        "N08"
+      ],
+      "name": "已确认的判据与覆盖策略",
+      "owner": "项目模板、参数目录及有权审批人提供；未确定的策略保留待确认。",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "判据与覆盖策略",
+        "rule": "待决阈值和覆盖规则不得填成默认通过。",
+        "fields": [
+          {
+            "name": "policy_version_ref",
+            "type": "VersionRef",
+            "label": "策略版本",
+            "rule": "记录适用项目、型号和范围。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "criteria",
+            "type": "object[]",
+            "label": "判定项",
+            "rule": "指标、运算符、阈值、单位和必需性。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "coverage_policy",
+            "type": "object",
+            "label": "覆盖规则",
+            "rule": "对象粒度、方向、档位及抽样接受条件。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "window_policy",
+            "type": "object",
+            "label": "时间规则",
+            "rule": "观测窗口、有效期和缺测处理分开。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "auth",
+      "producer": "external",
+      "consumers": [
+        "F01",
+        "F03",
+        "F04",
+        "F06",
+        "H01",
+        "H07",
+        "H06",
+        "T00",
+        "T04",
+        "N01",
+        "N02",
+        "N03",
+        "R01"
+      ],
+      "name": "授权与资源条件",
+      "owner": "项目权限、批准动作范围与执行资源预留记录。",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "授权与资源",
+        "rule": "授权不等于资源已预留；复验例外仅限批准范围。",
+        "fields": [
+          {
+            "name": "actor_id",
+            "type": "ID",
+            "label": "行为主体",
+            "rule": "记录用户或服务主体。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "allowed_scope",
+            "type": "object",
+            "label": "批准动作范围",
+            "rule": "项目、对象、动作与批准依据。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "channel",
+            "type": "enum",
+            "label": "执行通道",
+            "rule": "建议 ssh / agent / bmc；具体带外动作仍核对权限。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "reservation_refs",
+            "type": "RecordRef[]",
+            "label": "资源预留",
+            "rule": "绑定目标和执行窗口。",
+            "required": "需要独占时",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "readiness",
+      "producer": "external",
+      "consumers": [
+        "H04",
+        "T00",
+        "N01",
+        "C01"
+      ],
+      "name": "动态网络就绪证明",
+      "owner": "网络证据接口在执行前刷新；默认有效期为 30 秒。",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "动态就绪证明",
+        "rule": "执行前刷新，默认 30 秒有效；不限制整个任务运行时长。",
+        "fields": [
+          {
+            "name": "fabric / pod / switch_ids",
+            "type": "string / string / ID[]",
+            "label": "网络范围",
+            "rule": "标明 fabric 与交换机集合；pod 按本次范围填写。",
+            "required": "按作用域",
+            "status": "已有"
+          },
+          {
+            "name": "readiness_at",
+            "type": "Time",
+            "label": "刷新时间",
+            "rule": "不能使用未来时间冒充新鲜。",
+            "required": "必填",
+            "status": "已有"
+          },
+          {
+            "name": "ttl_seconds",
+            "type": "integer",
+            "label": "有效秒数",
+            "rule": "正整数，默认 30；消费时按适用边界核验。",
+            "required": "必填",
+            "status": "已有"
+          },
+          {
+            "name": "lldp_readable / config_ready",
+            "type": "boolean / boolean",
+            "label": "可读与配置就绪",
+            "rule": "分别记录，不能只保留在线标记。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "observations",
+      "producer": "external",
+      "consumers": [
+        "F05",
+        "F07",
+        "H07",
+        "H02",
+        "H03",
+        "H04",
+        "T01",
+        "T03",
+        "N04",
+        "N06",
+        "C01"
+      ],
+      "name": "主机／交换机观测与能力标记",
+      "owner": "主机与网络采集器提供；每项记录对象、时间、采集来源及质量。",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "采集事实与质量",
+        "rule": "主机与交换机观测分别留存，缺测不补零。",
+        "fields": [
+          {
+            "name": "object_ref",
+            "type": "ObjectRef",
+            "label": "被观测对象",
+            "rule": "定位设备、部件或物理端口。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "source / collected_at",
+            "type": "enum / Time",
+            "label": "采集来源与时间",
+            "rule": "source 区分 host、switch、bmc。",
+            "required": "必填",
+            "status": "已有"
+          },
+          {
+            "name": "collection_revision",
+            "type": "string",
+            "label": "采集修订",
+            "rule": "关联该批次原始结果。",
+            "required": "必填",
+            "status": "已有"
+          },
+          {
+            "name": "collection_status / values",
+            "type": "enum / object",
+            "label": "采集状态与内容",
+            "rule": "建议 collected / failed / not_run；成功无邻居单独记录，观察协议待确认。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "capabilities / quality",
+            "type": "object / object",
+            "label": "能力与质量",
+            "rule": "保留 unknown、降级、近似或估算标记。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "window",
+      "producer": "external",
+      "consumers": [
+        "T05",
+        "C01"
+      ],
+      "name": "本次负载对应的网络观测窗口",
+      "owner": "持续网络采集提供，与本次负载关联；精确窗口绑定方式仍待确认。",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "负载观测窗口",
+        "rule": "采样覆盖本次负载；窗口绑定和缺样策略仍待确认。",
+        "fields": [
+          {
+            "name": "load_attempt_ref",
+            "type": "RecordRef",
+            "label": "负载尝试",
+            "rule": "指向被观测的本次执行。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "object_refs / priority",
+            "type": "ObjectRef[] / integer",
+            "label": "对象与优先级",
+            "rule": "与规则和流量类对应。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "window / samples",
+            "type": "Window / object[]",
+            "label": "窗口与样本",
+            "rule": "记录采样时间、计数及完整性。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "counter_reset / gaps",
+            "type": "boolean / object[]",
+            "label": "重置与缺样",
+            "rule": "不能静默插值、补零或跨重置作差。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "human",
+      "producer": "external",
+      "consumers": [
+        "F08",
+        "H04",
+        "T06",
+        "N08",
+        "R01",
+        "C01"
+      ],
+      "name": "人工处置与确认记录",
+      "owner": "网络工程师、交付组长及现场人员的处置、审批与确认记录。",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "人工处置与确认",
+        "rule": "确认绑定对象和版本；签字不能替代缺失的检测证据。",
+        "fields": [
+          {
+            "name": "actor_id / action",
+            "type": "ID / enum",
+            "label": "确认人与动作",
+            "rule": "区分批准、维修登记、复验和关闭。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "scope / subject_version",
+            "type": "ObjectRef[] / VersionRef",
+            "label": "作用范围与版本",
+            "rule": "修改范围后重新核对批准适用性。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "confirmed_at / evidence_refs",
+            "type": "Time / RecordRef[]",
+            "label": "时间与依据",
+            "rule": "链接本次报告或复验记录。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "waiver",
+            "type": "object",
+            "label": "豁免",
+            "rule": "含要求、对象／路径、理由、审批人、期限及整改计划。",
+            "required": "存在豁免时",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "bom",
+      "producer": "F01",
+      "consumers": [
+        "F02",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08",
+        "H01",
+        "H07",
+        "H02",
+        "H04",
+        "H05",
+        "R01",
+        "C01"
+      ],
+      "name": "物料版本、稳定实体与期望连接",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "物料与期望连接",
+        "rule": "导入引用解析为稳定实体；同批次异摘要不得覆盖。",
+        "fields": [
+          {
+            "name": "bom_import_batch_id",
+            "type": "string",
+            "label": "导入批次",
+            "rule": "BOM-BATCH-<项目码>-<YYYYMMDD>-<seq>。",
+            "required": "必填",
+            "status": "已有"
+          },
+          {
+            "name": "content_hash",
+            "type": "string",
+            "label": "包摘要",
+            "rule": "sha256:<hex>；按声明文件与规定摘要算法计算。",
+            "required": "必填",
+            "status": "已有"
+          },
+          {
+            "name": "item_uid / category",
+            "type": "ID / enum",
+            "label": "物料身份与类别",
+            "rule": "类别：server、switch、nic、gpu、optic_module、cable、psu、bmc、port、other。提交后 ID 不可变。",
+            "required": "必填",
+            "status": "已有"
+          },
+          {
+            "name": "serial / model_version_ref",
+            "type": "string / VersionRef",
+            "label": "实物唯一键与型号",
+            "rule": "有 SN 时 (category, serial) 全局唯一；需要型号的物料引用已发布版本。",
+            "required": "按物料类别",
+            "status": "已有"
+          },
+          {
+            "name": "parent_uid / port_index",
+            "type": "ID / string",
+            "label": "父对象与端口位",
+            "rule": "端口按父项＋端口位唯一，breakout 子口独立。",
+            "required": "端口或部件",
+            "status": "已有"
+          },
+          {
+            "name": "endpoint_a_uid / endpoint_b_uid",
+            "type": "ID / ID",
+            "label": "线缆端点",
+            "rule": "两端引用端口，按无序对规范化。",
+            "required": "线缆",
+            "status": "已有"
+          },
+          {
+            "name": "bom_line_no",
+            "type": "integer",
+            "label": "导入行号",
+            "rule": "批次内唯一；只定位问题，不作实体主键。",
+            "required": "必填",
+            "status": "已有"
+          }
+        ]
+      }
+    },
+    {
+      "id": "plan",
+      "producer": "F02",
+      "consumers": [
+        "F03",
+        "F04",
+        "F06",
+        "F08",
+        "C01"
+      ],
+      "name": "网络实施计划、模板与变量快照",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "网络实施计划",
+        "rule": "把商定方案转成可执行输入；不替客户设计网络。",
+        "fields": [
+          {
+            "name": "plan_version_ref",
+            "type": "VersionRef",
+            "label": "计划版本",
+            "rule": "冻结本次批次与依据。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "device_refs / batch_order",
+            "type": "ObjectRef[] / object[]",
+            "label": "设备及实施批次",
+            "rule": "说明目标与批准顺序。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "template_refs / variables",
+            "type": "VersionRef[] / object",
+            "label": "模板及变量",
+            "rule": "变量关联基线、角色、地址规则和单位。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "baseline_refs",
+            "type": "VersionRef[]",
+            "label": "商定配置依据",
+            "rule": "明确引用已批准内容。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "env",
+      "producer": "F03",
+      "consumers": [
+        "F04",
+        "C01"
+      ],
+      "name": "环境自检记录",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "开通环境自检",
+        "rule": "必需检查通过才允许开通；环境通过不代表设备已开通。",
+        "fields": [
+          {
+            "name": "batch_ref",
+            "type": "RecordRef",
+            "label": "目标批次",
+            "rule": "与实施计划对应。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "checks",
+            "type": "object[]",
+            "label": "检查明细",
+            "rule": "检查对象、项目、必需性、结果及失败原因。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "media_refs / channel_checks",
+            "type": "VersionRef[] / object[]",
+            "label": "介质与通道",
+            "rule": "核对引导、采集和分发条件。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "checked_at / verdict",
+            "type": "Time / Result",
+            "label": "时间与结论",
+            "rule": "消费时核对条件仍适用。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "bootstrap",
+      "producer": "F04",
+      "consumers": [
+        "F05",
+        "F06",
+        "F08",
+        "H04",
+        "C01"
+      ],
+      "name": "身份绑定、管理可达与开通回执",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "身份与管理通道",
+        "rule": "管理可达、开通完成和生产配置同步分别记录。",
+        "fields": [
+          {
+            "name": "device_ref / identity_match",
+            "type": "ObjectRef / object",
+            "label": "设备身份",
+            "rule": "SN／MAC 与导入对象匹配，无冲突。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "boot_media_ref",
+            "type": "VersionRef",
+            "label": "开通介质",
+            "rule": "只应用批准的引导和最小管理配置。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "management_reachable",
+            "type": "boolean",
+            "label": "管理可达",
+            "rule": "不推导计算网络可达。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "bootstrap_receipt",
+            "type": "object",
+            "label": "开通回执",
+            "rule": "保留阶段、实际版本、时间与原始证据。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pre_cable",
+      "producer": "F05",
+      "consumers": [
+        "F08",
+        "H04",
+        "C01"
+      ],
+      "name": "网络接线预校验与待核验端口清单",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "网络接线预校验",
+        "rule": "未装机服务器的待核验端口保留缺口，不提前确认。",
+        "fields": [
+          {
+            "name": "bom_version_ref / pairs",
+            "type": "VersionRef / PortPair[]",
+            "label": "期望与端口对",
+            "rule": "端点必须已经存在。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "observation_refs",
+            "type": "RecordRef[]",
+            "label": "可观测连接",
+            "rule": "区分交换机互联与服务器接入口。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "pair_results",
+            "type": "object[]",
+            "label": "预校验结果",
+            "rule": "按端口对记录结果与依据。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "pending_ports",
+            "type": "ID[]",
+            "label": "待核验端口",
+            "rule": "交给 3.3 完成双侧采集和三方比对。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "net_config",
+      "producer": "F06",
+      "consumers": [
+        "F07",
+        "F08",
+        "H04",
+        "H06",
+        "C01"
+      ],
+      "name": "预期／实际配置快照与比对证明",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "网络配置闭环",
+        "rule": "下发成功不等于配置生效；漂移接受口径仍待确认。",
+        "fields": [
+          {
+            "name": "config_version_ref / approval_ref",
+            "type": "VersionRef / RecordRef",
+            "label": "配置与批准",
+            "rule": "批准快照对应本次目标和内容。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "intended_ref / running_ref",
+            "type": "RecordRef / RecordRef",
+            "label": "期望与实际快照",
+            "rule": "分别保存，按可比较字段比对。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "push_receipts",
+            "type": "object[]",
+            "label": "逐设备回执",
+            "rule": "保留实际执行状态与版本。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "diff / verification",
+            "type": "object[] / object",
+            "label": "差异与复采证明",
+            "rule": "关联规则版本、时间和漂移级别。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "health",
+      "producer": "F07",
+      "consumers": [
+        "F08",
+        "T00",
+        "N01",
+        "C01"
+      ],
+      "name": "网络健康证明",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "网络健康证明",
+        "rule": "健康结论绑定网络范围和时效，不代替本次负载结果。",
+        "fields": [
+          {
+            "name": "network_scope",
+            "type": "object",
+            "label": "网络范围",
+            "rule": "fabric、pod、交换机和必需端口。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "checks",
+            "type": "object[]",
+            "label": "健康检查",
+            "rule": "BGP、光功率、PTP 等适用项及证据。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "policy_version_ref",
+            "type": "VersionRef",
+            "label": "判据版本",
+            "rule": "适用范围及不适用策略需明确。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "collected_at / valid_until / verdict",
+            "type": "Time / Time / Result",
+            "label": "时间与结论",
+            "rule": "不凭历史通过自动准入。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lossless",
+      "producer": "F07",
+      "consumers": [
+        "F08",
+        "T00",
+        "T03",
+        "T05",
+        "N01",
+        "N06",
+        "C01"
+      ],
+      "name": "无损能力、基线与规则证据",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "无损能力与规则证据",
+        "rule": "能力、基线、运行观测、规则结果分开；降级不等于通过。",
+        "fields": [
+          {
+            "name": "port_refs / priority",
+            "type": "ObjectRef[] / integer",
+            "label": "端口与优先级",
+            "rule": "匹配本次流量类和无损队列。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "capabilities / baseline_ref",
+            "type": "object / VersionRef",
+            "label": "能力及基线",
+            "rule": "明确计数能力、配置意图及生效版本。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "rule_results",
+            "type": "object[]",
+            "label": "逐规则结果",
+            "rule": "规则版本、窗口、事实、结论与质量。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "degradation",
+            "type": "object[]",
+            "label": "能力缺口",
+            "rule": "保留 unknown／近似／估算及适用边界。",
+            "required": "存在缺口时",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "network_export",
+      "producer": "F08",
+      "consumers": [
+        "C01"
+      ],
+      "name": "网络验收包与交付基线",
+      "owner": "",
+      "terminal_consumer": "客户移交（外部读者）",
+      "data_contract": {
+        "category": "网络交付包",
+        "rule": "导出冻结引用；不增加装机或接线核验的总前置。",
+        "fields": [
+          {
+            "name": "export_id / baseline_ref",
+            "type": "ID / VersionRef",
+            "label": "交付包及基线",
+            "rule": "一个导出版本对应一组固定引用。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "asset_refs / connection_refs",
+            "type": "ObjectRef[] / RecordRef[]",
+            "label": "资产与连接",
+            "rule": "设备、端口、线缆和地址信息一致。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "config_refs / evidence_refs",
+            "type": "RecordRef[] / RecordRef[]",
+            "label": "配置和验收证据",
+            "rule": "逐项可解析并匹配快照。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "waiver_refs / manifest",
+            "type": "RecordRef[] / object",
+            "label": "豁免与包清单",
+            "rule": "豁免保留原结论；包清单含文件摘要。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "host_ready",
+      "producer": "H01",
+      "consumers": [
+        "H07",
+        "H02",
+        "C01"
+      ],
+      "name": "系统版本、注册回执与 SSH 互信证明",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "装机与互信结果",
+        "rule": "启动回执和 SSH 互信分别核验，通过后供采集使用。",
+        "fields": [
+          {
+            "name": "machine_id / install_request_id",
+            "type": "ID / ID",
+            "label": "设备与安装请求",
+            "rule": "回调绑定物理身份及本次请求。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "os_version / driver_versions",
+            "type": "string / object",
+            "label": "实际软件版本",
+            "rule": "与批准介质可对应。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "registration_receipt",
+            "type": "object",
+            "label": "注册回执",
+            "rule": "身份校验与一次性令牌校验结果，不保存明文令牌。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "ssh_trust",
+            "type": "object",
+            "label": "互信验证",
+            "rule": "验证时间、目标身份与结果；失败保留原因。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "inventory",
+      "producer": "H07",
+      "consumers": [
+        "H02",
+        "C01"
+      ],
+      "name": "装机硬件清单与采集质量记录",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "装机硬件采集清单",
+        "rule": "记录事实与采集质量；部分清单也留存并同步 CMDB，验机通过由 3.1 另行判定。",
+        "fields": [
+          {
+            "name": "machine_id / model_version_ref",
+            "type": "ID / VersionRef",
+            "label": "设备及独立型号",
+            "rule": "身份匹配批准 BOM；B300 整机必须固定 OEM 型号修订。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "components",
+            "type": "object[]",
+            "label": "部件清单",
+            "rule": "逐项 component_id、kind、slot、vendor、model、serial_number；含 CPU、内存、GPU、NIC、磁盘、电源。未知值用 null＋原因。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "capacity / firmware",
+            "type": "Metric / object[]",
+            "label": "容量与固件",
+            "rule": "容量保存数值与单位；固件记录所属部件、版本、读取来源。按型号定义必需性。",
+            "required": "适用时",
+            "status": "建议"
+          },
+          {
+            "name": "ports",
+            "type": "object[]",
+            "label": "物理端口与当前别名",
+            "rule": "physical_port_uid、component_id、permanent_mac、interface_name、bdf 分列；角色区分计算／管理／存储／unused。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "observations",
+            "type": "object[]",
+            "label": "分源观测",
+            "rule": "source=host|bmc；collected_at、received_at、collection_revision、quality、capability、raw_ref；来源冲突并列保存。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "coverage",
+            "type": "object",
+            "label": "采集数量",
+            "rule": "expected、received、valid、missing、duplicate、unexpected 分别记录对象集合及计数；分母由批准范围产生。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "missing_fields / collection_status",
+            "type": "object[] / enum",
+            "label": "缺失与任务状态",
+            "rule": "缺失项写对象、字段、原因；采集状态 complete|partial|failed 不是验收 Result。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "g1",
+      "producer": "H02",
+      "consumers": [
+        "H03",
+        "H04",
+        "H05",
+        "C01"
+      ],
+      "name": "硬件核验快照与完整性证明",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "硬件采集快照",
+        "rule": "字段完整和身份一致后供拓扑与接线核验使用。",
+        "fields": [
+          {
+            "name": "machine_id / snapshot_ref",
+            "type": "ID / RecordRef",
+            "label": "设备与快照",
+            "rule": "同次采集的硬件与系统信息可关联。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "gpu_items / nic_items",
+            "type": "object[] / object[]",
+            "label": "GPU 与网卡",
+            "rule": "UUID、永久 MAC、BDF、接口名和能力分别记录。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "os_driver_versions / optics",
+            "type": "object / object[]",
+            "label": "软件与光模块",
+            "rule": "光模块不可采集时保留质量标记。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "completeness / identity_checks",
+            "type": "object / object[]",
+            "label": "完整性与身份核对",
+            "rule": "必需项齐备，永久 MAC 与物料一致。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "topology",
+      "producer": "H03",
+      "consumers": [
+        "H04",
+        "H05",
+        "N01",
+        "N03",
+        "N06",
+        "C01"
+      ],
+      "name": "机内拓扑快照与差异记录",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "机内拓扑结果",
+        "rule": "独立型号预期与实测分开保存；不推断外部接线。",
+        "fields": [
+          {
+            "name": "model_version_ref / snapshot_ref",
+            "type": "VersionRef / RecordRef",
+            "label": "预期及实测版本",
+            "rule": "与当前设备和部件对应。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "gpu_nic_relations",
+            "type": "object[]",
+            "label": "GPU–NIC 关系",
+            "rule": "关联稳定部件、BDF、上游路径和 NUMA。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "link_capabilities / link_states",
+            "type": "object[] / object[]",
+            "label": "链路能力和状态",
+            "rule": "PCIe 宽度／速率、NVLink 按型号设计核对。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "topology_diff / verdict",
+            "type": "object[] / Result",
+            "label": "差异与结论",
+            "rule": "差异关联原始输出与修复对象。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "g2",
+      "producer": "H04",
+      "consumers": [
+        "H05",
+        "C01"
+      ],
+      "name": "四步接线记录、确认关系与验收证明",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "接线确认记录",
+        "rule": "四步链与最终确认完整后交给 3.4；此处不要求已发布映射。",
+        "fields": [
+          {
+            "name": "target_refs / port_pairs",
+            "type": "ObjectRef[] / PortPair[]",
+            "label": "目标及端口对",
+            "rule": "冻结本次范围；不可用单口通过代替全部范围。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "step_reports",
+            "type": "RecordRef[]",
+            "label": "四步报告链",
+            "rule": "按 3.3.1～3.3.4 关联有效版本。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "host_observation_ref / switch_observation_ref",
+            "type": "RecordRef / RecordRef",
+            "label": "双侧实测",
+            "rule": "区分采集失败与有效观察下无邻居。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "confirmed_relations_ref / issue_refs",
+            "type": "RecordRef / RecordRef[]",
+            "label": "关系与差异工单",
+            "rule": "三方比对按物理端口对完成；工单经复验后关闭。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "confirmed_by / confirmed_at",
+            "type": "ID / Time",
+            "label": "最终确认",
+            "rule": "交付组长确认本次范围、报告链与关系版本。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "verdict / valid_until",
+            "type": "Result / Time",
+            "label": "验收结论及期限",
+            "rule": "消费者还须核对当前依赖版本。",
+            "required": "必填",
+            "status": "已有"
+          }
+        ]
+      }
+    },
+    {
+      "id": "mapping",
+      "producer": "H05",
+      "consumers": [
+        "H06",
+        "T00",
+        "T01",
+        "T02",
+        "T03",
+        "T04",
+        "N01",
+        "N03",
+        "N06",
+        "C01"
+      ],
+      "name": "不可变映射版本与发布证明",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "已验证映射",
+        "rule": "所需角色覆盖 100% 且无冲突后，发布不可变版本。",
+        "fields": [
+          {
+            "name": "mapping_revision_ref",
+            "type": "VersionRef",
+            "label": "映射修订",
+            "rule": "配置、测试与定位引用同一明确修订。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "physical_port_uid / machine_id",
+            "type": "ID / ID",
+            "label": "稳定端口与设备",
+            "rule": "实体在映射发布前已存在。",
+            "required": "必填",
+            "status": "已有"
+          },
+          {
+            "name": "interface_name / permanent_mac / bdf",
+            "type": "string / string / string",
+            "label": "当前系统别名",
+            "rule": "与稳定端口关联；别名变化不替换实体身份。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "switch_port_ref / gpu_affinity",
+            "type": "ObjectRef / object[]",
+            "label": "外部对端与机内亲和",
+            "rule": "分别引用接线确认与拓扑依据。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "role_coverage / conflicts",
+            "type": "object / object[]",
+            "label": "覆盖与冲突",
+            "rule": "范围匹配本次启用角色；冲突未清除不发布。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "g4",
+      "producer": "H06",
+      "consumers": [
+        "T00",
+        "T02",
+        "T03",
+        "T04",
+        "N01",
+        "N02",
+        "C01"
+      ],
+      "name": "配置版本、应用回执与基线验证证明",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "基线配置验证",
+        "rule": "应用回执、读回和抽检分开；抽检外推范围待明确。",
+        "fields": [
+          {
+            "name": "config_set_ref / mapping_revision_ref",
+            "type": "VersionRef / VersionRef",
+            "label": "配置与映射",
+            "rule": "冻结角色、介质和网络意图依据。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "target_results",
+            "type": "object[]",
+            "label": "逐目标应用结果",
+            "rule": "目标、实际版本、回执与失败原因。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "readback_refs / sample_results",
+            "type": "RecordRef[] / object[]",
+            "label": "读回与抽检",
+            "rule": "记录真实抽样对象及策略。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "covered_targets / verdict",
+            "type": "ObjectRef[] / Result",
+            "label": "有效覆盖及结论",
+            "rule": "只能用于实际可证明覆盖的测试目标。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "test_plan",
+      "producer": "T00",
+      "consumers": [
+        "T01",
+        "T02",
+        "T03",
+        "T04",
+        "T05",
+        "T06",
+        "C01"
+      ],
+      "name": "冻结测试计划与准入记录",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "冻结测试计划",
+        "rule": "计划对象为实现建议；调度、覆盖和部分阈值仍待确认。",
+        "fields": [
+          {
+            "name": "plan_version_ref / targets",
+            "type": "VersionRef / ObjectRef[]",
+            "label": "计划与目标",
+            "rule": "非法空请求不能解释为无需检查。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "required_pairs / required_paths",
+            "type": "TestPair[] / object[]",
+            "label": "必需配对和路径",
+            "rule": "路径表示、方向与覆盖算法按批准策略。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "test_profile / required_checks",
+            "type": "string / object[]",
+            "label": "档位与必需项",
+            "rule": "各项明确参数、判据和适用范围。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "dependency_refs / windows",
+            "type": "RecordRef[] / Window[]",
+            "label": "依赖与观测计划",
+            "rule": "绑定映射、配置、规则及采样要求。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "l1",
+      "producer": "T01",
+      "consumers": [
+        "T06",
+        "C01"
+      ],
+      "name": "端口链路检查结果",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "端口链路检查",
+        "rule": "按本次必需端口角色判定；unused 与 compute 分开。",
+        "fields": [
+          {
+            "name": "plan_ref / physical_port_uid",
+            "type": "RecordRef / ID",
+            "label": "计划与端口",
+            "rule": "同一次测试范围内定位。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "link_state / negotiated_speed",
+            "type": "enum / Metric",
+            "label": "链路与速率",
+            "rule": "保留协商值及批准的期望值。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "dom / source",
+            "type": "object / enum",
+            "label": "光模块遥测与来源",
+            "rule": "主机、交换机分别保存，缺测不填零。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "collected_at / quality / verdict",
+            "type": "Time / object / Result",
+            "label": "时效、质量与结论",
+            "rule": "必需观测缺失保留阻断原因。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "l2",
+      "producer": "T02",
+      "consumers": [
+        "T06",
+        "C01"
+      ],
+      "name": "网卡配对可达结果与覆盖集合",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "IP 可达性结果",
+        "rule": "只证明本次实际探测的配对、方向与地址族。",
+        "fields": [
+          {
+            "name": "plan_ref / pair",
+            "type": "RecordRef / TestPair",
+            "label": "计划与网卡配对",
+            "rule": "保留 rail、方向、地址族及实际端点。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "probe_parameters",
+            "type": "object",
+            "label": "探测参数",
+            "rule": "协议、次数、超时与适用判据。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "probe_results",
+            "type": "object[]",
+            "label": "探测结果",
+            "rule": "发送／接收、丢包和时延须记录单位。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "coverage / verdict",
+            "type": "object / Result",
+            "label": "覆盖与结论",
+            "rule": "不能把 ping 通过当成 RDMA 通过。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "l3",
+      "producer": "T03",
+      "consumers": [
+        "T05",
+        "T06",
+        "C01"
+      ],
+      "name": "RDMA 写读、带宽、丢包与窗口记录",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "RDMA 写读结果",
+        "rule": "写、读、性能与无损条件分别判断。",
+        "fields": [
+          {
+            "name": "plan_ref / pair / operation",
+            "type": "RecordRef / TestPair / enum",
+            "label": "计划、配对与读写方向",
+            "rule": "写和读分别保存；不能混作同一结果。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "traffic_class / queue",
+            "type": "integer / string",
+            "label": "流量类与队列",
+            "rule": "与已批准配置一致。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "bandwidth / counters",
+            "type": "Metric / object",
+            "label": "带宽与计数",
+            "rule": "保留实际单位、计数口径及质量。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "observation_window_ref / verdict",
+            "type": "RecordRef / Result",
+            "label": "窗口与结论",
+            "rule": "所需无损证据可用；连通不自动等于性能合格。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "l4",
+      "producer": "T04",
+      "consumers": [
+        "T05",
+        "T06",
+        "C01"
+      ],
+      "name": "多流吞吐、热点覆盖与负载窗口",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "多流负载结果",
+        "rule": "负载目标与性能合格阈值分开，不外推未测热点。",
+        "fields": [
+          {
+            "name": "plan_ref / mapping_ref",
+            "type": "RecordRef / VersionRef",
+            "label": "测试计划与映射",
+            "rule": "与本次 GPU–NIC 关系一致。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "load_targets / concurrency",
+            "type": "object[] / integer",
+            "label": "流量目标与并发",
+            "rule": "记录实际配对、路径及资源使用。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "window / throughput",
+            "type": "Window / Metric[]",
+            "label": "实际持续窗口与吞吐",
+            "rule": "按实际运行记录，不用计划时长代替。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "hotspot_coverage / verdict",
+            "type": "object / Result",
+            "label": "热点覆盖与结论",
+            "rule": "明确测到什么、缺什么。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "l5",
+      "producer": "T05",
+      "consumers": [
+        "T06",
+        "C01"
+      ],
+      "name": "无损规则交叉判定与降级记录",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "无损交叉判定",
+        "rule": "窗口必须覆盖相关负载；规则告警到最终验收的映射待确认。",
+        "fields": [
+          {
+            "name": "load_result_refs / window_ref",
+            "type": "RecordRef[] / RecordRef",
+            "label": "负载与观测窗口",
+            "rule": "关联本次写读、多流结果和同窗口证据。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "rule_version_ref / port_priority",
+            "type": "VersionRef / object",
+            "label": "规则与对象",
+            "rule": "端口、优先级及规则范围匹配。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "facts / quality",
+            "type": "object / object",
+            "label": "判定事实与质量",
+            "rule": "计数增量、能力缺口、重置和近似分别保留。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "rule_results",
+            "type": "object[]",
+            "label": "逐项结果",
+            "rule": "可判定性、是否触发、严重度与证据引用分开。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "g5",
+      "producer": "T06",
+      "consumers": [
+        "N01",
+        "N06",
+        "C01"
+      ],
+      "name": "网络测试证明、分层报告与路径基线",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "网络测试验收证明",
+        "rule": "必需有效结果全通过或明确批准豁免后，按实际范围供通信组消费。",
+        "fields": [
+          {
+            "name": "project_id / test_profile",
+            "type": "ID / string",
+            "label": "项目与档位",
+            "rule": "匹配本次通信组请求。",
+            "required": "必填",
+            "status": "已有"
+          },
+          {
+            "name": "covered_targets / covered_paths",
+            "type": "ObjectRef[] / object[]",
+            "label": "已证明的覆盖",
+            "rule": "保留实际方向与范围，抽样不自动外推。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "dependency_versions / result_refs",
+            "type": "VersionRef[] / RecordRef[]",
+            "label": "依赖与各项结果",
+            "rule": "关联映射、配置、型号、物料和策略版本。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "collected_at / valid_until / verdict",
+            "type": "Time / Time / Result",
+            "label": "时间与结论",
+            "rule": "历史结论保留；消费时核对当前有效性。",
+            "required": "必填",
+            "status": "已有"
+          },
+          {
+            "name": "waiver_refs",
+            "type": "RecordRef[]",
+            "label": "豁免记录",
+            "rule": "批准要求、范围、期限和整改必须匹配。",
+            "required": "WAIVED 时",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nccl_admission",
+      "producer": "N01",
+      "consumers": [
+        "N02",
+        "N03",
+        "C01"
+      ],
+      "name": "通信组准入记录",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "通信组准入记录",
+        "rule": "跨机交付测试消费适用网络证明；机内诊断单独标识用途。",
+        "fields": [
+          {
+            "name": "group_run_id / purpose",
+            "type": "ID / enum",
+            "label": "通信组与用途",
+            "rule": "purpose 建议 delivery / diagnostic，分别表示交付测试与机内诊断。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "members / required_paths",
+            "type": "object[] / object[]",
+            "label": "成员和所需路径",
+            "rule": "成员关联目标 GPU／NIC 和档位。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "evidence_refs / dependency_versions",
+            "type": "RecordRef[] / VersionRef[]",
+            "label": "准入依据",
+            "rule": "网络、映射、拓扑、配置与就绪证明。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "precheck_results / admitted_at",
+            "type": "object[] / Time",
+            "label": "预检及时间",
+            "rule": "逐项记录资源、软件、能力与阻断原因。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nccl_environment",
+      "producer": "N02",
+      "consumers": [
+        "N03",
+        "C01"
+      ],
+      "name": "测试环境一致性与介质摘要回执",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "测试环境一致性",
+        "rule": "每个成员的内容身份可核对；准备成功不等于测试成功。",
+        "fields": [
+          {
+            "name": "group_run_id / admission_ref",
+            "type": "ID / RecordRef",
+            "label": "通信组和准入",
+            "rule": "环境分发对象在本组内。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "media_refs / digests",
+            "type": "VersionRef[] / string[]",
+            "label": "软件和摘要",
+            "rule": "镜像、NCCL、驱动与测试工具明确版本。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "member_receipts",
+            "type": "object[]",
+            "label": "逐成员准备回执",
+            "rule": "记录实际版本、摘要校验、状态和原因。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "environment_parameters",
+            "type": "object",
+            "label": "运行参数",
+            "rule": "保存本组统一参数快照。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "group_results",
+      "producer": "N03",
+      "consumers": [
+        "N04",
+        "N05",
+        "N06",
+        "N08",
+        "C01"
+      ],
+      "name": "通信组各次尝试的原始结果与诊断",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "通信组原始结果",
+        "rule": "成员冻结、全组启动；失败后生成新的整组尝试。",
+        "fields": [
+          {
+            "name": "group_run_id / group_attempt_id",
+            "type": "ID / ID",
+            "label": "组与组尝试",
+            "rule": "重试保留业务组，使用新的尝试 ID。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "members / rank / world_size",
+            "type": "object[] / integer / integer",
+            "label": "成员与规模",
+            "rule": "rank 关联成员；同一次组尝试的规模一致。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "operator / message_bytes / coverage_mode",
+            "type": "string / integer / enum",
+            "label": "测试参数与覆盖模式",
+            "rule": "区分 grouped_coverage 和 single_communicator。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "raw_result_refs / execution_status",
+            "type": "RecordRef[] / enum",
+            "label": "原始输出与执行状态",
+            "rule": "建议 running / succeeded / failed / timed_out / cancelled / unknown；与验收结论分开。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "window / diagnostics",
+            "type": "Window / RecordRef[]",
+            "label": "运行窗口与诊断",
+            "rule": "每个结果绑定本次组尝试。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "metrics",
+      "producer": "N04",
+      "consumers": [
+        "N05",
+        "N06",
+        "N07",
+        "N08",
+        "C01"
+      ],
+      "name": "NCCL 指标与检测场景矩阵",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "指标与场景判定",
+        "rule": "组级指标不复制为节点指标；缺独立测量保留 unavailable。",
+        "fields": [
+          {
+            "name": "group_attempt_ref / scenario",
+            "type": "RecordRef / string",
+            "label": "尝试与检测场景",
+            "rule": "指标属于明确场景、组规模和测试条件。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "algbw / busbw / latency",
+            "type": "Metric / Metric / Metric",
+            "label": "性能指标",
+            "rule": "保留原单位及工具语义；不可直接当作链路吞吐。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "baseline_ref / comparability",
+            "type": "VersionRef / object",
+            "label": "基线与可比条件",
+            "rule": "型号、规模、拓扑、软件、算子和消息大小匹配。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "scenario_results / quality",
+            "type": "object[] / object",
+            "label": "场景结果与质量",
+            "rule": "逐项保存判据、观测、缺失原因和结论。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "report",
+      "producer": "N05",
+      "consumers": [
+        "N06",
+        "N07",
+        "N08",
+        "C01"
+      ],
+      "name": "测试报告与原始数据索引",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "测试报告",
+        "rule": "报告引用本次有效数据；生成报告不等于评审通过。",
+        "fields": [
+          {
+            "name": "report_version_ref / scope",
+            "type": "VersionRef / object",
+            "label": "报告版本与范围",
+            "rule": "目标、档位与覆盖模式明确。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "metric_refs / raw_result_refs",
+            "type": "RecordRef[] / RecordRef[]",
+            "label": "指标与原始数据",
+            "rule": "每个结论能回到执行结果。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "baseline_refs / summary",
+            "type": "VersionRef[] / object",
+            "label": "比较基线与汇总",
+            "rule": "实际覆盖、通过项、失败项及缺口分别列明。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "analysis_refs",
+            "type": "RecordRef[]",
+            "label": "后续分析章节",
+            "rule": "后续汇编时补入新修订，不作为 5.5 首次生成的前置。",
+            "required": "章节形成后",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "trace",
+      "producer": "N06",
+      "consumers": [
+        "N07",
+        "N08",
+        "C01"
+      ],
+      "name": "失败分析、工单关联与证据包",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "失败分析与定位",
+        "rule": "发现来源与处置责任域分开，缺证据不标已确诊。",
+        "fields": [
+          {
+            "name": "report_ref / failure_ref",
+            "type": "RecordRef / RecordRef",
+            "label": "报告和失败事件",
+            "rule": "保持最初发现环节。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "object_refs / evidence_refs",
+            "type": "ObjectRef[] / RecordRef[]",
+            "label": "关联对象与证据",
+            "rule": "通信组、GPU、网卡、物理端口和网络事实可关联。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "source / responsible_domain",
+            "type": "enum / enum",
+            "label": "发现来源与责任域",
+            "rule": "责任域可为 host、fabric、unknown；不改写发现来源。",
+            "required": "必填",
+            "status": "已有"
+          },
+          {
+            "name": "finding / issue_refs",
+            "type": "object / RecordRef[]",
+            "label": "分析结论与工单",
+            "rule": "区分假设、支持证据和待补证据。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tuning",
+      "producer": "N07",
+      "consumers": [
+        "N08",
+        "C01"
+      ],
+      "name": "调优清单与版本化变更入口",
+      "owner": "",
+      "terminal_consumer": "",
+      "data_contract": {
+        "category": "调优清单",
+        "rule": "建议不直接变更设备；采纳后进入批准的版本化变更。",
+        "fields": [
+          {
+            "name": "report_ref / recommendation_id",
+            "type": "RecordRef / ID",
+            "label": "报告与建议项",
+            "rule": "每项建议独立定位。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "applicable_scope / evidence_refs",
+            "type": "object / RecordRef[]",
+            "label": "适用范围与依据",
+            "rule": "型号、配置和测试条件匹配。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "proposed_change / impact",
+            "type": "object / object",
+            "label": "建议变更及影响",
+            "rule": "明确参数、作用对象和受影响证明。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "review_record",
+            "type": "object",
+            "label": "确认记录",
+            "rule": "记录采纳、拒绝或待定及责任人。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "g6",
+      "producer": "N08",
+      "consumers": [
+        "C01"
+      ],
+      "name": "报告评审与退出准入证明",
+      "owner": "",
+      "terminal_consumer": "优雅退出（边界外消费者）",
+      "data_contract": {
+        "category": "报告评审证明",
+        "rule": "通过只解锁优雅退出；清理、撤权与归档另行完成。",
+        "fields": [
+          {
+            "name": "report_version_ref / tuning_ref",
+            "type": "VersionRef / RecordRef",
+            "label": "报告与调优清单",
+            "rule": "确认冻结的报告修订。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "covered_targets / scenario_refs",
+            "type": "ObjectRef[] / RecordRef[]",
+            "label": "覆盖与场景依据",
+            "rule": "必需场景有有效结论，范围与交付目标一致。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "reviewer_id / reviewed_at",
+            "type": "ID / Time",
+            "label": "评审人与时间",
+            "rule": "保留交付组长确认。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "verdict / waiver_refs",
+            "type": "Result / RecordRef[]",
+            "label": "评审结论与豁免",
+            "rule": "上游豁免与风险继续保留；传播口径待确认。",
+            "required": "必填",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "repair",
+      "producer": "R01",
+      "consumers": [
+        "C01"
+      ],
+      "name": "修复、复验与关闭记录",
+      "owner": "",
+      "terminal_consumer": "原生产流程的受控恢复（显式回流）",
+      "data_contract": {
+        "category": "修复与复验记录",
+        "rule": "维修登记、复验通过、提议关闭和确认关闭分别记录。",
+        "fields": [
+          {
+            "name": "issue_id / approved_scope",
+            "type": "ID / object",
+            "label": "工单与批准范围",
+            "rule": "冻结目标、动作和允许的本故障例外。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "actions / changed_components",
+            "type": "object[] / object[]",
+            "label": "处置与换件",
+            "rule": "记录新旧实物身份，不能覆盖旧部件历史。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "verification_attempt_ref / evidence_refs",
+            "type": "RecordRef / RecordRef[]",
+            "label": "复验尝试与证明",
+            "rule": "由原生产流程生成新证明，覆盖受影响对象及版本。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "closure_record",
+            "type": "object",
+            "label": "关闭确认",
+            "rule": "复验通过后提议，由网络工程师或交付组长确认。",
+            "required": "关闭时",
+            "status": "建议"
+          }
+        ]
+      }
+    },
+    {
+      "id": "cmdb",
+      "producer": "C01",
+      "consumers": [],
+      "name": "CMDB 联邦索引与同步回执",
+      "owner": "",
+      "terminal_consumer": "设备与项目查询／维护人员／AIOps（外部读者）",
+      "data_contract": {
+        "category": "CMDB 联邦索引与同步回执",
+        "rule": "每条源记录独立触发；源模块保有数据，CMDB 只存索引、同步元数据与归档引用。",
+        "fields": [
+          {
+            "name": "event_id / schema_version",
+            "type": "ID / string",
+            "label": "事件与契约版本",
+            "rule": "同事件重复投递可幂等处理；同事件不同内容拒收。新未知必需字段不能默认通过。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "source_kind / source_ref / source_hash",
+            "type": "enum / RecordRef / string",
+            "label": "权威来源引用",
+            "rule": "类型来自订阅目录；固定记录与修订，校验摘要，不把凭据或遥测全量复制入 CMDB。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "project_id / subject_refs",
+            "type": "ID / ObjectRef[]",
+            "label": "项目与对象",
+            "rule": "至少一个对象或明确项目对象；设备、部件、端口须存在且项目范围匹配。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "source_sequence / received_at",
+            "type": "integer / Time",
+            "label": "源顺序与接收时间",
+            "rule": "同源记录链提供单调正序号；不能用字符串修订号或接收时间判定新旧。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "source_quality / current_source_ref",
+            "type": "enum / RecordRef",
+            "label": "当前数据状态",
+            "rule": "新 unknown 仍成为最新观测并显示未知；last_known_ref 另存最后有效值及时间，不冒充当前正常。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "sync_status / rejection_reason",
+            "type": "enum / string",
+            "label": "同步回执",
+            "rule": "indexed|duplicate|quarantined|pending；收到=新建+重复+拒收+待处理；冲突有可重放记录。",
+            "required": "必填",
+            "status": "建议"
+          },
+          {
+            "name": "archive_manifest_ref / cleanup_ref",
+            "type": "RecordRef / RecordRef",
+            "label": "归档证明",
+            "rule": "清理已核验事件触发，快照引用逐项一致；仅有最终评审不能置 maintained。",
+            "required": "归档时",
+            "status": "建议"
+          },
+          {
+            "name": "manual_fields",
+            "type": "object",
+            "label": "人工维保补充",
+            "rule": "source=manual，客户资产号／维保／备注与自动字段分列，互不覆盖。",
+            "required": "维护人员补充时",
+            "status": "建议"
+          }
+        ]
+      }
+    }
+  ],
+  "rules": [
+    {
+      "name": "持续 PFC 暂停",
+      "description": "60 秒窗口内暂停计数增量 ≥1；连续三个窗口非零或达到 100 帧／60 秒时升级。具体升级动作仍待确认。"
+    },
+    {
+      "name": "暂停风暴或死锁",
+      "description": "300 秒内 XOFF 累计 ≥90 秒；同一网络中至少三个端口同时命中时升级。无 XOFF 事件时保留 unknown；替代估算为发送暂停帧 ≥1000 帧／60 秒且连续三个窗口命中，结果标为 approximation。"
+    },
+    {
+      "name": "ECN 恒不标记",
+      "description": "完整 3600 秒窗口内 ECN 恒零，且同窗口有队列水位大于零或 PFC 增量 ≥1 的拥塞证据，才命中此规则。"
+    },
+    {
+      "name": "ECN 过度标记",
+      "description": "300 秒内标记比例 >5% 为告警；2% < 比例 ≤5% 仅观察记录。"
+    },
+    {
+      "name": "配置意图不一致",
+      "description": "分别核对批准意图、设备配置态与可比较的硬件事实。缺少可比较字段时记录 unknown。"
+    },
+    {
+      "name": "无损队列丢包",
+      "description": "应无损的队列出现非零丢包时命中。硬件丢包遥测和接口丢包计数都不可用时，结果为 unknown。"
+    },
+    {
+      "name": "ECN 与 PFC 缓冲余量不足",
+      "description": "ECN 最大阈值对应缓冲占位 ≥0.6 时命中；无法直接读取 XOFF 缓冲量时，按配置比例与池大小估算，并标记 estimated。"
+    }
+  ],
+  "glossary": [
+    {
+      "name": "物料清单（BOM）",
+      "description": "设备、部件、端口与预期连接的版本化清单。预期连接必须与本次实际观测分开保存。"
+    },
+    {
+      "name": "物理端口与系统接口",
+      "description": "物理端口是稳定的实物身份；操作系统接口名和 PCIe 地址可能变化，需要通过已验证映射关联。"
+    },
+    {
+      "name": "机内拓扑与外部接线",
+      "description": "机内拓扑描述 GPU 到网卡的 PCIe／NUMA 关系；外部接线描述主机端口到交换机端口的实际连接。"
+    },
+    {
+      "name": "LLDP／DOM",
+      "description": "LLDP 采集实际邻居；DOM 是光模块温度、光功率等遥测。主机与交换机的数据分别保留。"
+    },
+    {
+      "name": "rail／网卡配对",
+      "description": "rail 是批准网络方案中的分组。同一组内实际测试的网卡对、方向与覆盖范围必须保留。"
+    },
+    {
+      "name": "RDMA／NCCL",
+      "description": "RDMA 写读验证网卡间的数据通路；NCCL 验证指定 GPU 通信组的集合通信表现。两者的性能指标不能互相替代。"
+    },
+    {
+      "name": "PFC／ECN／CNP",
+      "description": "分别表示按优先级暂停、拥塞标记、RoCE 拥塞通知。需要结合配置、计数能力、负载与时间窗口判断。"
+    },
+    {
+      "name": "证明与当前可用性",
+      "description": "历史通过结果继续保留；新任务仍须核对项目、目标、路径、档位、依赖版本和有效期。"
+    },
+    {
+      "name": "验收结论与数据质量",
+      "description": "PASS 为通过，FAIL 为违反判据，BLOCKED 为前置或必需证明不足，WAIVED 为批准的例外。unknown、降级、近似和估算属于质量标记，不能直接当作通过。"
+    },
+    {
+      "name": "执行角色",
+      "description": "交付组长负责最终确认与允许的豁免；网络工程师、网络负责人和交付工程师按各自动作权限执行、审批或处置。"
+    }
+  ],
+  "decisions": [
+    {
+      "owner": "交付工程师＋研发负责人",
+      "recommendation": "明确逐层串行或按路径调度；无损交叉验证观测需覆盖负载而不是结束后补采。",
+      "boundary": "可先实现计划／调度接口与仿真，不发布未经定义的跳层逻辑。",
+      "id": "Q1",
+      "topic": "测试调度与停止范围",
+      "flows": [
+        "T00",
+        "T02",
+        "T03",
+        "T04",
+        "T05"
+      ]
+    },
+    {
+      "owner": "网络工程师／网络负责人＋交付组长",
+      "recommendation": "给定每档超时、成功标准、吞吐指标、地址族与watchdog状态集合；不从硬件标称自动算。",
+      "boundary": "工具适配和结果采集可做；对应自动PASS须等待策略。",
+      "id": "Q2",
+      "topic": "测试阈值与 watchdog 判据",
+      "flows": [
+        "T00",
+        "T02",
+        "T03",
+        "T04"
+      ]
+    },
+    {
+      "owner": "网络工程师／网络负责人＋研发负责人",
+      "recommendation": "决定历史窗口复用条件、时钟偏差、计数重置、缺采样和30s/300s/3600s关系。",
+      "boundary": "可实现带时间和质量的原始结果；短窗口不能伪证长规则。",
+      "id": "Q3",
+      "topic": "观测窗口与负载绑定",
+      "flows": [
+        "F07",
+        "T00",
+        "T03",
+        "T04",
+        "T05"
+      ]
+    },
+    {
+      "owner": "网络工程师＋NCCL负责人",
+      "recommendation": "定义成员到NIC、方向、rail、ECMP/热点、档位覆盖的映射和抽样可接受范围。",
+      "boundary": "先做集合差异与可插拔覆盖计算；禁止机器级代替路径级。",
+      "id": "Q4",
+      "topic": "路径覆盖生成与档位适用",
+      "flows": [
+        "T00",
+        "T02",
+        "T03",
+        "T04",
+        "T06",
+        "N01"
+      ]
+    },
+    {
+      "owner": "网络负责人＋交付组长",
+      "recommendation": "明确warning/observe/critical的门禁作用，持续暂停规则升级动作及缓冲余量规则适用性。",
+      "boundary": "保留逐规则结果，不能擅自用健康分代替门禁。",
+      "id": "Q5",
+      "topic": "无损规则到验收结论的映射",
+      "flows": [
+        "F07",
+        "T05",
+        "T06"
+      ]
+    },
+    {
+      "owner": "网络工程师／网络负责人＋交付组长",
+      "recommendation": "逐能力说明必需、可补证、可豁免的范围与证据；unknown绝非0。",
+      "boundary": "能力矩阵与降级呈现可做；不可自动全放行。",
+      "id": "Q6",
+      "topic": "缺测与近似证据的接受范围",
+      "flows": [
+        "F07",
+        "H02",
+        "T01",
+        "T05"
+      ]
+    },
+    {
+      "owner": "网络负责人＋交付组长",
+      "recommendation": "确认Major/Minor是否允许；物理接线验收前最低配置闭环如何定义；基线配置验收并行复核的边界。",
+      "boundary": "以物理接线验收前必须具备有效交换机开通与配置就绪为不可突破约束。",
+      "id": "Q7",
+      "topic": "配置就绪标准与并行时序",
+      "flows": [
+        "F06",
+        "H04"
+      ]
+    },
+    {
+      "owner": "交付组长＋服务器配置负责人",
+      "recommendation": "规定选样、比例、失败处置和抽检结论适用范围。",
+      "boundary": "记录逐目标应用／读回；不得自行默认抽检比例。",
+      "id": "Q8",
+      "topic": "基线配置抽检的适用范围",
+      "flows": [
+        "H06"
+      ]
+    },
+    {
+      "owner": "网络工程师＋适配器研发",
+      "recommendation": "用独立采集状态、观察窗口和返回值区分线路异常与无法观测。",
+      "boundary": "先实现有类型的缺测原因，不能空数组即PASS或断链。",
+      "id": "Q9",
+      "topic": "邻居缺失与采集失败的区分",
+      "flows": [
+        "H04",
+        "R01"
+      ]
+    },
+    {
+      "owner": "网络负责人＋交付组长",
+      "recommendation": "明确fabric/pod范围及PTP是否有批准的不适用策略。",
+      "boundary": "现有判据仍保留PTP；不自行删项。",
+      "id": "Q10",
+      "topic": "网络健康范围与时钟同步适用性",
+      "flows": [
+        "F07",
+        "N01"
+      ]
+    },
+    {
+      "owner": "交付组长＋研发负责人",
+      "recommendation": "确定FAIL/BLOCKED同时存在时主状态和明细；关联工单适用范围；断链复验模板。",
+      "boundary": "逐项结果先保存，拒绝把项目无关工单变成全局锁。",
+      "id": "Q11",
+      "topic": "混合结论与工单阻断范围",
+      "flows": [
+        "T06",
+        "N08",
+        "R01"
+      ]
+    },
+    {
+      "owner": "交付组长＋项目负责人",
+      "recommendation": "明确下游独立通过时如何保留上游豁免引用及风险，不新增第五门禁枚举。",
+      "boundary": "消费时校验豁免范围、期限、理由；无关例外不能借用。",
+      "id": "Q12",
+      "topic": "豁免风险在后续步骤中的保留",
+      "flows": [
+        "T06",
+        "N01",
+        "N08"
+      ]
+    }
+  ],
+  "invariants": {
+    "INV-01": "物理身份早于Mapping；物理接线验收不能等待映射发布验收。",
+    "INV-02": "已确认接线关系由物理接线验收三方比对产生，不能作为物理接线验收启动前置。",
+    "INV-03": "ZTP完成、下发成功、配置生效是不同事实。",
+    "INV-04": "任务成功、检测通过、证据可消费是三个判断。",
+    "INV-05": "必需unknown／过期／缺覆盖不得产生PASS。",
+    "INV-06": "A–B与C–D通过不能证明A–C。",
+    "INV-07": "依赖版本改变只影响依赖它的下游，历史结果不得篡改。",
+    "INV-08": "豁免不能改成PASS；只对批准范围、期限与理由有效。",
+    "INV-09": "采集来源、发现来源、责任域是不同维度。",
+    "INV-10": "维修登记不关闭工单，复验PASS才提议关闭。",
+    "INV-11": "NCCL通信组统一启动并整组恢复。",
+    "INV-12": "临时诊断与修复权限不能解锁普通批量任务。",
+    "INV-13": "来源字段完整不足以证明物理事实正确，仍须独立样本和现场核验。",
+    "INV-14": "冻结后发生相关变更，旧尝试不能成为当前版本的有效证明。",
+    "INV-15": "短窗口无异常不能证明长窗口规则已验证；规则不触发也不等于整个网络测试验收通过。",
+    "INV-16": "管理通道可达不能代替被测计算通路可达。"
+  },
+  "case_names": {
+    "CASE-01": "完整且适用的网络测试验收可消费",
+    "CASE-02": "跨项目证据拒绝",
+    "CASE-03": "缺目标拒绝",
+    "CASE-04": "A-B/C-D不证明A-C",
+    "CASE-05": "档位不适用拒绝（模型采用相等）",
+    "CASE-06": "相关配置版本版本改变",
+    "CASE-07": "门禁证据过期",
+    "CASE-08": "未来采样时间不冒充新鲜",
+    "CASE-09": "就绪证明31s已过期",
+    "CASE-10": "就绪恰好30s（模型边界约定）",
+    "CASE-11": "必需unknown不是零丢包",
+    "CASE-12": "明确非必需的缺失不擅自扩大阻断",
+    "CASE-13": "FAIL不能被直接消费",
+    "CASE-14": "BLOCKED不是PASS",
+    "CASE-15": "有效豁免可按明确策略消费但不改PASS",
+    "CASE-16": "过期豁免拒绝",
+    "CASE-17": "豁免不能借用到另一路径",
+    "CASE-18": "无审批的WAIVED拒绝",
+    "CASE-19": "未允许该豁免的消费任务拒绝",
+    "CASE-20": "无权限不派发",
+    "CASE-21": "资源不足不派发",
+    "CASE-22": "普通任务不越过阻断告警",
+    "CASE-23": "三方一致产生端口对PASS",
+    "CASE-24": "主机LLDP未采到不判断线",
+    "CASE-25": "交换机回读缺失不空成功",
+    "CASE-26": "采集成功但实际邻居不符",
+    "CASE-27": "采集成功且无邻居是实际差异",
+    "CASE-28": "永久MAC不符不能通过",
+    "CASE-29": "3.3.3局部通过不代替最终确认",
+    "CASE-30": "四步确认后才解锁Mapping",
+    "CASE-31": "完整窗口ECN恒零且队列拥塞命中",
+    "CASE-32": "完整窗口ECN恒零且PFC增长命中",
+    "CASE-33": "无拥塞时零计数不单独判ECN 恒不标记规则",
+    "CASE-34": "ECN并非恒零不命中ECN 恒不标记规则",
+    "CASE-35": "30s不能证明3600s规则完整",
+    "CASE-36": "窗口内缺采样不伪装完整",
+    "CASE-37": "计数能力不存在不填零",
+    "CASE-38": "计数重置需明确策略，模型保守拒绝判定",
+    "CASE-39": "全组资源与启动条件齐备",
+    "CASE-40": "部分资源不能启动整组",
+    "CASE-41": "成员未全部ready不能过屏障",
+    "CASE-42": "不能滚动启动通信组",
+    "CASE-43": "失败rank触发整组新尝试",
+    "CASE-44": "执行通道不允许时不能越过",
+    "CASE-45": "明确豁免本项缺证据可消费但仍是WAIVED",
+    "CASE-46": "豁免一项不能掩盖另一必需项缺失",
+    "CASE-47": "有效豁免不越过项目权限"
+  },
+  "questions": [
+    {
+      "key": "owner",
+      "title": "谁负责"
+    },
+    {
+      "key": "admission",
+      "title": "为什么允许开始"
+    },
+    {
+      "key": "scope",
+      "title": "对什么对象操作"
+    },
+    {
+      "key": "evidence",
+      "title": "产生什么证明"
+    },
+    {
+      "key": "consumers",
+      "title": "谁可以使用"
+    },
+    {
+      "key": "recovery",
+      "title": "失败后如何继续"
+    }
+  ],
+  "wiring_sample": {
+    "flow_id": "H04",
+    "intro": "把批准的期望连接与主机、交换机两侧的实际观测逐项核对，再由交付组长确认本次范围内的完整结果。",
+    "brief": {
+      "owner": "平台采集与比对；网络工程师登记处置并核对修复，现场人员执行实物动作；交付组长完成最终确认。",
+      "admission": "逐目标硬件采集有效，3.2 拓扑验证通过，端口已建模、交换机配置就绪，双侧采集通道可用且就绪证明新鲜。",
+      "scope": "本次冻结目标内的服务器、GPU–NIC 关系及主机物理端口 ↔ 交换机物理端口对。",
+      "evidence": "四个子步骤的版本化报告、双侧邻居与 MAC 证据、三方比对及确认关系、差异工单与最终确认记录。",
+      "consumers": "3.4 使用有效接线确认来检查映射覆盖与冲突，再发布不可变映射；3.3 完成并不直接完成配置或网络测试。",
+      "recovery": "缺测先恢复采集，真实差异进入 0.1；通常从 3.3.2 重采，拓扑变化先回 3.2，复验通过后再确认关闭。"
+    },
+    "roles": [
+      {
+        "actor": "交付工程师",
+        "action": "组织本次核查范围与执行，跟进阻断项。",
+        "boundary": "发起、执行与确认仍按各动作权限校验；批次成功率不替代逐目标准入。"
+      },
+      {
+        "actor": "平台采集与比对流程",
+        "action": "读取既定期望、采集双侧证据、持久化逐步结果并关联工单。",
+        "boundary": "保留主机与交换机来源；不能用本次实测反向生成期望。"
+      },
+      {
+        "actor": "网络工程师与现场人员",
+        "action": "网络工程师登记处置与复验；现场人员按工单修线、换件并记录实物变化。",
+        "boundary": "维修登记不能替代通过证明；工单由网络工程师或交付组长确认关闭。"
+      },
+      {
+        "actor": "交付组长",
+        "action": "确认四步链、关系版本及差异关闭证据，完成 3.3.4。",
+        "boundary": "最终确认绑定本次范围与证据；签字不能补出缺失观测或掩盖已知差异。"
+      }
+    ],
+    "admission": [
+      {
+        "condition": "对象与期望可定位",
+        "evidence": "物料版本、稳定物理端口与期望连接；主机和交换机端口均已建模。",
+        "producer": [
+          "F01"
+        ],
+        "gap": "端点或期望缺失时补齐；接口名和列表顺序不能充当稳定身份。"
+      },
+      {
+        "condition": "本次每台服务器可核验",
+        "evidence": "有效硬件采集证明，或该环节允许且适用的显式豁免；独立型号预期与已通过的机内拓扑结果。",
+        "producer": [
+          "H02",
+          "H03"
+        ],
+        "gap": "采集不足先补采；拓扑不符先修复并重做 3.2。"
+      },
+      {
+        "condition": "网络端可读且配置就绪",
+        "evidence": "开通、配置比对和网络接线预校验证据；对应端口可读 LLDP，网络域或适配器在线。",
+        "producer": [
+          "F04",
+          "F05",
+          "F06"
+        ],
+        "gap": "补齐对应设备和端口的证明；配置漂移允许口径仍待确认。"
+      },
+      {
+        "condition": "本次就绪证明仍新鲜",
+        "evidence": "执行前刷新对应网络范围的就绪证明，默认有效期为 30 秒。",
+        "producer": [],
+        "gap": "过期重新获取。此期限用于准入检查，不要求整个核查在 30 秒内结束。"
+      },
+      {
+        "condition": "动作权限和执行资源满足",
+        "evidence": "本次目标、执行通道与资源条件；恢复作业另核对工单和批准动作范围。",
+        "producer": [],
+        "gap": "只对显式选定的合格范围执行，不能静默删去阻断目标后宣告整批通过。"
+      }
+    ],
+    "admission_boundary": "已确认接线关系由本步骤产生；3.4 的已发布映射也尚未产生，二者均不作为 3.3 的启动条件。网络健康与无损证明在后续测试准入按要求消费。",
+    "steps": [
+      {
+        "code": "3.3.1",
+        "title": "确认 GPU–NIC 关系",
+        "input": "3.2 已通过的拓扑结果与独立型号预期。",
+        "action": "核对每个 GPU 对应的网卡、PCIe 上游路径、NUMA 归属和链路能力／状态。",
+        "output": "版本化 GPU–NIC 关系表与本步报告。",
+        "finish": "关系有有效拓扑依据，才进入双侧采集。",
+        "failure": "拓扑差异阻断后续，回到 3.2 处理；更新拓扑后同步更新本步依据。"
+      },
+      {
+        "code": "3.3.2",
+        "title": "采集双侧邻居与 MAC",
+        "input": "本步确认的机内关系、物料期望、主机和交换机采集通道。",
+        "action": "采集主机实际邻居、永久 MAC 与交换机侧回读，分别记录来源、采集状态、时间与原始证据。",
+        "output": "双侧邻居快照、MAC 一致性记录与本步报告。",
+        "finish": "必需观测完整，才允许进入三方比对。",
+        "failure": "采集失败为证明不足；有效观测窗口内确实无邻居才是线路异常的证据。"
+      },
+      {
+        "code": "3.3.3",
+        "title": "进行三方比对",
+        "input": "批准的物料连接期望、主机实测、交换机回读。",
+        "action": "按稳定物理端口对比较期望与双侧观测，关联永久 MAC、差异类别和工单。",
+        "output": "逐端口对结果、已确认连接关系、差异清单与本步报告。",
+        "finish": "三方一致可形成该端口对的通过结果，交给最终确认。",
+        "failure": "任一侧必需证据缺失则阻断；明确不一致则失败并处理差异，不能扩大局部通过范围。"
+      },
+      {
+        "code": "3.3.4",
+        "title": "交付组长最终确认",
+        "input": "前三步通过的报告链、最终关系版本及差异工单的复验和关闭记录。",
+        "action": "核对本次目标覆盖与依赖版本，确认人和时间随冻结的报告及关系版本保存。",
+        "output": "完整四步链、最终关系表版本、确认记录与物理接线验收证明。",
+        "finish": "本次范围完整确认后，可交给 3.4 检查映射覆盖与冲突。",
+        "failure": "未完成复验、未确认关闭或版本已变化时，补齐或重验后重新确认。"
+      }
+    ],
+    "evidence_fields": [
+      {
+        "name": "项目与对象范围",
+        "meaning": "项目、目标集合、稳定物理端口对和范围摘要。",
+        "check": "证明覆盖本次请求；不同项目、端口对和未测对象不能混用。"
+      },
+      {
+        "name": "期望与依赖版本",
+        "meaning": "物料、型号、拓扑、网络配置及适用策略的明确版本引用。",
+        "check": "依据变更时沿实际依赖重新核验；3.3 不要求引用尚未发布的映射版本。"
+      },
+      {
+        "name": "双侧观测",
+        "meaning": "主机／交换机来源、采集状态、采样时间／窗口、邻居值、MAC 与原始证据。",
+        "check": "空邻居、采集失败和未执行分别表达；缺测不能补零。"
+      },
+      {
+        "name": "步骤报告与关系",
+        "meaning": "3.3.1～3.3.4 的报告引用、版本及逐端口对结果、确认关系版本。",
+        "check": "四步依据一致；单个端口对通过不自动变成整步完成。"
+      },
+      {
+        "name": "处置与复验",
+        "meaning": "工单、处理动作、受影响对象、复验尝试及关闭确认。",
+        "check": "复验通过覆盖本次受影响范围和版本后，才允许提议并确认关闭。"
+      },
+      {
+        "name": "最终确认与时效",
+        "meaning": "确认人、时间、确认时的范围与报告版本、采集时间和证明有效期。",
+        "check": "当前消费再次核对适用性；历史通过和当前失效可以同时成立。"
+      },
+      {
+        "name": "执行关联与结论",
+        "meaning": "来源执行及尝试、检测结论、质量标记和允许的豁免记录分别保存。",
+        "check": "执行成功、验收结论与当前可消费性分开；异常根因不改写最初发现来源。"
+      }
+    ],
+    "handoff": [
+      {
+        "event": "3.3.3 端口对通过",
+        "meaning": "该连接已有三方一致证据，保存确认关系。",
+        "next": "继续检查本次完整范围并进入 3.3.4；尚未完成映射发布。"
+      },
+      {
+        "event": "3.3.4 最终确认完成",
+        "meaning": "完整报告链、关系版本和本次确认已经成立。",
+        "next": "3.4 可消费有效接线证明，检查启用角色所需映射 100% 覆盖且无冲突。"
+      },
+      {
+        "event": "3.4 发布已验证映射",
+        "meaning": "后续可引用同一个不可变映射版本。",
+        "next": "3.5 使用映射实施并验证配置；第 4 步再核对测试准入。"
+      }
+    ],
+    "recoveries": [
+      {
+        "problem": "采集失败或通道不可用",
+        "action": "补齐采集能力、恢复通道并刷新就绪证明。",
+        "return": "3.3.2 重新采集受影响范围；证明不足期间不判接线通过。"
+      },
+      {
+        "problem": "错口、错线或错轨",
+        "action": "按批准期望处理实物接线；保存动作与线缆标识。",
+        "return": "3.3.2 单口增量采集与交换机回读，再做 3.3.3 比对。"
+      },
+      {
+        "problem": "光模块、线缆或网卡问题",
+        "action": "保留 DOM／链路／硬件证据，按工单处理或换件。",
+        "return": "按类别补做采集、邻居与必要单路径诊断；网卡变化核对拓扑影响。"
+      },
+      {
+        "problem": "机内拓扑或部件关系变化",
+        "action": "按证据选择型号、配置或硬件修复；刷固件属于受审批的可选动作。",
+        "return": "先重做 3.2，再更新 3.3.1；重新核验依赖旧关系的后续证明。"
+      },
+      {
+        "problem": "物料或配置依据变化",
+        "action": "批准变更并保存新版本，识别受影响的端口与关系。",
+        "return": "回到实际受影响的生产步骤补证，重新比对并确认；保留历史结果。"
+      }
+    ],
+    "recovery_boundary": "只对本工单冻结的对象和动作开放受控复验，继续核对无关前置、项目权限、主机信任与资源条件。复验通过后提议关闭，由网络工程师／交付组长确认；连续两次失败升级处理。",
+    "scenarios": [
+      {
+        "id": "confirmed",
+        "name": "三方一致且已确认",
+        "host": "采集成功：B300 A 端口 c1 看到SN5610 SW 端口 c01。",
+        "switch": "采集成功：SN5610 SW 端口 c01 回读到B300 A 端口 c1。",
+        "pair": "PASS · 当前示例端口对一致",
+        "completion": "示例范围仅此端口对；前三步通过、无未闭环差异，交付组长已确认。",
+        "usable": "可交给 3.4 核验映射覆盖与冲突。",
+        "next": "进入映射发布的条件核验，不直接进入网络测试。",
+        "tone": "pass"
+      },
+      {
+        "id": "missing",
+        "name": "交换机采集失败",
+        "host": "采集成功：B300 A 端口 c1 看到SN5610 SW 端口 c01。",
+        "switch": "采集失败：没有有效回读；实际邻居未知。",
+        "pair": "BLOCKED · 必需证据不足",
+        "completion": "三方证据不完整，不能完成最终确认。",
+        "usable": "当前不能供 3.4 消费。",
+        "next": "恢复交换机采集，从 3.3.2 重采；不直接断言线缆损坏。",
+        "tone": "blocked"
+      },
+      {
+        "id": "mismatch",
+        "name": "有效观测显示接错",
+        "host": "采集成功：B300 A 端口 c1 实际看到SN5610 SW 端口 c02。",
+        "switch": "采集成功：SN5610 SW 端口 c01 回读到另一服务器端口。",
+        "pair": "FAIL · 观测与期望不一致",
+        "completion": "明确差异进入工单，阻断后续确认。",
+        "usable": "当前不能供 3.4 消费。",
+        "next": "按期望纠正接线，再从 3.3.2 采集与比对，复验通过后确认关闭。",
+        "tone": "failed"
+      },
+      {
+        "id": "unconfirmed",
+        "name": "端口对通过，尚未确认",
+        "host": "采集成功：B300 A 端口 c1 看到SN5610 SW 端口 c01。",
+        "switch": "采集成功：SN5610 SW 端口 c01 回读到B300 A 端口 c1。",
+        "pair": "PASS · 当前示例端口对一致",
+        "completion": "前三步已通过，但交付组长尚未完成 3.3.4。",
+        "usable": "尚不能作为整步完成证明交给 3.4。",
+        "next": "核对完整范围、报告链和工单关闭证据，完成最终确认。",
+        "tone": "blocked"
+      },
+      {
+        "id": "changed",
+        "name": "确认后相关版本变化",
+        "host": "历史快照：B300 A 端口 c1 当时看到SN5610 SW 端口 c01。",
+        "switch": "历史快照：SN5610 SW 端口 c01 当时回读到B300 A 端口 c1。",
+        "pair": "历史 PASS · 原结果保留",
+        "completion": "旧版本已确认；当前该端口对的物料期望已批准变更。",
+        "usable": "旧证明不能直接供本次新版本使用。",
+        "next": "按新期望重采、比对并确认，产生新版本证明。",
+        "tone": "blocked"
+      }
+    ],
+    "scenario_context": "说明性情景：从两台 B300 与一台 SN5610 的贯穿案例中，只选 A.c1 ↔ SW.c01 一个端口对说明。批准期望为B300 A.c1 ↔ SN5610 SW.c01；除情景明确改变的条件外，硬件、拓扑、MAC、权限、范围和时效均满足。这里展示规则含义，不连接设备，也不代表完整判定器。",
+    "checks": [
+      {
+        "id": "wiring.pair_match",
+        "name": "三方一致、邻居差异与 MAC 不符",
+        "cases": [
+          "CASE-23",
+          "CASE-26",
+          "CASE-27",
+          "CASE-28"
+        ],
+        "scope": "现有模型检查逐端口对比对；稳定身份解析与真实采集仍需适配器验证。",
+        "fields": [
+          "双侧观测",
+          "步骤报告与关系"
+        ]
+      },
+      {
+        "id": "wiring.missing_side",
+        "name": "主机或交换机缺测时阻断",
+        "cases": [
+          "CASE-24",
+          "CASE-25"
+        ],
+        "scope": "模型区分采集失败与邻居差异；观察窗口和采集错误协议仍待确认。",
+        "fields": [
+          "双侧观测"
+        ]
+      },
+      {
+        "id": "wiring.confirmation",
+        "name": "前三步通过后仍须最终确认",
+        "cases": [
+          "CASE-29",
+          "CASE-30"
+        ],
+        "scope": "模型只检查三个通过值与最终确认标记；未验证报告版本、身份鉴权或工单数据库。",
+        "fields": [
+          "步骤报告与关系",
+          "最终确认与时效"
+        ]
+      },
+      {
+        "id": "wiring.scope",
+        "name": "完整目标覆盖与逐目标准入",
+        "cases": [],
+        "scope": "已明确要求；本样板尚无完整自动验证，需要覆盖缺目标、额外端点和非法空请求。",
+        "fields": [
+          "项目与对象范围"
+        ]
+      },
+      {
+        "id": "wiring.version",
+        "name": "变化后重新判断证明适用性",
+        "cases": [],
+        "scope": "已明确要求；全站有通用版本竞争示例，尚未验证四步报告的完整并发发布。",
+        "fields": [
+          "期望与依赖版本",
+          "最终确认与时效"
+        ]
+      },
+      {
+        "id": "wiring.recovery",
+        "name": "受控复验与确认关闭",
+        "cases": [],
+        "scope": "已明确要求；全站有恢复可达路径示例，尚未验证实际工单、权限和资源系统。",
+        "fields": [
+          "处置与复验",
+          "执行关联与结论"
+        ]
+      }
+    ],
+    "decisions": [
+      "Q7",
+      "Q9",
+      "Q11"
+    ],
+    "decision_note": "配置就绪与漂移的允许口径、采集失败和有效无邻居的观察协议、混合结论与工单阻断范围仍待确认。断链专属自动复验模板也需明确。缺少这些策略时保留明细和阻断原因，不补写默认通过。"
+  },
+  "data_guide": {
+    "note": "“已有”指沿用字段名；新增字段名与结构为开发约定建议。结合本卡片的模拟数据理解；生产接口 Schema 与业务阈值仍需确认。",
+    "id_rules": [
+      {
+        "name": "阅读编号",
+        "fields": "3.3 / 3.3.2",
+        "rule": "只定位页面步骤，不作为对象主键、版本号或执行 ID。",
+        "status": "已明确"
+      },
+      {
+        "name": "项目身份",
+        "fields": "project_id",
+        "rule": "业务记录绑定项目；跨项目证据不可借用。共享型号、介质等目录通过明确版本引用。",
+        "status": "已明确"
+      },
+      {
+        "name": "稳定实物",
+        "fields": "item_uid / machine_id / physical_port_uid",
+        "rule": "平台按全局身份键分配或匹配；改名、重装不换 ID，换新实物使用新 ID。端口按父对象＋端口位匹配；接口名、BDF、行号不能代替。",
+        "status": "已明确"
+      },
+      {
+        "name": "产物及版本",
+        "fields": "record_id / version_ref",
+        "rule": "record_id 标识同一源记录链，不复用于其他产物；record_id＋revision 定位不可变修订。新采样追加修订，消费者必须固定引用。",
+        "status": "命名建议"
+      },
+      {
+        "name": "执行及重试",
+        "fields": "execution_id / attempt_id；group_run_id / group_attempt_id",
+        "rule": "每次尝试使用新 ID 并绑定所属执行；NCCL 绑定所属通信组，按整组创建新尝试。",
+        "status": "命名建议"
+      }
+    ],
+    "formats": [
+      {
+        "name": "ID",
+        "shape": "string",
+        "rule": "非空稳定标识；按对象身份规则唯一，不固定 UUID 或自增编码。"
+      },
+      {
+        "name": "ObjectRef",
+        "shape": "{kind, id}",
+        "rule": "kind 指明对象类别，id 为稳定 ID；业务对象归属必须可核对。"
+      },
+      {
+        "name": "VersionRef",
+        "shape": "{object_id, revision}",
+        "rule": "两项均为非空字符串；引用明确修订，不使用 latest。"
+      },
+      {
+        "name": "RecordRef",
+        "shape": "{record_id, revision}",
+        "rule": "引用不可变产物修订；来源、项目与覆盖范围可核对。"
+      },
+      {
+        "name": "Time / Window",
+        "shape": "UTC 字符串 / {start, end}",
+        "rule": "时间用 ISO-8601 UTC，例如 2026-10-26T10:00:00Z；窗口结束不早于开始。具体边界按适用策略。"
+      },
+      {
+        "name": "Metric",
+        "shape": "{value, unit, quality}",
+        "rule": "value 为 number 或 null；unit 显式保存。缺测使用 null＋质量原因，不能填 0。"
+      },
+      {
+        "name": "PortPair",
+        "shape": "{a, b}",
+        "rule": "a、b 为 physical_port_uid；实物线缆端点按无序对规范化。测试方向另存，不能套用无序去重。"
+      },
+      {
+        "name": "TestPair",
+        "shape": "{src, dst, rail, address_family}",
+        "rule": "src/dst 为明确端点引用；方向、rail 与地址族按批准计划记录，覆盖算法仍待确认。"
+      },
+      {
+        "name": "Result",
+        "shape": "PASS / FAIL / BLOCKED / WAIVED",
+        "rule": "只用于验收结论；执行状态、采集质量与当前可消费性分别保存。"
+      },
+      {
+        "name": "T[] / enum",
+        "shape": "数组 / 明确取值集合",
+        "rule": "数组逐项校验类型与引用；集合按稳定键去重。空数组、缺字段、null、不适用分别定义。"
+      }
+    ],
+    "common_fields": [
+      {
+        "name": "record_id",
+        "type": "ID",
+        "label": "产物标识",
+        "rule": "不同产物链使用新 ID；同链新增不可变 revision，消费者按 RecordRef 精确引用。",
+        "required": "必填",
+        "status": "建议"
+      },
+      {
+        "name": "project_id",
+        "type": "ID",
+        "label": "所属项目",
+        "rule": "业务产物必填；共享目录本身使用所属目录的作用域。",
+        "required": "必填",
+        "status": "已有"
+      },
+      {
+        "name": "subject_refs",
+        "type": "ObjectRef[]",
+        "label": "覆盖对象",
+        "rule": "按实际设备、端口或通信组记录；非法空目标不得通过。",
+        "required": "必填",
+        "status": "建议"
+      },
+      {
+        "name": "version_ref / based_on",
+        "type": "VersionRef / RecordRef[]",
+        "label": "自身修订与输入依据",
+        "rule": "发布修订不可变；依赖按本流程实际输入登记，不引用尚未产生的结果。",
+        "required": "必填",
+        "status": "建议"
+      },
+      {
+        "name": "execution_id / attempt_id",
+        "type": "ID / ID",
+        "label": "执行来源",
+        "rule": "自动作业必填；人工产物记录责任人、操作和确认时间。",
+        "required": "条件",
+        "status": "建议"
+      },
+      {
+        "name": "created_at",
+        "type": "Time",
+        "label": "记录时间",
+        "rule": "不代替 collected_at 或 valid_until。",
+        "required": "必填",
+        "status": "建议"
+      }
+    ]
+  },
+  "hardware_example": {
+    "title": "贯穿案例：2 台 B300 GPU 服务器 + 1 台 SN5610",
+    "scope": "采用 DGX B300 公布配置作为 B300 服务器参考：每台 8 GPU、8 个 ConnectX-8 集群端口。SN5610 提供 64 个 800GbE 端口；案例启用其中 16 个，其余 48 个不参与本次计算网络验收。",
+    "boundary": "这是讲解用的两机单交换机拓扑，所有采样值均为模拟。其他 B300 整机须绑定其 OEM 型号版本；线缆／光模块兼容性、内部拓扑、生产冗余、固件与性能基线仍需实际方案确认。",
+    "identities": [
+      [
+        "项目",
+        "project-demo",
+        "所有案例记录的项目范围"
+      ],
+      [
+        "设备",
+        "machine-b300-a / machine-b300-b / machine-sn5610-1",
+        "A、B、SW 是展示简称；序列号用于核对，设备 ID 保持稳定"
+      ],
+      [
+        "端口",
+        "port-a-c1…c8 / port-b-c1…c8 / port-sw-c01…c64",
+        "示例稳定 ID，不能用 OS 接口名或 PCIe 地址替代"
+      ],
+      [
+        "连接",
+        "A.c1…c8 ↔ SW.c01…c08；B.c1…c8 ↔ SW.c09…c16",
+        "16 条线缆、32 个端点；端口标记是案例标签，适配器映射到实际面板标识"
+      ],
+      [
+        "测试范围",
+        "rail-1…rail-8；A.ci ↔ B.ci；IPv4",
+        "案例计划：8 个无向配对、16 个有向检查；rail 是逻辑配对，不表示 8 套独立交换网络，也不证明所有 ECMP 路径"
+      ],
+      [
+        "版本",
+        "BOM r1 / 型号 r1 / 映射 r1 / 配置 r1 / 策略 r1",
+        "均为模拟的已批准输入；生产必须引用实际审批版本"
+      ],
+      [
+        "采样",
+        "2026-10-26T08:00:00Z",
+        "案例时间；每条记录独立保存 collected_at、received_at、source、quality、raw_ref"
+      ]
+    ],
+    "quantities": "数量看集合：预期、已收到、有效、匹配、缺失、重复、额外分别统计。质量看来源、身份、版本、时间和采集能力。16 条记录不一定覆盖 16 个不同对象；unknown、过期或缺测不能记为合格。",
+    "sources": [
+      {
+        "title": "NVIDIA DGX B300 官方配置",
+        "url": "https://docs.nvidia.com/dgx/dgxb300-user-guide/introduction-to-dgxb300.html"
+      },
+      {
+        "title": "NVIDIA SN5610 官方硬件说明",
+        "url": "https://networking-docs.nvidia.com/sn5000hw/introduction"
+      },
+      {
+        "title": "NVIDIA NCCL 指标定义",
+        "url": "https://github.com/NVIDIA/nccl-tests/blob/master/doc/PERFORMANCE.md"
+      }
+    ],
+    "checked_on": "2026-10-26"
+  },
+  "diagrams": [
+    "五步交付与产物依赖",
+    "3.3 核对并确认物理接线",
+    "4 网络测试",
+    "0.1 修复与定向复验",
+    "5 NCCL 测试与评审",
+    "0.2 CMDB 全过程数据流"
+  ]
+}

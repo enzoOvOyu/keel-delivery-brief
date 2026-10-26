@@ -1,0 +1,1519 @@
+{
+  "status": "passed",
+  "model_version": "1.1-collection-review",
+  "source": {
+    "name": "keel-delivery-fishbone.md",
+    "sha256": "450950bfaef536a74d4e93c703e48fb8ea4eafba95d9c9812d63eca1dd26f624"
+  },
+  "summary": {
+    "flows": 32,
+    "artifacts": 42,
+    "drawio_pages": 6,
+    "structural_checks": 15,
+    "cases": 47,
+    "passed_cases": 47,
+    "mutations": 6,
+    "killed_mutations": 6
+  },
+  "walkthrough": {
+    "passed": true,
+    "cards": 45,
+    "checks": [
+      {
+        "name": "16 个唯一且有效对象通过数量与质量核验",
+        "passed": true,
+        "actual": "PASS",
+        "expected": "PASS"
+      },
+      {
+        "name": "收到 16 行但重复一个对象不能通过",
+        "passed": true,
+        "actual": "BLOCKED",
+        "expected": "BLOCKED"
+      },
+      {
+        "name": "部分采集缺一个对象为缺证据",
+        "passed": true,
+        "actual": "BLOCKED",
+        "expected": "BLOCKED"
+      },
+      {
+        "name": "已证明完整枚举但少一个实物为明确不符",
+        "passed": true,
+        "actual": "FAIL",
+        "expected": "FAIL"
+      },
+      {
+        "name": "16 条收到中一条未知：有效数为 15",
+        "passed": true,
+        "actual": 15,
+        "expected": 15
+      },
+      {
+        "name": "未知质量不自动通过",
+        "passed": true,
+        "actual": "BLOCKED",
+        "expected": "BLOCKED"
+      },
+      {
+        "name": "过期数据不作为有效证据",
+        "passed": true,
+        "actual": "BLOCKED",
+        "expected": "BLOCKED"
+      },
+      {
+        "name": "身份未核实不作为有效证据",
+        "passed": true,
+        "actual": "BLOCKED",
+        "expected": "BLOCKED"
+      },
+      {
+        "name": "额外有效实物不静默忽略",
+        "passed": true,
+        "actual": "FAIL",
+        "expected": "FAIL"
+      },
+      {
+        "name": "空预期集合不自动通过",
+        "passed": true,
+        "actual": "BLOCKED",
+        "expected": "BLOCKED"
+      },
+      {
+        "name": "物理线缆交换端点顺序仍是同一对",
+        "passed": true,
+        "actual": "PASS",
+        "expected": "PASS"
+      },
+      {
+        "name": "双侧一致但违背 BOM 仍是接错",
+        "passed": true,
+        "actual": "FAIL",
+        "expected": "FAIL"
+      },
+      {
+        "name": "缺少交换机实测不能通过",
+        "passed": true,
+        "actual": "BLOCKED",
+        "expected": "BLOCKED"
+      },
+      {
+        "name": "端点重复不是有效线缆",
+        "passed": true,
+        "actual": "BLOCKED",
+        "expected": "BLOCKED"
+      },
+      {
+        "name": "首条合法源记录独立建索引",
+        "passed": true,
+        "actual": "indexed",
+        "expected": "indexed"
+      },
+      {
+        "name": "重复事件幂等返回且不重复建索引",
+        "passed": true,
+        "actual": "duplicate",
+        "expected": "duplicate"
+      },
+      {
+        "name": "另一个事件引用同源修订也幂等",
+        "passed": true,
+        "actual": "duplicate",
+        "expected": "duplicate"
+      },
+      {
+        "name": "重复后只有一个历史索引",
+        "passed": true,
+        "actual": 1,
+        "expected": 1
+      },
+      {
+        "name": "同事件不同内容拒收",
+        "passed": true,
+        "actual": "quarantined",
+        "expected": "quarantined"
+      },
+      {
+        "name": "同源修订不同内容拒收",
+        "passed": true,
+        "actual": "quarantined",
+        "expected": "quarantined"
+      },
+      {
+        "name": "跨项目拒收",
+        "passed": true,
+        "actual": "quarantined",
+        "expected": "quarantined"
+      },
+      {
+        "name": "未知对象拒收",
+        "passed": true,
+        "actual": "quarantined",
+        "expected": "quarantined"
+      },
+      {
+        "name": "格式合法但源记录不存在时拒收",
+        "passed": true,
+        "actual": "quarantined",
+        "expected": "quarantined"
+      },
+      {
+        "name": "摘要与权威源记录不匹配时拒收",
+        "passed": true,
+        "actual": "quarantined",
+        "expected": "quarantined"
+      },
+      {
+        "name": "新质量未知仍可索引",
+        "passed": true,
+        "actual": "indexed",
+        "expected": "indexed"
+      },
+      {
+        "name": "新未知替换当前状态，不延续旧绿色",
+        "passed": true,
+        "actual": "unknown",
+        "expected": "unknown"
+      },
+      {
+        "name": "最后有效记录另存，不冒充最新",
+        "passed": true,
+        "actual": 1,
+        "expected": 1
+      },
+      {
+        "name": "乱序旧修订仅入历史",
+        "passed": true,
+        "actual": 2,
+        "expected": 2
+      },
+      {
+        "name": "迟到旧修订不覆盖新投影",
+        "passed": true,
+        "actual": 2,
+        "expected": 2
+      },
+      {
+        "name": "同序号不同修订拒收",
+        "passed": true,
+        "actual": "quarantined",
+        "expected": "quarantined"
+      },
+      {
+        "name": "同步回执数量守恒",
+        "passed": true,
+        "actual": 6,
+        "expected": 6
+      },
+      {
+        "name": "未知版本拒收",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "非法质量拒收",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "序号布尔值拒收",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "空对象集合拒收",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "无效日期拒收",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "未声明字段拒收",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "未知源类别拒收",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "不固定修订拒收",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "缺必填引用拒收",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "全部 32 流程与 13 内部子步骤有五段动作数据",
+        "passed": true,
+        "actual": 45,
+        "expected": 45
+      },
+      {
+        "name": "每张卡有动作、原始数据、数量质量比较、输出和消费",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "新增采集位于装机且被验机消费",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "全部流程产物及原始观测进入 CMDB",
+        "passed": true,
+        "actual": [
+          "bom",
+          "bootstrap",
+          "env",
+          "g1",
+          "g2",
+          "g4",
+          "g5",
+          "g6",
+          "group_results",
+          "health",
+          "host_ready",
+          "human",
+          "inventory",
+          "l1",
+          "l2",
+          "l3",
+          "l4",
+          "l5",
+          "lossless",
+          "mapping",
+          "metrics",
+          "nccl_admission",
+          "nccl_environment",
+          "net_config",
+          "network_export",
+          "observations",
+          "plan",
+          "pre_cable",
+          "readiness",
+          "repair",
+          "report",
+          "test_plan",
+          "topology",
+          "trace",
+          "tuning",
+          "window"
+        ],
+        "expected": [
+          "bom",
+          "bootstrap",
+          "env",
+          "g1",
+          "g2",
+          "g4",
+          "g5",
+          "g6",
+          "group_results",
+          "health",
+          "host_ready",
+          "human",
+          "inventory",
+          "l1",
+          "l2",
+          "l3",
+          "l4",
+          "l5",
+          "lossless",
+          "mapping",
+          "metrics",
+          "nccl_admission",
+          "nccl_environment",
+          "net_config",
+          "network_export",
+          "observations",
+          "plan",
+          "pre_cable",
+          "readiness",
+          "repair",
+          "report",
+          "test_plan",
+          "topology",
+          "trace",
+          "tuning",
+          "window"
+        ]
+      },
+      {
+        "name": "CMDB 是逐事件消费，不是全局前置",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "事件 Schema 源类别与订阅目录双向一致",
+        "passed": true,
+        "actual": [
+          "bom",
+          "bootstrap",
+          "env",
+          "g1",
+          "g2",
+          "g4",
+          "g5",
+          "g6",
+          "group_results",
+          "health",
+          "host_ready",
+          "human",
+          "inventory",
+          "l1",
+          "l2",
+          "l3",
+          "l4",
+          "l5",
+          "lossless",
+          "mapping",
+          "metrics",
+          "nccl_admission",
+          "nccl_environment",
+          "net_config",
+          "network_export",
+          "observations",
+          "plan",
+          "pre_cable",
+          "readiness",
+          "repair",
+          "report",
+          "test_plan",
+          "topology",
+          "trace",
+          "tuning",
+          "window"
+        ],
+        "expected": [
+          "bom",
+          "bootstrap",
+          "env",
+          "g1",
+          "g2",
+          "g4",
+          "g5",
+          "g6",
+          "group_results",
+          "health",
+          "host_ready",
+          "human",
+          "inventory",
+          "l1",
+          "l2",
+          "l3",
+          "l4",
+          "l5",
+          "lossless",
+          "mapping",
+          "metrics",
+          "nccl_admission",
+          "nccl_environment",
+          "net_config",
+          "network_export",
+          "observations",
+          "plan",
+          "pre_cable",
+          "readiness",
+          "repair",
+          "report",
+          "test_plan",
+          "topology",
+          "trace",
+          "tuning",
+          "window"
+        ]
+      },
+      {
+        "name": "事件 Schema 必填与有限模型一致",
+        "passed": true,
+        "actual": [
+          "collected_at",
+          "event_id",
+          "project_id",
+          "received_at",
+          "schema_version",
+          "source_hash",
+          "source_kind",
+          "source_quality",
+          "source_ref",
+          "source_sequence",
+          "subject_refs"
+        ],
+        "expected": [
+          "collected_at",
+          "event_id",
+          "project_id",
+          "received_at",
+          "schema_version",
+          "source_hash",
+          "source_kind",
+          "source_quality",
+          "source_ref",
+          "source_sequence",
+          "subject_refs"
+        ]
+      },
+      {
+        "name": "动作卡消费按钮与模型一致",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      }
+    ],
+    "scope": "有限模拟数据与事件模型；未连接硬件，未实现生产 CMDB，未运行 TLC。"
+  },
+  "reading_version": "1.4-actions",
+  "definition_sha256": {
+    "build_artifacts.py": "189b840460231a282a8ecb46a579c5d196819522bd0ffe40a8178ca15764c975",
+    "collection.py": "361e46942c838ead8153f5e749697dbd62028230a3039b9c7df872dc8765ed3e",
+    "walkthrough.py": "7b5a51b42968031f1bde7a3a36e1601440b319169bcea5cd1edb3a5022932410",
+    "collection_model.py": "e1b50335efbaad024265e632556bf2e9df11515bff0495545432ddec7a936daa",
+    "verify_walkthrough.py": "87a26a0dee95e254aca87c4488b061d1896b8aaa95f0bc1fdf51715643adb212",
+    "verify_contracts.py": "d952dc52f877bda471cac795bf2e2581a6add5bb35ba0dcd3ba4e98b11aabd50",
+    "acceptance-cases.json": "026bc69fb88c1367fcd79945bf27e2054868b5f383d46bcff2c2941b8db53d38",
+    "collection-event.schema.json": "dc68cad255d561f95397cd587435725182c32671b14b7cf0f6d09760ffffafc7",
+    "DEVELOPMENT-REQUIREMENTS.md": "8b816ec3a4ce61ca0ca6c96f2e9299a074d445935f964d9d72f0b1fa931d5f91"
+  },
+  "structural_checks": [
+    {
+      "name": "source_sha256",
+      "passed": true,
+      "detail": "450950bfaef536a74d4e93c703e48fb8ea4eafba95d9c9812d63eca1dd26f624"
+    },
+    {
+      "name": "unique_ids",
+      "passed": true,
+      "detail": "流程和逻辑产物ID唯一"
+    },
+    {
+      "name": "complete_contracts",
+      "passed": true,
+      "detail": "所有流程均具备契约字段"
+    },
+    {
+      "name": "input_references",
+      "passed": true,
+      "detail": "输入有生产方或明确外部权威来源"
+    },
+    {
+      "name": "output_ownership",
+      "passed": true,
+      "detail": "每个逻辑产物有对应生产边界"
+    },
+    {
+      "name": "consumer_links",
+      "passed": true,
+      "detail": "正向消费与反向索引一致"
+    },
+    {
+      "name": "no_orphan_products",
+      "passed": true,
+      "detail": "终端消费者和恢复回流显式登记"
+    },
+    {
+      "name": "normal_evidence_dag",
+      "passed": true,
+      "detail": "前向证据构建无环；恢复回流不是普通前置边"
+    },
+    {
+      "name": "g2_not_waiting_for_g3",
+      "passed": true,
+      "detail": "G2不依赖Mapping发布"
+    },
+    {
+      "name": "g4_not_omitted",
+      "passed": true,
+      "detail": "G5准入依赖有效G4"
+    },
+    {
+      "name": "g5_not_forced_serial",
+      "passed": true,
+      "detail": "没有将未定的L1→L2→L3串行策略写为既定硬依赖"
+    },
+    {
+      "name": "decision_references",
+      "passed": true,
+      "detail": "Q引用存在"
+    },
+    {
+      "name": "invariant_references",
+      "passed": true,
+      "detail": "INV流程引用存在"
+    },
+    {
+      "name": "drawio_xml_and_edges",
+      "passed": true,
+      "detail": {
+        "pages": 6,
+        "edges": 75
+      }
+    },
+    {
+      "name": "document_contract_coverage",
+      "passed": true,
+      "detail": "文档覆盖全部流程ID"
+    }
+  ],
+  "cases": [
+    {
+      "id": "CASE-01",
+      "name": "完整且适用的G5可消费",
+      "invariants": [
+        "INV-04",
+        "INV-06"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": true
+      },
+      "actual": {
+        "allowed": true,
+        "reasons": [],
+        "preserved_verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-02",
+      "name": "跨项目证据拒绝",
+      "invariants": [
+        "INV-05"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "project_mismatch"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "project_mismatch"
+        ],
+        "preserved_verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-03",
+      "name": "缺目标拒绝",
+      "invariants": [
+        "INV-05"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "target_gap"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "target_gap"
+        ],
+        "preserved_verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-04",
+      "name": "A-B/C-D不证明A-C",
+      "invariants": [
+        "INV-06"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "path_gap"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "path_gap"
+        ],
+        "preserved_verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-05",
+      "name": "档位不适用拒绝（模型采用相等）",
+      "invariants": [
+        "INV-05"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "profile_mismatch"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "profile_mismatch"
+        ],
+        "preserved_verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-06",
+      "name": "相关ConfigSet版本改变",
+      "invariants": [
+        "INV-07",
+        "INV-14"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "version_mismatch"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "version_mismatch"
+        ],
+        "preserved_verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-07",
+      "name": "门禁证据过期",
+      "invariants": [
+        "INV-05"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "evidence_time_invalid"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "evidence_time_invalid",
+          "readiness_stale"
+        ],
+        "preserved_verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-08",
+      "name": "未来采样时间不冒充新鲜",
+      "invariants": [
+        "INV-05"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "evidence_time_invalid"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "evidence_time_invalid"
+        ],
+        "preserved_verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-09",
+      "name": "就绪证明31s已过期",
+      "invariants": [
+        "INV-05"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "readiness_stale"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "readiness_stale"
+        ],
+        "preserved_verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-10",
+      "name": "就绪恰好30s（模型边界约定）",
+      "invariants": [
+        "INV-05"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": true
+      },
+      "actual": {
+        "allowed": true,
+        "reasons": [],
+        "preserved_verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-11",
+      "name": "必需unknown不是零丢包",
+      "invariants": [
+        "INV-05"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "required_quality_missing"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "required_quality_missing"
+        ],
+        "preserved_verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-12",
+      "name": "明确非必需的缺失不擅自扩大阻断",
+      "invariants": [
+        "INV-05"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": true
+      },
+      "actual": {
+        "allowed": true,
+        "reasons": [],
+        "preserved_verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-13",
+      "name": "FAIL不能被直接消费",
+      "invariants": [
+        "INV-04"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "verdict_not_accepted"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "verdict_not_accepted"
+        ],
+        "preserved_verdict": "FAIL"
+      }
+    },
+    {
+      "id": "CASE-14",
+      "name": "BLOCKED不是PASS",
+      "invariants": [
+        "INV-04",
+        "INV-05"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "verdict_not_accepted"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "verdict_not_accepted"
+        ],
+        "preserved_verdict": "BLOCKED"
+      }
+    },
+    {
+      "id": "CASE-15",
+      "name": "有效豁免可按明确策略消费但不改PASS",
+      "invariants": [
+        "INV-08"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": true,
+        "preserved_verdict": "WAIVED"
+      },
+      "actual": {
+        "allowed": true,
+        "reasons": [],
+        "preserved_verdict": "WAIVED"
+      }
+    },
+    {
+      "id": "CASE-16",
+      "name": "过期豁免拒绝",
+      "invariants": [
+        "INV-08"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "waiver_invalid"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "waiver_invalid"
+        ],
+        "preserved_verdict": "WAIVED"
+      }
+    },
+    {
+      "id": "CASE-17",
+      "name": "豁免不能借用到另一路径",
+      "invariants": [
+        "INV-08"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "waiver_invalid"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "waiver_invalid"
+        ],
+        "preserved_verdict": "WAIVED"
+      }
+    },
+    {
+      "id": "CASE-18",
+      "name": "无审批的WAIVED拒绝",
+      "invariants": [
+        "INV-08"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "waiver_invalid"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "waiver_invalid"
+        ],
+        "preserved_verdict": "WAIVED"
+      }
+    },
+    {
+      "id": "CASE-19",
+      "name": "未允许该豁免的消费任务拒绝",
+      "invariants": [
+        "INV-08"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "waiver_invalid"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "waiver_invalid"
+        ],
+        "preserved_verdict": "WAIVED"
+      }
+    },
+    {
+      "id": "CASE-20",
+      "name": "无权限不派发",
+      "invariants": [
+        "INV-12"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "permission_missing"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "permission_missing"
+        ],
+        "preserved_verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-21",
+      "name": "资源不足不派发",
+      "invariants": [
+        "INV-11"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "resources_missing"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "resources_missing"
+        ],
+        "preserved_verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-22",
+      "name": "普通任务不越过阻断告警",
+      "invariants": [
+        "INV-12"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "blocking_alert"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "blocking_alert"
+        ],
+        "preserved_verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-23",
+      "name": "三方一致产生端口对PASS",
+      "invariants": [
+        "INV-02"
+      ],
+      "status": "pass",
+      "expected": {
+        "verdict": "PASS"
+      },
+      "actual": {
+        "verdict": "PASS",
+        "cause": "three_way_match"
+      }
+    },
+    {
+      "id": "CASE-24",
+      "name": "主机LLDP未采到不判断线",
+      "invariants": [
+        "INV-05"
+      ],
+      "status": "pass",
+      "expected": {
+        "verdict": "BLOCKED",
+        "cause": "missing_evidence"
+      },
+      "actual": {
+        "verdict": "BLOCKED",
+        "cause": "missing_evidence"
+      }
+    },
+    {
+      "id": "CASE-25",
+      "name": "交换机回读缺失不空成功",
+      "invariants": [
+        "INV-05"
+      ],
+      "status": "pass",
+      "expected": {
+        "verdict": "BLOCKED",
+        "cause": "missing_evidence"
+      },
+      "actual": {
+        "verdict": "BLOCKED",
+        "cause": "missing_evidence"
+      }
+    },
+    {
+      "id": "CASE-26",
+      "name": "采集成功但实际邻居不符",
+      "invariants": [
+        "INV-02"
+      ],
+      "status": "pass",
+      "expected": {
+        "verdict": "FAIL",
+        "cause": "observed_mismatch"
+      },
+      "actual": {
+        "verdict": "FAIL",
+        "cause": "observed_mismatch"
+      }
+    },
+    {
+      "id": "CASE-27",
+      "name": "采集成功且无邻居是实际差异",
+      "invariants": [
+        "INV-02"
+      ],
+      "status": "pass",
+      "expected": {
+        "verdict": "FAIL",
+        "cause": "observed_mismatch"
+      },
+      "actual": {
+        "verdict": "FAIL",
+        "cause": "observed_mismatch"
+      }
+    },
+    {
+      "id": "CASE-28",
+      "name": "永久MAC不符不能通过",
+      "invariants": [
+        "INV-02"
+      ],
+      "status": "pass",
+      "expected": {
+        "verdict": "FAIL",
+        "cause": "observed_mismatch"
+      },
+      "actual": {
+        "verdict": "FAIL",
+        "cause": "observed_mismatch"
+      }
+    },
+    {
+      "id": "CASE-29",
+      "name": "Step3局部通过不代替最终确认",
+      "invariants": [
+        "INV-02"
+      ],
+      "status": "pass",
+      "expected": {
+        "g2_complete": false
+      },
+      "actual": {
+        "g2_complete": false
+      }
+    },
+    {
+      "id": "CASE-30",
+      "name": "四步确认后才解锁Mapping",
+      "invariants": [
+        "INV-01",
+        "INV-02"
+      ],
+      "status": "pass",
+      "expected": {
+        "g2_complete": true
+      },
+      "actual": {
+        "g2_complete": true
+      }
+    },
+    {
+      "id": "CASE-31",
+      "name": "完整窗口ECN恒零且队列拥塞命中",
+      "invariants": [
+        "INV-15"
+      ],
+      "status": "pass",
+      "expected": {
+        "evaluable": true,
+        "triggered": true
+      },
+      "actual": {
+        "evaluable": true,
+        "triggered": true
+      }
+    },
+    {
+      "id": "CASE-32",
+      "name": "完整窗口ECN恒零且PFC增长命中",
+      "invariants": [
+        "INV-15"
+      ],
+      "status": "pass",
+      "expected": {
+        "evaluable": true,
+        "triggered": true
+      },
+      "actual": {
+        "evaluable": true,
+        "triggered": true
+      }
+    },
+    {
+      "id": "CASE-33",
+      "name": "无拥塞时零计数不单独判LL-03",
+      "invariants": [
+        "INV-15"
+      ],
+      "status": "pass",
+      "expected": {
+        "evaluable": true,
+        "triggered": false
+      },
+      "actual": {
+        "evaluable": true,
+        "triggered": false
+      }
+    },
+    {
+      "id": "CASE-34",
+      "name": "ECN并非恒零不命中LL-03",
+      "invariants": [
+        "INV-15"
+      ],
+      "status": "pass",
+      "expected": {
+        "evaluable": true,
+        "triggered": false
+      },
+      "actual": {
+        "evaluable": true,
+        "triggered": false
+      }
+    },
+    {
+      "id": "CASE-35",
+      "name": "30s不能证明3600s规则完整",
+      "invariants": [
+        "INV-15"
+      ],
+      "status": "pass",
+      "expected": {
+        "evaluable": false,
+        "triggered": null
+      },
+      "actual": {
+        "evaluable": false,
+        "triggered": null
+      }
+    },
+    {
+      "id": "CASE-36",
+      "name": "窗口内缺采样不伪装完整",
+      "invariants": [
+        "INV-05",
+        "INV-15"
+      ],
+      "status": "pass",
+      "expected": {
+        "evaluable": false,
+        "triggered": null
+      },
+      "actual": {
+        "evaluable": false,
+        "triggered": null
+      }
+    },
+    {
+      "id": "CASE-37",
+      "name": "计数能力不存在不填零",
+      "invariants": [
+        "INV-05",
+        "INV-15"
+      ],
+      "status": "pass",
+      "expected": {
+        "evaluable": false,
+        "triggered": null
+      },
+      "actual": {
+        "evaluable": false,
+        "triggered": null
+      }
+    },
+    {
+      "id": "CASE-38",
+      "name": "计数重置需明确策略，模型保守拒绝判定",
+      "invariants": [
+        "INV-15"
+      ],
+      "status": "pass",
+      "expected": {
+        "evaluable": false,
+        "triggered": null
+      },
+      "actual": {
+        "evaluable": false,
+        "triggered": null
+      }
+    },
+    {
+      "id": "CASE-39",
+      "name": "全组资源与启动条件齐备",
+      "invariants": [
+        "INV-11"
+      ],
+      "status": "pass",
+      "expected": {
+        "allow_start": true
+      },
+      "actual": {
+        "allow_start": true
+      }
+    },
+    {
+      "id": "CASE-40",
+      "name": "部分资源不能启动整组",
+      "invariants": [
+        "INV-11"
+      ],
+      "status": "pass",
+      "expected": {
+        "allow_start": false
+      },
+      "actual": {
+        "allow_start": false
+      }
+    },
+    {
+      "id": "CASE-41",
+      "name": "成员未全部ready不能过屏障",
+      "invariants": [
+        "INV-11"
+      ],
+      "status": "pass",
+      "expected": {
+        "allow_start": false
+      },
+      "actual": {
+        "allow_start": false
+      }
+    },
+    {
+      "id": "CASE-42",
+      "name": "不能滚动启动通信组",
+      "invariants": [
+        "INV-11"
+      ],
+      "status": "pass",
+      "expected": {
+        "allow_start": false
+      },
+      "actual": {
+        "allow_start": false
+      }
+    },
+    {
+      "id": "CASE-43",
+      "name": "失败rank触发整组新尝试",
+      "invariants": [
+        "INV-11"
+      ],
+      "status": "pass",
+      "expected": {
+        "restart": [
+          "A",
+          "B"
+        ],
+        "new_group_attempt": true
+      },
+      "actual": {
+        "restart": [
+          "A",
+          "B"
+        ],
+        "new_group_attempt": true
+      }
+    },
+    {
+      "id": "CASE-44",
+      "name": "执行通道不允许时不能越过",
+      "invariants": [
+        "INV-12",
+        "INV-16"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "channel_missing"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "channel_missing"
+        ],
+        "preserved_verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-45",
+      "name": "明确豁免本项缺证据可消费但仍是WAIVED",
+      "invariants": [
+        "INV-05",
+        "INV-08"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": true,
+        "preserved_verdict": "WAIVED"
+      },
+      "actual": {
+        "allowed": true,
+        "reasons": [],
+        "preserved_verdict": "WAIVED"
+      }
+    },
+    {
+      "id": "CASE-46",
+      "name": "豁免一项不能掩盖另一必需项缺失",
+      "invariants": [
+        "INV-05",
+        "INV-08"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "required_quality_missing"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "required_quality_missing"
+        ],
+        "preserved_verdict": "WAIVED"
+      }
+    },
+    {
+      "id": "CASE-47",
+      "name": "有效豁免不越过项目权限",
+      "invariants": [
+        "INV-08",
+        "INV-12"
+      ],
+      "status": "pass",
+      "expected": {
+        "allowed": false,
+        "reason": "permission_missing"
+      },
+      "actual": {
+        "allowed": false,
+        "reasons": [
+          "permission_missing"
+        ],
+        "preserved_verdict": "WAIVED"
+      }
+    }
+  ],
+  "mutations": [
+    {
+      "mutation": "ignore_paths",
+      "killed": true,
+      "detected_by": [
+        "CASE-04"
+      ]
+    },
+    {
+      "mutation": "ignore_versions",
+      "killed": true,
+      "detected_by": [
+        "CASE-06"
+      ]
+    },
+    {
+      "mutation": "unknown_as_zero",
+      "killed": true,
+      "detected_by": [
+        "CASE-11",
+        "CASE-46"
+      ]
+    },
+    {
+      "mutation": "ignore_waiver_scope",
+      "killed": true,
+      "detected_by": [
+        "CASE-17"
+      ]
+    },
+    {
+      "mutation": "ignore_missing_side",
+      "killed": true,
+      "detected_by": [
+        "CASE-24",
+        "CASE-25"
+      ]
+    },
+    {
+      "mutation": "ignore_rule_window",
+      "killed": true,
+      "detected_by": [
+        "CASE-35"
+      ]
+    }
+  ],
+  "version_race": {
+    "states": 16,
+    "transitions": 28,
+    "safety_ok": true,
+    "counterexample": null,
+    "bounds": "1 active attempt; 2 config revisions; at most one change; no real executor/message transport/time model"
+  },
+  "version_race_mutant": {
+    "states": 19,
+    "transitions": 33,
+    "safety_ok": false,
+    "counterexample": {
+      "state": [
+        1,
+        0,
+        true,
+        0,
+        true
+      ],
+      "trace": [
+        "admit_current",
+        "finish_attempt",
+        "change_config",
+        "publish_result"
+      ]
+    },
+    "bounds": "1 active attempt; 2 config revisions; at most one change; no real executor/message transport/time model"
+  },
+  "recovery": {
+    "reachable": true,
+    "path": [
+      "open",
+      "repair_registered",
+      "verify_running",
+      "verification_pass",
+      "closed"
+    ],
+    "condition": "authorized repair, unrelated constraints satisfied, and successful targeted revalidation"
+  },
+  "recovery_mutant": {
+    "reachable": false,
+    "path": [],
+    "condition": "ordinary blocking alarm cannot be bypassed without the scoped recovery exception"
+  },
+  "explicitly_case_or_model_checked_invariants": [
+    "INV-01",
+    "INV-02",
+    "INV-04",
+    "INV-05",
+    "INV-06",
+    "INV-07",
+    "INV-08",
+    "INV-10",
+    "INV-11",
+    "INV-12",
+    "INV-14",
+    "INV-15",
+    "INV-16"
+  ],
+  "other_invariants_require_review": [
+    "INV-03",
+    "INV-09",
+    "INV-13"
+  ],
+  "limitations": [
+    "No keel production implementation was tested.",
+    "No real device, adapter, vendor threshold or network topology was verified.",
+    "No third-party expert sign-off or formal completeness proof.",
+    "G5 scheduling/coverage/time/waiver policies remain Q1-Q12.",
+    "Model examples use exact profile equality and directed path strings; production compatibility and path derivation are not specified here.",
+    "Model interval is [collected_at, valid_until), readiness age is inclusive of TTL; final API boundaries must be agreed.",
+    "LL-03 trigger result is not overall network health or G5 PASS."
+  ]
+}

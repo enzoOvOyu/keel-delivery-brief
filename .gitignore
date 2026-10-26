@@ -1,0 +1,21 @@
+# Local credentials and configuration
+/.deploy-keys/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+
+# Caches and development dependencies
+__pycache__/
+*.py[cod]
+node_modules/
+.venv/
+venv/
+.DS_Store
+*.log
+
+# Extracted sources are maintained in spec/source/.
+/keel-site-complete-source.zip

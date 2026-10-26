@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="keel交付流程开发契约：前置要求、后置产物、网络证据依赖、恢复规则与可复现验证。">
+  <title>交付流程讲解 · Keel</title>
+  <link rel="stylesheet" href="style.css?v=1.4-actions">
+</head>
+<body data-view="contracts">
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="#contracts"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 4v24M25 5 10 16l15 11M14 13l10-8M14 19l10 8" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Keel<span class="brand-sub">DELIVERY GUIDE</span></span></a>
+    <div class="side-label">五步交付 / 阅读指南</div>
+    <nav aria-label="主要导航">
+      <button data-view="contracts" class="nav active">流程与产物<span class="count" id="flow-total">32</span></button>
+      <button data-view="wiring" class="nav">3.3 接线核验样板<span class="count">详解</span></button>
+      <button data-flow="C01" class="nav">0.2 公共 CMDB<span class="count">全程</span></button>
+      <button data-view="perspective" class="nav">理解证据链</button>
+      <button data-view="diagrams" class="nav">流程图<span class="count">6</span></button>
+      <button data-view="network" class="nav">网络测试详解</button>
+      <button data-view="demo" class="nav">证据准入演示</button>
+      <button data-view="verification" class="nav">校验与待确认</button>
+    </nav>
+    <div class="side-download"><span class="side-label">开发交付包</span><a href="downloads/keel-developer-contracts.md" download>↗ 完整流程讲解 <small>.md</small></a><a href="downloads/DEVELOPMENT-REQUIREMENTS.md" download>↗ 后续开发约束 <small>.md</small></a><a href="downloads/keel-delivery.drawio" download>↗ 编辑流程图 <small>.drawio</small></a><a href="downloads/keel-development-handoff.zip" download>↗ 文档与验证材料 <small>.zip</small></a></div>
+    <div class="side-bottom"><i></i>需求评审材料<span>2026.10.26</span></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><div>keel 项目<span class="slash">/</span><b>交付流程讲解</b></div><div class="top-actions"><span class="pill neutral">评审版</span><a class="button primary small" href="downloads/keel-development-handoff.zip" download>下载完整交付包 <span>↓</span></a></div></header>
+    <main>
+      <div class="intro"><div><div class="eyebrow">五个步骤 · 同一套编号 · 完整的消费关系</div><h1>每一步做什么，产物交给谁。</h1><p>从网络底座到 NCCL 评审，用统一的步骤编号理解开始条件、执行动作、完成证明与故障恢复。</p></div><span class="review-stamp">DELIVERY<br><b>五步</b><small>业务细节持续确认</small></span></div>
+      <div class="legend"><span><b class="tag k">明确要求</b></span><span><b class="tag d">逻辑约束</b></span><span><b class="tag p">实现建议</b></span><span><b class="tag q">待确认</b></span><span class="legend-end">模型检查与现场验收分别说明</span></div>
+      <div id="load-error" class="callout amber" role="alert" hidden><strong>讲解资料加载失败</strong><p id="load-error-text"></p><button id="reload-data" class="button">重新加载</button></div>
+      <section id="view-contracts" class="view active" aria-label="流程与产物">
+        <div class="section-heading"><div><h2>按五步阅读，按产物依赖执行</h2><p>第一位数字表示大步骤，第二位表示流程，第三位表示流程内部的子步骤。</p></div><button class="button" data-go="diagrams">查看依赖图 ↗</button></div>
+        <div class="spine" id="spine"></div>
+        <article id="stage-overview" class="stage-overview" aria-live="polite"></article>
+        <div class="reading-note"><strong>编号是阅读位置。</strong>网络与服务器侧可以并行；开始条件以每个流程的输入和有效证明为准。网络测试的五类检查保留独立判据，具体调度仍待确认。</div>
+        <div class="bridge-note"><strong>验机到测试的连接</strong><button class="inline-chip" data-flow="H05">3.4 发布已验证映射</button><span>→</span><button class="inline-chip" data-flow="H06">3.5 应用并验证服务器基线配置</button><span>→</span><button class="inline-chip" data-flow="T00">4.1 确认准入并冻结测试计划</button></div>
+        <div class="common-flow"><span><b>公共流程 0.x</b> · 修复按需进入，CMDB 全程接收源记录</span><button class="button small" data-flow="R01">0.1 修复与定向复验 ↗</button><button class="button small" data-flow="C01">0.2 CMDB 数据沉淀 ↗</button></div>
+        <details class="details glossary"><summary>先读懂这些概念：设备身份、接线、测试与验收证明</summary><dl id="glossary"></dl></details>
+        <div class="contract-toolbar"><div class="search-wrap"><span>⌕</span><input id="search" type="search" placeholder="搜索步骤编号、动作、产物或开始条件…" aria-label="搜索流程"><kbd>/</kbd></div><select id="group-filter" aria-label="步骤范围"><option value="">全部步骤与公共流程</option></select><span id="result-count" class="muted" aria-live="polite"></span></div>
+        <div class="contract-layout"><div id="flow-list" class="flow-list"></div><article id="flow-detail" class="flow-detail" aria-live="polite" tabindex="-1"></article></div>
+        <div class="section-heading artifact-heading"><div><h2>产物消费索引</h2><p>同一种产物可有多个目标、执行尝试和版本；具体消费时还须核对范围与有效期。</p></div></div><div class="artifact-browser"><select id="artifact-select" aria-label="选择产物"></select><div id="artifact-detail"></div></div>
+      </section>
+      <section id="view-wiring" class="view" aria-label="3.3 接线核验完整样板">
+        <div class="section-heading"><div><span class="eyebrow">第 3 步 · 验机与基线配置</span><h2>3.3 核对并确认物理接线</h2><p>从开始条件到映射交接，完整解释一个流程如何形成可使用的证明。</p></div><button class="button" data-flow="H04">查看流程契约 ↗</button></div>
+        <article id="wiring-overview" class="stage-overview"></article>
+        <nav class="sample-nav" aria-label="样板内容导航"><a href="#wiring/roles">责任与准入</a><a href="#wiring/steps">四步执行</a><a href="#wiring/evidence">证据与交接</a><a href="#wiring/scenarios">情景对照</a><a href="#wiring/recovery">失败与复验</a><a href="#wiring/verification">验证与待确认</a></nav>
+        <div id="wiring-content"></div>
+      </section>
+      <section id="view-perspective" class="view" aria-label="理解证据链">
+        <div class="section-heading"><div><h2>为什么完成一个动作，还需要证明？</h2><p>开始条件、执行结果和下游可用性分别回答不同问题。</p></div></div>
+        <div class="perspective-grid">
+          <article class="essay"><span class="eyebrow">开始条件</span><h3>从下一步需要什么，反推当前要证明什么</h3><p>一个跨机通信组需要指定网卡、路径、软件与性能基线。只有适用的网络测试证明覆盖这些条件，才能进入通信组测试。</p><div><button class="inline-chip" data-flow="T06">4.7 汇总网络测试并发布证明</button><button class="inline-chip" data-flow="N01">5.1 检查通信组运行条件</button></div></article>
+          <article class="essay"><span class="eyebrow">事实边界</span><h3>期望、观测和确认关系分别保存</h3><p>物料清单描述应该接到哪里；双侧邻居采集描述实际看到了什么；最终确认后才发布映射。接线正确仍需要配置应用与网络测试来证明运行表现。</p><div><button class="inline-chip" data-flow="H04">3.3 核对并确认物理接线</button><button class="inline-chip" data-flow="H05">3.4 发布已验证映射</button></div></article>
+          <article class="essay"><span class="eyebrow">有效范围</span><h3>曾经通过，要按当前任务再次核对</h3><p>历史证明绑定目标、路径、档位、配置和时间。换卡、改线或更新配置后，保留历史结果，并重新判断相关证明能否使用。单对测试通过不外推到未测路径。</p><button class="button small" data-go="demo">查看准入演示 ↗</button></article>
+          <article class="essay"><span class="eyebrow">恢复路径</span><h3>维修登记之后，还要定向复验</h3><p>修复绑定具体工单和对象，只允许豁免该故障对应的阻断。复验通过后再提议并确认关闭，继续核验权限、资源和无关前置条件。</p><button class="inline-chip" data-flow="R01">0.1 修复与定向复验</button></article>
+        </div>
+        <div class="essay wide"><h3>六类信息，各有明确职责</h3><div class="fact-layers"><span>期望<small>物料、型号与商定基线</small></span><span>观测<small>原始采集、来源与时间</small></span><span>确认关系<small>接线确认与映射版本</small></span><span>应用结果<small>配置回执与实际读回</small></span><span>检测结果<small>网络测试与通信组测试</small></span><span>消费证明<small>与当前任务条件匹配</small></span></div><p class="muted">稳定实体、关系版本和证据实例分别留存；每次消费都有明确的版本与范围。</p></div>
+      </section>
+      <section id="view-diagrams" class="view" aria-label="流程图">
+        <div class="section-heading"><div><h2>同一步骤，在图中仍是同一编号</h2><p>全图呈现产物依赖，专图展开接线、网络测试、恢复与 NCCL。每张图单独说明连线含义。</p></div><a class="button primary" href="downloads/keel-delivery.drawio" download>下载可编辑图 ↓</a></div>
+        <div class="tabs" id="diagram-tabs"></div><div class="diagram-tools"><span id="diagram-caption"></span><div><button class="button small" id="zoom-out" aria-label="缩小流程图">−</button><button class="button small" id="zoom-fit">适应宽度</button><button class="button small" id="zoom-in" aria-label="放大流程图">＋</button></div></div><div id="diagram-error" class="callout amber" hidden>图纸未加载，请重新选择图页；下方文字说明仍可阅读。</div><div class="diagram-viewport"><img id="diagram-image" alt="交付流程依赖图"></div><div id="diagram-explanation" class="diagram-explanation"></div>
+      </section>
+      <section id="view-network" class="view" aria-label="网络测试详解">
+        <div class="section-heading"><div><h2>第 4 步 · 网络测试</h2><p>围绕同一目标、映射、配置和负载窗口，形成可供 NCCL 消费的证明。</p></div><button class="button" data-flow="T00">从 4.1 阅读 ↗</button></div>
+        <div class="network-strips"><div><span class="tag k">4.1 准入</span><h3>确认可以开始测试</h3><p>核对基线配置、映射、角色、网络就绪、健康、无损能力及测试资源。</p></div><div><span class="tag d">4.2～4.6 检查</span><h3>证明本次范围内的运行表现</h3><p>分别保留链路、IP、RDMA、多流与无损结果。观测绑定对象、流量类、质量和窗口。</p></div><div><span class="tag k">4.7 汇总</span><h3>说明后续能够使用哪些证明</h3><p>核验必需结果、路径覆盖、版本与有效期；缺测保留缺口，抽样保留实际范围。</p></div></div>
+        <div class="reading-note">4.2～4.6 是五类检查的阅读编号。它们之间的严格串行、停止粒度与采样编排仍待确认。</div>
+        <div id="layer-tabs" class="tabs"></div><article id="layer-detail" class="essay"></article>
+        <div class="section-heading rules-heading"><div><h2>无损规则：先保留事实，再解释结论</h2><p>以下为建议默认条件；商定基线与审批生效的规则版本优先。告警级别、健康分和最终验收结论分别保存。</p></div></div><div id="ll-rules" class="ll-rules"></div>
+        <div class="callout amber"><strong>30 秒打流，不能单独证明 3600 秒规则已完整验证。</strong><p>判断 ECN 恒不标记，需要完整窗口、ECN 恒零及同窗口拥塞证据。缺采样、计数重置或能力缺失时，必须说明无法判定的部分。</p></div>
+      </section>
+      <section id="view-demo" class="view" aria-label="证据准入演示">
+        <div class="section-heading"><div><h2>同一份历史结果，现在还能使用吗？</h2><p>这是使用假设对象的评审模型，展示证据消费逻辑；不连接设备。</p></div><span class="pill neutral">模拟数据</span></div>
+        <div class="demo-layout"><div class="essay demo-controls"><div class="demo-base"><span>4.7 已发布的网络测试证明</span><b>A:1 → B:1 · full-v1</b><small>配置 c1 / 映射 m1 / 证据仍在有效期</small></div><h3>改变本次消费条件</h3>
+          <label><input type="checkbox" id="demo-path">新通信组还需要 A:1 → C:1</label>
+          <label><input type="checkbox" id="demo-version">相关配置已变为 c2</label>
+          <label><input type="checkbox" id="demo-stale">网络就绪证明已有 31 秒</label>
+          <label><input type="checkbox" id="demo-unknown">必需 PFC 观测不可采集</label>
+          <label><input type="checkbox" id="demo-waiver">交付组长的有效豁免恰好覆盖该 PFC 缺口</label>
+          <label><input type="checkbox" id="demo-auth">当前用户没有项目执行权限</label>
+          <button class="button" id="demo-reset">重置为基准情景</button>
+        </div><div class="demo-output"><div id="demo-verdict" aria-live="polite"></div><div class="essay"><h3>不会随演示改变的规则</h3><p>历史报告仍保留原结论。拒绝消费不会篡改历史；有效豁免保持 WAIVED，也不能越过项目权限、路径缺口或版本不匹配。</p><p class="muted">本模型只覆盖显式单档位与路径集合。路径覆盖算法、混合结论与豁免风险如何传递仍待确认；本页的待确认清单列出了各项边界。</p></div></div></div>
+      </section>
+      <section id="view-verification" class="view" aria-label="校验与待确认">
+        <div class="section-heading"><div><h2>检查结果与业务待确认项</h2><p>模型检查用于发现特定逻辑错误；实际设备、性能基线与现场交付需要各自的验证证据。</p></div><a class="button" href="downloads/verification-report.md" download>下载校验报告 ↓</a></div>
+        <div id="verification-stats" class="stats"></div>
+        <div class="verification-layout"><article class="essay"><span class="eyebrow">版本变化反例</span><h3>旧结果能否覆盖新配置？</h3><div class="trace-line">准入 → 执行完成 → 配置变化 → 旧结果发布</div><p id="race-detail"></p><p class="muted">模型只枚举一个活动尝试、两个配置版本及一次变更，不包含真实消息系统与全部并发。</p></article><article class="essay"><span class="eyebrow">恢复路径</span><h3>修复后仍有合法的复验入口</h3><p>登记维修 → 限定范围复验 → 复验通过 → 提议关闭 → 确认关闭。</p><p>删除限定恢复入口后，模型无法到达关闭；它说明明确前提下的可达路径。</p><button class="inline-chip" data-flow="R01">0.1 修复与定向复验</button></article></div>
+        <details class="details"><summary>查看反例与边界用例 <span id="cases-count"></span></summary><div class="table-scroll"><table><thead><tr><th>用例</th><th>情景</th><th>模型结果</th><th>核对的约束</th></tr></thead><tbody id="case-table"></tbody></table></div></details>
+        <div class="section-heading"><div><h2>12 项待确认事项，各自对应受影响步骤</h2><p>采集、证据记录和编排骨架可先实现；对应业务策略明确之前，不能默认发布通过结论。</p></div></div><div id="decisions" class="decision-list"></div>
+        <div class="callout amber"><strong>历史 PASS、当前可消费性与现场验收分别判断。</strong><p>评审模型不覆盖真实设备、完整适配器、全部并发与现场性能；待确认事项不会随校验通过自动关闭。</p></div>
+      </section>
+      <footer>Keel · 五步交付讲解<span>步骤编号统一 · 证据按范围消费 · 未决事项明确保留</span></footer>
+    </main>
+  </div>
+</div>
+<div id="toast" role="status"></div><script src="app.js?v=1.4-actions" defer></script>
+</body></html>

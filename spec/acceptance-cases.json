@@ -1,0 +1,1051 @@
+{
+  "scope": "有限契约样例，不代表生产API或完整现场验收。路径使用显式有向字符串；档位使用精确相等。",
+  "defaults": {
+    "admission": {
+      "now": 1000,
+      "evidence": {
+        "project": "p1",
+        "targets": [
+          "A",
+          "B"
+        ],
+        "paths": [
+          "A:1>B:1"
+        ],
+        "profile": "full-v1",
+        "versions": {
+          "BOM": "b1",
+          "MappingRevision": "m1",
+          "ConfigSet": "c1",
+          "policy": "r1"
+        },
+        "collected_at": 900,
+        "valid_until": 1100,
+        "verdict": "PASS",
+        "quality": [
+          {
+            "required": true,
+            "value": "known"
+          }
+        ]
+      },
+      "request": {
+        "project": "p1",
+        "targets": [
+          "A",
+          "B"
+        ],
+        "paths": [
+          "A:1>B:1"
+        ],
+        "profile": "full-v1",
+        "versions": {
+          "BOM": "b1",
+          "MappingRevision": "m1",
+          "ConfigSet": "c1",
+          "policy": "r1"
+        },
+        "readiness_at": 990,
+        "readiness_ttl": 30,
+        "permission": true,
+        "resources": true,
+        "channel": true,
+        "blocking_alert": false,
+        "allow_waived": false
+      }
+    },
+    "g2": {
+      "host_collected": true,
+      "switch_collected": true,
+      "host_neighbor": "S:7",
+      "switch_neighbor": "A:1",
+      "expected_host": "S:7",
+      "expected_switch": "A:1",
+      "mac_match": true
+    },
+    "ll03": {
+      "window_seconds": 3600,
+      "samples_complete": true,
+      "capability": true,
+      "counter_reset": false,
+      "ecn_all_zero": true,
+      "queue_watermark": 1,
+      "pfc_delta": 0
+    },
+    "group": {
+      "members": [
+        "A",
+        "B"
+      ],
+      "reserved": [
+        "A",
+        "B"
+      ],
+      "ready": [
+        "A",
+        "B"
+      ],
+      "barrier": true
+    }
+  },
+  "cases": [
+    {
+      "id": "CASE-01",
+      "kind": "admission",
+      "name": "完整且适用的G5可消费",
+      "inv": [
+        "INV-04",
+        "INV-06"
+      ],
+      "patch": {},
+      "expect": {
+        "allowed": true
+      }
+    },
+    {
+      "id": "CASE-02",
+      "kind": "admission",
+      "name": "跨项目证据拒绝",
+      "inv": [
+        "INV-05"
+      ],
+      "patch": {
+        "request": {
+          "project": "p2"
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "project_mismatch"
+      }
+    },
+    {
+      "id": "CASE-03",
+      "kind": "admission",
+      "name": "缺目标拒绝",
+      "inv": [
+        "INV-05"
+      ],
+      "patch": {
+        "request": {
+          "targets": [
+            "A",
+            "B",
+            "C"
+          ]
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "target_gap"
+      }
+    },
+    {
+      "id": "CASE-04",
+      "kind": "admission",
+      "name": "A-B/C-D不证明A-C",
+      "inv": [
+        "INV-06"
+      ],
+      "patch": {
+        "evidence": {
+          "targets": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "paths": [
+            "A:1>B:1",
+            "C:1>D:1"
+          ]
+        },
+        "request": {
+          "targets": [
+            "A",
+            "C"
+          ],
+          "paths": [
+            "A:1>C:1"
+          ]
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "path_gap"
+      }
+    },
+    {
+      "id": "CASE-05",
+      "kind": "admission",
+      "name": "档位不适用拒绝（模型采用相等）",
+      "inv": [
+        "INV-05"
+      ],
+      "patch": {
+        "request": {
+          "profile": "different-profile"
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "profile_mismatch"
+      }
+    },
+    {
+      "id": "CASE-06",
+      "kind": "admission",
+      "name": "相关ConfigSet版本改变",
+      "inv": [
+        "INV-07",
+        "INV-14"
+      ],
+      "patch": {
+        "request": {
+          "versions": {
+            "ConfigSet": "c2"
+          }
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "version_mismatch"
+      }
+    },
+    {
+      "id": "CASE-07",
+      "kind": "admission",
+      "name": "门禁证据过期",
+      "inv": [
+        "INV-05"
+      ],
+      "patch": {
+        "now": 1100
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "evidence_time_invalid"
+      }
+    },
+    {
+      "id": "CASE-08",
+      "kind": "admission",
+      "name": "未来采样时间不冒充新鲜",
+      "inv": [
+        "INV-05"
+      ],
+      "patch": {
+        "evidence": {
+          "collected_at": 1001
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "evidence_time_invalid"
+      }
+    },
+    {
+      "id": "CASE-09",
+      "kind": "admission",
+      "name": "就绪证明31s已过期",
+      "inv": [
+        "INV-05"
+      ],
+      "patch": {
+        "request": {
+          "readiness_at": 969
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "readiness_stale"
+      }
+    },
+    {
+      "id": "CASE-10",
+      "kind": "admission",
+      "name": "就绪恰好30s（模型边界约定）",
+      "inv": [
+        "INV-05"
+      ],
+      "status": "P",
+      "patch": {
+        "request": {
+          "readiness_at": 970
+        }
+      },
+      "expect": {
+        "allowed": true
+      }
+    },
+    {
+      "id": "CASE-11",
+      "kind": "admission",
+      "name": "必需unknown不是零丢包",
+      "inv": [
+        "INV-05"
+      ],
+      "patch": {
+        "evidence": {
+          "quality": [
+            {
+              "required": true,
+              "value": "unknown"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "required_quality_missing"
+      }
+    },
+    {
+      "id": "CASE-12",
+      "kind": "admission",
+      "name": "明确非必需的缺失不擅自扩大阻断",
+      "inv": [
+        "INV-05"
+      ],
+      "patch": {
+        "evidence": {
+          "quality": [
+            {
+              "required": true,
+              "value": "known"
+            },
+            {
+              "required": false,
+              "value": "unknown"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "allowed": true
+      }
+    },
+    {
+      "id": "CASE-13",
+      "kind": "admission",
+      "name": "FAIL不能被直接消费",
+      "inv": [
+        "INV-04"
+      ],
+      "patch": {
+        "evidence": {
+          "verdict": "FAIL"
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "verdict_not_accepted"
+      }
+    },
+    {
+      "id": "CASE-14",
+      "kind": "admission",
+      "name": "BLOCKED不是PASS",
+      "inv": [
+        "INV-04",
+        "INV-05"
+      ],
+      "patch": {
+        "evidence": {
+          "verdict": "BLOCKED"
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "verdict_not_accepted"
+      }
+    },
+    {
+      "id": "CASE-15",
+      "kind": "admission",
+      "name": "有效豁免可按明确策略消费但不改PASS",
+      "inv": [
+        "INV-08"
+      ],
+      "patch": {
+        "request": {
+          "allow_waived": true
+        },
+        "evidence": {
+          "verdict": "WAIVED",
+          "waiver": {
+            "targets": [
+              "A",
+              "B"
+            ],
+            "paths": [
+              "A:1>B:1"
+            ],
+            "valid_until": 1050,
+            "approver": "DL-example",
+            "reason": "reviewed exception",
+            "remediation": "repair-plan"
+          }
+        }
+      },
+      "expect": {
+        "allowed": true,
+        "preserved_verdict": "WAIVED"
+      }
+    },
+    {
+      "id": "CASE-16",
+      "kind": "admission",
+      "name": "过期豁免拒绝",
+      "inv": [
+        "INV-08"
+      ],
+      "patch": {
+        "request": {
+          "allow_waived": true
+        },
+        "evidence": {
+          "verdict": "WAIVED",
+          "waiver": {
+            "targets": [
+              "A",
+              "B"
+            ],
+            "paths": [
+              "A:1>B:1"
+            ],
+            "valid_until": 999,
+            "approver": "DL-example",
+            "reason": "reviewed exception",
+            "remediation": "repair-plan"
+          }
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "waiver_invalid"
+      }
+    },
+    {
+      "id": "CASE-17",
+      "kind": "admission",
+      "name": "豁免不能借用到另一路径",
+      "inv": [
+        "INV-08"
+      ],
+      "patch": {
+        "request": {
+          "allow_waived": true
+        },
+        "evidence": {
+          "verdict": "WAIVED",
+          "waiver": {
+            "targets": [
+              "A",
+              "B"
+            ],
+            "paths": [
+              "C:1>D:1"
+            ],
+            "valid_until": 1050,
+            "approver": "DL-example",
+            "reason": "reviewed exception",
+            "remediation": "repair-plan"
+          }
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "waiver_invalid"
+      }
+    },
+    {
+      "id": "CASE-18",
+      "kind": "admission",
+      "name": "无审批的WAIVED拒绝",
+      "inv": [
+        "INV-08"
+      ],
+      "patch": {
+        "request": {
+          "allow_waived": true
+        },
+        "evidence": {
+          "verdict": "WAIVED",
+          "waiver": {
+            "targets": [
+              "A",
+              "B"
+            ],
+            "paths": [
+              "A:1>B:1"
+            ],
+            "valid_until": 1050,
+            "approver": "",
+            "reason": "exception",
+            "remediation": "repair-plan"
+          }
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "waiver_invalid"
+      }
+    },
+    {
+      "id": "CASE-19",
+      "kind": "admission",
+      "name": "未允许该豁免的消费任务拒绝",
+      "inv": [
+        "INV-08"
+      ],
+      "patch": {
+        "evidence": {
+          "verdict": "WAIVED",
+          "waiver": {
+            "targets": [
+              "A",
+              "B"
+            ],
+            "paths": [
+              "A:1>B:1"
+            ],
+            "valid_until": 1050,
+            "approver": "DL-example",
+            "reason": "exception",
+            "remediation": "repair-plan"
+          }
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "waiver_invalid"
+      }
+    },
+    {
+      "id": "CASE-20",
+      "kind": "admission",
+      "name": "无权限不派发",
+      "inv": [
+        "INV-12"
+      ],
+      "patch": {
+        "request": {
+          "permission": false
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "permission_missing"
+      }
+    },
+    {
+      "id": "CASE-21",
+      "kind": "admission",
+      "name": "资源不足不派发",
+      "inv": [
+        "INV-11"
+      ],
+      "patch": {
+        "request": {
+          "resources": false
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "resources_missing"
+      }
+    },
+    {
+      "id": "CASE-22",
+      "kind": "admission",
+      "name": "普通任务不越过阻断告警",
+      "inv": [
+        "INV-12"
+      ],
+      "patch": {
+        "request": {
+          "blocking_alert": true
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "blocking_alert"
+      }
+    },
+    {
+      "id": "CASE-23",
+      "kind": "g2",
+      "name": "三方一致产生端口对PASS",
+      "inv": [
+        "INV-02"
+      ],
+      "patch": {},
+      "expect": {
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "CASE-24",
+      "kind": "g2",
+      "name": "主机LLDP未采到不判断线",
+      "inv": [
+        "INV-05"
+      ],
+      "patch": {
+        "host_collected": false
+      },
+      "expect": {
+        "verdict": "BLOCKED",
+        "cause": "missing_evidence"
+      }
+    },
+    {
+      "id": "CASE-25",
+      "kind": "g2",
+      "name": "交换机回读缺失不空成功",
+      "inv": [
+        "INV-05"
+      ],
+      "patch": {
+        "switch_collected": false
+      },
+      "expect": {
+        "verdict": "BLOCKED",
+        "cause": "missing_evidence"
+      }
+    },
+    {
+      "id": "CASE-26",
+      "kind": "g2",
+      "name": "采集成功但实际邻居不符",
+      "inv": [
+        "INV-02"
+      ],
+      "patch": {
+        "host_neighbor": "S:9"
+      },
+      "expect": {
+        "verdict": "FAIL",
+        "cause": "observed_mismatch"
+      }
+    },
+    {
+      "id": "CASE-27",
+      "kind": "g2",
+      "name": "采集成功且无邻居是实际差异",
+      "inv": [
+        "INV-02"
+      ],
+      "patch": {
+        "host_neighbor": null
+      },
+      "expect": {
+        "verdict": "FAIL",
+        "cause": "observed_mismatch"
+      }
+    },
+    {
+      "id": "CASE-28",
+      "kind": "g2",
+      "name": "永久MAC不符不能通过",
+      "inv": [
+        "INV-02"
+      ],
+      "patch": {
+        "mac_match": false
+      },
+      "expect": {
+        "verdict": "FAIL",
+        "cause": "observed_mismatch"
+      }
+    },
+    {
+      "id": "CASE-29",
+      "kind": "g2_finish",
+      "name": "Step3局部通过不代替最终确认",
+      "inv": [
+        "INV-02"
+      ],
+      "input": {
+        "step_verdicts": [
+          "PASS",
+          "PASS",
+          "PASS"
+        ],
+        "dl_confirmed": false
+      },
+      "expect": {
+        "g2_complete": false
+      }
+    },
+    {
+      "id": "CASE-30",
+      "kind": "g2_finish",
+      "name": "四步确认后才解锁Mapping",
+      "inv": [
+        "INV-01",
+        "INV-02"
+      ],
+      "input": {
+        "step_verdicts": [
+          "PASS",
+          "PASS",
+          "PASS"
+        ],
+        "dl_confirmed": true
+      },
+      "expect": {
+        "g2_complete": true
+      }
+    },
+    {
+      "id": "CASE-31",
+      "kind": "ll03",
+      "name": "完整窗口ECN恒零且队列拥塞命中",
+      "inv": [
+        "INV-15"
+      ],
+      "patch": {},
+      "expect": {
+        "evaluable": true,
+        "triggered": true
+      }
+    },
+    {
+      "id": "CASE-32",
+      "kind": "ll03",
+      "name": "完整窗口ECN恒零且PFC增长命中",
+      "inv": [
+        "INV-15"
+      ],
+      "patch": {
+        "queue_watermark": 0,
+        "pfc_delta": 1
+      },
+      "expect": {
+        "evaluable": true,
+        "triggered": true
+      }
+    },
+    {
+      "id": "CASE-33",
+      "kind": "ll03",
+      "name": "无拥塞时零计数不单独判LL-03",
+      "inv": [
+        "INV-15"
+      ],
+      "patch": {
+        "queue_watermark": 0
+      },
+      "expect": {
+        "evaluable": true,
+        "triggered": false
+      }
+    },
+    {
+      "id": "CASE-34",
+      "kind": "ll03",
+      "name": "ECN并非恒零不命中LL-03",
+      "inv": [
+        "INV-15"
+      ],
+      "patch": {
+        "ecn_all_zero": false
+      },
+      "expect": {
+        "evaluable": true,
+        "triggered": false
+      }
+    },
+    {
+      "id": "CASE-35",
+      "kind": "ll03",
+      "name": "30s不能证明3600s规则完整",
+      "inv": [
+        "INV-15"
+      ],
+      "patch": {
+        "window_seconds": 30
+      },
+      "expect": {
+        "evaluable": false,
+        "triggered": null
+      }
+    },
+    {
+      "id": "CASE-36",
+      "kind": "ll03",
+      "name": "窗口内缺采样不伪装完整",
+      "inv": [
+        "INV-05",
+        "INV-15"
+      ],
+      "patch": {
+        "samples_complete": false
+      },
+      "expect": {
+        "evaluable": false,
+        "triggered": null
+      }
+    },
+    {
+      "id": "CASE-37",
+      "kind": "ll03",
+      "name": "计数能力不存在不填零",
+      "inv": [
+        "INV-05",
+        "INV-15"
+      ],
+      "patch": {
+        "capability": false
+      },
+      "expect": {
+        "evaluable": false,
+        "triggered": null
+      }
+    },
+    {
+      "id": "CASE-38",
+      "kind": "ll03",
+      "name": "计数重置需明确策略，模型保守拒绝判定",
+      "inv": [
+        "INV-15"
+      ],
+      "status": "P/Q3",
+      "patch": {
+        "counter_reset": true
+      },
+      "expect": {
+        "evaluable": false,
+        "triggered": null
+      }
+    },
+    {
+      "id": "CASE-39",
+      "kind": "group",
+      "name": "全组资源与启动条件齐备",
+      "inv": [
+        "INV-11"
+      ],
+      "patch": {},
+      "expect": {
+        "allow_start": true
+      }
+    },
+    {
+      "id": "CASE-40",
+      "kind": "group",
+      "name": "部分资源不能启动整组",
+      "inv": [
+        "INV-11"
+      ],
+      "patch": {
+        "reserved": [
+          "A"
+        ]
+      },
+      "expect": {
+        "allow_start": false
+      }
+    },
+    {
+      "id": "CASE-41",
+      "kind": "group",
+      "name": "成员未全部ready不能过屏障",
+      "inv": [
+        "INV-11"
+      ],
+      "patch": {
+        "ready": [
+          "A"
+        ]
+      },
+      "expect": {
+        "allow_start": false
+      }
+    },
+    {
+      "id": "CASE-42",
+      "kind": "group",
+      "name": "不能滚动启动通信组",
+      "inv": [
+        "INV-11"
+      ],
+      "patch": {
+        "barrier": false
+      },
+      "expect": {
+        "allow_start": false
+      }
+    },
+    {
+      "id": "CASE-43",
+      "kind": "group_retry",
+      "name": "失败rank触发整组新尝试",
+      "inv": [
+        "INV-11"
+      ],
+      "input": {
+        "members": [
+          "A",
+          "B"
+        ],
+        "failed": [
+          "B"
+        ]
+      },
+      "expect": {
+        "restart": [
+          "A",
+          "B"
+        ],
+        "new_group_attempt": true
+      }
+    },
+    {
+      "id": "CASE-44",
+      "kind": "admission",
+      "name": "执行通道不允许时不能越过",
+      "inv": [
+        "INV-12",
+        "INV-16"
+      ],
+      "patch": {
+        "request": {
+          "channel": false
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "channel_missing"
+      }
+    },
+    {
+      "id": "CASE-45",
+      "kind": "admission",
+      "name": "明确豁免本项缺证据可消费但仍是WAIVED",
+      "inv": [
+        "INV-05",
+        "INV-08"
+      ],
+      "patch": {
+        "request": {
+          "allow_waived": true
+        },
+        "evidence": {
+          "verdict": "WAIVED",
+          "quality": [
+            {
+              "required": true,
+              "requirement_id": "pfc",
+              "value": "unknown"
+            }
+          ],
+          "waiver": {
+            "targets": [
+              "A",
+              "B"
+            ],
+            "paths": [
+              "A:1>B:1"
+            ],
+            "valid_until": 1050,
+            "approver": "DL-example",
+            "reason": "explicit criterion exception",
+            "remediation": "repair-plan",
+            "requirements": [
+              "pfc"
+            ]
+          }
+        }
+      },
+      "expect": {
+        "allowed": true,
+        "preserved_verdict": "WAIVED"
+      }
+    },
+    {
+      "id": "CASE-46",
+      "kind": "admission",
+      "name": "豁免一项不能掩盖另一必需项缺失",
+      "inv": [
+        "INV-05",
+        "INV-08"
+      ],
+      "patch": {
+        "request": {
+          "allow_waived": true
+        },
+        "evidence": {
+          "verdict": "WAIVED",
+          "quality": [
+            {
+              "required": true,
+              "requirement_id": "drop",
+              "value": "unknown"
+            }
+          ],
+          "waiver": {
+            "targets": [
+              "A",
+              "B"
+            ],
+            "paths": [
+              "A:1>B:1"
+            ],
+            "valid_until": 1050,
+            "approver": "DL-example",
+            "reason": "explicit criterion exception",
+            "remediation": "repair-plan",
+            "requirements": [
+              "pfc"
+            ]
+          }
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "required_quality_missing"
+      }
+    },
+    {
+      "id": "CASE-47",
+      "kind": "admission",
+      "name": "有效豁免不越过项目权限",
+      "inv": [
+        "INV-08",
+        "INV-12"
+      ],
+      "patch": {
+        "request": {
+          "allow_waived": true,
+          "permission": false
+        },
+        "evidence": {
+          "verdict": "WAIVED",
+          "waiver": {
+            "targets": [
+              "A",
+              "B"
+            ],
+            "paths": [
+              "A:1>B:1"
+            ],
+            "valid_until": 1050,
+            "approver": "DL-example",
+            "reason": "explicit criterion exception",
+            "remediation": "repair-plan",
+            "requirements": [
+              "pfc"
+            ]
+          }
+        }
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "permission_missing"
+      }
+    }
+  ]
+}

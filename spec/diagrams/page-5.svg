@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1400" role="img" aria-label="5 NCCL 测试与评审">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#7560a8"/></marker><marker id="amber" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#b07920"/></marker></defs>
+<rect width="100%" height="100%" fill="#fff"/>
+<g font-family="Arial, PingFang SC, Microsoft YaHei, sans-serif">
+<polyline points="270.0,300.0 270.0,360.0" fill="none" stroke="#7560a8" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="270.0,500.0 270.0,560.0" fill="none" stroke="#7560a8" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="440.0,630.0 550.0,630.0" fill="none" stroke="#7560a8" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="890.0,630.0 1000.0,630.0" fill="none" stroke="#7560a8" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1170.0,700.0 1170.0,780.0" fill="none" stroke="#7560a8" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1000.0,850.0 890.0,850.0" fill="none" stroke="#7560a8" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="550.0,850.0 440.0,850.0" fill="none" stroke="#7560a8" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="440.0,630.0 460,630.0 460,280 550.0,280.0" fill="none" stroke="#b07920" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#amber)" stroke-dasharray="7 5"/>
+<polyline points="550.0,280.0 540,280.0 540,230 440.0,230.0" fill="none" stroke="#b07920" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#amber)" stroke-dasharray="7 5"/>
+<polyline points="1170.0,360.0 1170.0,380 1360,380 1360,850 1340.0,850.0" fill="none" stroke="#7560a8" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="70.0" y="20.0" width="1450.0" height="85.0" rx="12" fill="#EDE9FE" stroke="#c4bfd5"/>
+<text x="795.0" y="56.5" text-anchor="middle" font-size="15" font-weight="650" fill="#25223d">5 NCCL 测试与评审</text>
+<text x="795.0" y="79.0" text-anchor="middle" font-size="15" font-weight="400" fill="#25223d">实线为处理顺序或证据消费，虚线为整组失败后的恢复。步骤编号与流程卡一致。</text>
+<rect x="100.0" y="160.0" width="340.0" height="140.0" rx="12" fill="#F3F0FF" stroke="#c4bfd5"/>
+<text x="270.0" y="212.75" text-anchor="middle" font-size="15" font-weight="650" fill="#25223d">5.1 检查通信组运行条件</text>
+<text x="270.0" y="235.25" text-anchor="middle" font-size="15" font-weight="400" fill="#25223d">确认本通信组可安全启动测试</text>
+<text x="270.0" y="257.75" text-anchor="middle" font-size="15" font-weight="400" fill="#25223d">并具备解释结果所需的证据</text>
+<rect x="100.0" y="360.0" width="340.0" height="140.0" rx="12" fill="#F3F0FF" stroke="#c4bfd5"/>
+<text x="270.0" y="424.0" text-anchor="middle" font-size="15" font-weight="650" fill="#25223d">5.2 准备一致的测试环境</text>
+<text x="270.0" y="446.5" text-anchor="middle" font-size="15" font-weight="400" fill="#25223d">使组内使用冻结且一致的软件环境。</text>
+<rect x="100.0" y="560.0" width="340.0" height="140.0" rx="12" fill="#F3F0FF" stroke="#c4bfd5"/>
+<text x="270.0" y="612.75" text-anchor="middle" font-size="15" font-weight="650" fill="#25223d">5.3 执行通信组测试</text>
+<text x="270.0" y="635.25" text-anchor="middle" font-size="15" font-weight="400" fill="#25223d">按型号与覆盖模式</text>
+<text x="270.0" y="657.75" text-anchor="middle" font-size="15" font-weight="400" fill="#25223d">执行机内、跨机和全目标通信测试</text>
+<rect x="550.0" y="560.0" width="340.0" height="140.0" rx="12" fill="#F3F0FF" stroke="#c4bfd5"/>
+<text x="720.0" y="624.0" text-anchor="middle" font-size="15" font-weight="650" fill="#25223d">5.4 回收结果并核对检测场景</text>
+<text x="720.0" y="646.5" text-anchor="middle" font-size="15" font-weight="400" fill="#25223d">将原始结果转换为保持测量粒度的指标。</text>
+<rect x="1000.0" y="560.0" width="340.0" height="140.0" rx="12" fill="#F3F0FF" stroke="#c4bfd5"/>
+<text x="1170.0" y="624.0" text-anchor="middle" font-size="15" font-weight="650" fill="#25223d">5.5 生成测试报告</text>
+<text x="1170.0" y="646.5" text-anchor="middle" font-size="15" font-weight="400" fill="#25223d">生成可追溯到具体测试规模和尝试的报告。</text>
+<rect x="1000.0" y="780.0" width="340.0" height="140.0" rx="12" fill="#F3F0FF" stroke="#c4bfd5"/>
+<text x="1170.0" y="844.0" text-anchor="middle" font-size="15" font-weight="650" fill="#25223d">5.6 追踪失败原因</text>
+<text x="1170.0" y="866.5" text-anchor="middle" font-size="15" font-weight="400" fill="#25223d">将异常关联到可处置对象及历史基线。</text>
+<rect x="550.0" y="780.0" width="340.0" height="140.0" rx="12" fill="#F3F0FF" stroke="#c4bfd5"/>
+<text x="720.0" y="844.0" text-anchor="middle" font-size="15" font-weight="650" fill="#25223d">5.7 汇总调优建议</text>
+<text x="720.0" y="866.5" text-anchor="middle" font-size="15" font-weight="400" fill="#25223d">形成可审查且能回流版本化配置的改进建议。</text>
+<rect x="100.0" y="780.0" width="340.0" height="140.0" rx="12" fill="#F3F0FF" stroke="#c4bfd5"/>
+<text x="270.0" y="844.0" text-anchor="middle" font-size="15" font-weight="650" fill="#25223d">5.8 评审报告与退出条件</text>
+<text x="270.0" y="866.5" text-anchor="middle" font-size="15" font-weight="400" fill="#25223d">确认本次交付测试达标并完成调优清单确认。</text>
+<rect x="550.0" y="200.0" width="340.0" height="160.0" rx="12" fill="#FFF1F2" stroke="#c4bfd5"/>
+<text x="720.0" y="262.75" text-anchor="middle" font-size="15" font-weight="650" fill="#25223d">通信组执行失败</text>
+<text x="720.0" y="285.25" text-anchor="middle" font-size="15" font-weight="400" fill="#25223d">终止其余参与者并保存诊断</text>
+<text x="720.0" y="307.75" text-anchor="middle" font-size="15" font-weight="400" fill="#25223d">新尝试整组重建，再做 5.1 预检</text>
+<rect x="1000.0" y="200.0" width="340.0" height="160.0" rx="12" fill="#EFF6FF" stroke="#c4bfd5"/>
+<text x="1170.0" y="262.75" text-anchor="middle" font-size="15" font-weight="650" fill="#25223d">网络与映射证据</text>
+<text x="1170.0" y="285.25" text-anchor="middle" font-size="15" font-weight="400" fill="#25223d">网络路径基线、无损规则结果</text>
+<text x="1170.0" y="307.75" text-anchor="middle" font-size="15" font-weight="400" fill="#25223d">端口、拓扑与 GPU 遥测</text>
+<rect x="100.0" y="1100.0" width="1250.0" height="140.0" rx="12" fill="#F8FAFC" stroke="#c4bfd5"/>
+<text x="725.0" y="1164.0" text-anchor="middle" font-size="15" font-weight="650" fill="#25223d">5.8 评审出口</text>
+<text x="725.0" y="1186.5" text-anchor="middle" font-size="15" font-weight="400" fill="#25223d">报告达标并确认调优清单后，解锁优雅退出。机内诊断不能直接证明交付通过；分组覆盖与全域单通信组分别报告。</text>
+<g><rect x="487.0" y="269.0" width="36" height="20" rx="4" fill="white" fill-opacity=".95"/><text x="505.0" y="283.0" text-anchor="middle" fill="#b07920" font-size="12">失败</text></g>
+<g><rect x="460.0" y="219.0" width="60" height="20" rx="4" fill="white" fill-opacity=".95"/><text x="490.0" y="233.0" text-anchor="middle" fill="#b07920" font-size="12">重新核验</text></g>
+<g><rect x="1235.0" y="369.0" width="60" height="20" rx="4" fill="white" fill-opacity=".95"/><text x="1265.0" y="383.0" text-anchor="middle" fill="#7560a8" font-size="12">溯源输入</text></g>
+</g></svg>
