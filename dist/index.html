@@ -4,7 +4,8 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="keel交付流程开发契约：前置要求、后置产物、网络证据依赖、恢复规则与可复现验证。">
   <title>交付流程讲解 · Keel</title>
-  <link rel="stylesheet" href="style.css?v=1.4-actions">
+  <script type="module" crossorigin src="./assets/index-Uwpr_7v2.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DdpwGTQt.css">
 </head>
 <body data-view="contracts">
 <div class="app">
@@ -14,7 +15,7 @@
     <nav aria-label="主要导航">
       <button data-view="contracts" class="nav active">流程与产物<span class="count" id="flow-total">32</span></button>
       <button data-view="wiring" class="nav">3.3 接线核验样板<span class="count">详解</span></button>
-      <button data-flow="C01" class="nav">0.2 公共 CMDB<span class="count">全程</span></button>
+      <button data-flow="C01" class="nav" hidden>0.2 公共 CMDB<span class="count">全程</span></button>
       <button data-view="perspective" class="nav">理解证据链</button>
       <button data-view="diagrams" class="nav">流程图<span class="count">6</span></button>
       <button data-view="network" class="nav">网络测试详解</button>
@@ -25,7 +26,7 @@
     <div class="side-bottom"><i></i>需求评审材料<span>2026.10.26</span></div>
   </aside>
   <div class="workspace">
-    <header class="topbar"><div>keel 项目<span class="slash">/</span><b>交付流程讲解</b></div><div class="top-actions"><span class="pill neutral">评审版</span><a class="button primary small" href="downloads/keel-development-handoff.zip" download>下载完整交付包 <span>↓</span></a></div></header>
+    <header class="topbar"><div>keel 项目<span class="slash">/</span><b>交付流程讲解</b></div><div class="top-actions" id="header-actions"><span class="pill neutral">评审版</span><a class="button primary small" href="downloads/keel-development-handoff.zip" download>下载完整交付包 <span>↓</span></a></div></header>
     <main>
       <div class="intro"><div><div class="eyebrow">五个步骤 · 同一套编号 · 完整的消费关系</div><h1>每一步做什么，产物交给谁。</h1><p>从网络底座到 NCCL 评审，用统一的步骤编号理解开始条件、执行动作、完成证明与故障恢复。</p></div><span class="review-stamp">DELIVERY<br><b>五步</b><small>业务细节持续确认</small></span></div>
       <div class="legend"><span><b class="tag k">明确要求</b></span><span><b class="tag d">逻辑约束</b></span><span><b class="tag p">实现建议</b></span><span><b class="tag q">待确认</b></span><span class="legend-end">模型检查与现场验收分别说明</span></div>
@@ -60,7 +61,7 @@
       </section>
       <section id="view-diagrams" class="view" aria-label="流程图">
         <div class="section-heading"><div><h2>同一步骤，在图中仍是同一编号</h2><p>全图呈现产物依赖，专图展开接线、网络测试、恢复与 NCCL。每张图单独说明连线含义。</p></div><a class="button primary" href="downloads/keel-delivery.drawio" download>下载可编辑图 ↓</a></div>
-        <div class="tabs" id="diagram-tabs"></div><div class="diagram-tools"><span id="diagram-caption"></span><div><button class="button small" id="zoom-out" aria-label="缩小流程图">−</button><button class="button small" id="zoom-fit">适应宽度</button><button class="button small" id="zoom-in" aria-label="放大流程图">＋</button></div></div><div id="diagram-error" class="callout amber" hidden>图纸未加载，请重新选择图页；下方文字说明仍可阅读。</div><div class="diagram-viewport"><img id="diagram-image" alt="交付流程依赖图"></div><div id="diagram-explanation" class="diagram-explanation"></div>
+        <div class="tabs" id="diagram-tabs"></div><div class="diagram-tools"><span id="diagram-caption"></span><div><button class="button small" id="diagram-edit">编辑流程图</button><button class="button small" id="zoom-out" aria-label="缩小流程图">−</button><button class="button small" id="zoom-fit">适应宽度</button><button class="button small" id="zoom-in" aria-label="放大流程图">＋</button></div></div><div id="diagram-error" class="callout amber" hidden>图纸未加载，请重新选择图页；下方文字说明仍可阅读。</div><div class="diagram-viewport"><img id="diagram-image" alt="交付流程依赖图"></div><div id="diagram-explanation" class="diagram-explanation"></div>
       </section>
       <section id="view-network" class="view" aria-label="网络测试详解">
         <div class="section-heading"><div><h2>第 4 步 · 网络测试</h2><p>围绕同一目标、映射、配置和负载窗口，形成可供 NCCL 消费的证明。</p></div><button class="button" data-flow="T00">从 4.1 阅读 ↗</button></div>
@@ -85,14 +86,16 @@
       <section id="view-verification" class="view" aria-label="校验与待确认">
         <div class="section-heading"><div><h2>检查结果与业务待确认项</h2><p>模型检查用于发现特定逻辑错误；实际设备、性能基线与现场交付需要各自的验证证据。</p></div><a class="button" href="downloads/verification-report.md" download>下载校验报告 ↓</a></div>
         <div id="verification-stats" class="stats"></div>
+        <div class="section-heading"><div><h2>把待确认项填成可执行的项目规则</h2><p>先指定项目与范围，再逐项填写、核对影响并明确确认。确认结果可回到对应步骤查看，也可导出交给开发。</p></div></div><div id="decisions" class="decision-list"></div>
+        <details class="details verification-evidence"><summary>模型校验如何对应交付流程</summary>
         <div class="verification-layout"><article class="essay"><span class="eyebrow">版本变化反例</span><h3>旧结果能否覆盖新配置？</h3><div class="trace-line">准入 → 执行完成 → 配置变化 → 旧结果发布</div><p id="race-detail"></p><p class="muted">模型只枚举一个活动尝试、两个配置版本及一次变更，不包含真实消息系统与全部并发。</p></article><article class="essay"><span class="eyebrow">恢复路径</span><h3>修复后仍有合法的复验入口</h3><p>登记维修 → 限定范围复验 → 复验通过 → 提议关闭 → 确认关闭。</p><p>删除限定恢复入口后，模型无法到达关闭；它说明明确前提下的可达路径。</p><button class="inline-chip" data-flow="R01">0.1 修复与定向复验</button></article></div>
-        <details class="details"><summary>查看反例与边界用例 <span id="cases-count"></span></summary><div class="table-scroll"><table><thead><tr><th>用例</th><th>情景</th><th>模型结果</th><th>核对的约束</th></tr></thead><tbody id="case-table"></tbody></table></div></details>
-        <div class="section-heading"><div><h2>12 项待确认事项，各自对应受影响步骤</h2><p>采集、证据记录和编排骨架可先实现；对应业务策略明确之前，不能默认发布通过结论。</p></div></div><div id="decisions" class="decision-list"></div>
+        <details class="details"><summary>查看反例与边界用例 <span id="cases-count"></span></summary><div class="table-scroll"><table><thead><tr><th>用例</th><th>情景</th><th>模型结果</th><th>核对的约束</th><th>约束涉及的步骤</th></tr></thead><tbody id="case-table"></tbody></table></div></details>
+        </details>
         <div class="callout amber"><strong>历史 PASS、当前可消费性与现场验收分别判断。</strong><p>评审模型不覆盖真实设备、完整适配器、全部并发与现场性能；待确认事项不会随校验通过自动关闭。</p></div>
       </section>
       <footer>Keel · 五步交付讲解<span>步骤编号统一 · 证据按范围消费 · 未决事项明确保留</span></footer>
     </main>
   </div>
 </div>
-<div id="toast" role="status"></div><script src="app.js?v=1.4-actions" defer></script>
+<div id="toast" role="status"></div>
 </body></html>

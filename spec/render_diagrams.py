@@ -110,7 +110,7 @@ def main():
             edges.append((c,points));total+=1
         svg=[f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" role="img" aria-label="{html.escape(page.get("name"))}">',
              '<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#7560a8"/></marker><marker id="amber" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#b07920"/></marker></defs>',
-             '<rect width="100%" height="100%" fill="#fff"/>','<g font-family="Arial, PingFang SC, Microsoft YaHei, sans-serif">']
+             '<rect width="100%" height="100%" fill="#fff"/>','<g font-family="-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, &quot;PingFang SC&quot;, &quot;Microsoft YaHei&quot;, &quot;Noto Sans SC&quot;, &quot;Noto Sans CJK SC&quot;, &quot;WenQuanYi Zen Hei&quot;, sans-serif">']
         labels=[]; label_boxes=[]
         for c,pts in edges:
             dashed='dashed=1' in c.get('style','');color='#b07920' if dashed else '#7560a8'

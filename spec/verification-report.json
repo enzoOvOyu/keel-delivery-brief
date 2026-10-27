@@ -15,6 +15,129 @@
     "mutations": 6,
     "killed_mutations": 6
   },
+  "decision_forms": {
+    "scope": "仅检查表单定义、约束说明和流程引用；不验证用户填值、设备性能或实际批准权限。",
+    "topics": 12,
+    "fields": 139,
+    "checks": [
+      {
+        "name": "原有 12 项问题完整保留且顺序稳定",
+        "passed": true
+      },
+      {
+        "name": "确认事项与流程卡双向关联",
+        "passed": true
+      },
+      {
+        "name": "补齐调度、watchdog、配置变更和抽检消费关联",
+        "passed": true
+      },
+      {
+        "name": "测试调度与停止范围：字段可填写且有具体影响",
+        "passed": true
+      },
+      {
+        "name": "测试调度与停止范围：类型、单位、条件与空值无默认",
+        "passed": true
+      },
+      {
+        "name": "测试阈值与 watchdog 判据：字段可填写且有具体影响",
+        "passed": true
+      },
+      {
+        "name": "测试阈值与 watchdog 判据：类型、单位、条件与空值无默认",
+        "passed": true
+      },
+      {
+        "name": "观测窗口与负载绑定：字段可填写且有具体影响",
+        "passed": true
+      },
+      {
+        "name": "观测窗口与负载绑定：类型、单位、条件与空值无默认",
+        "passed": true
+      },
+      {
+        "name": "路径覆盖生成与档位适用：字段可填写且有具体影响",
+        "passed": true
+      },
+      {
+        "name": "路径覆盖生成与档位适用：类型、单位、条件与空值无默认",
+        "passed": true
+      },
+      {
+        "name": "无损规则到验收结论的映射：字段可填写且有具体影响",
+        "passed": true
+      },
+      {
+        "name": "无损规则到验收结论的映射：类型、单位、条件与空值无默认",
+        "passed": true
+      },
+      {
+        "name": "缺测与近似证据的接受范围：字段可填写且有具体影响",
+        "passed": true
+      },
+      {
+        "name": "缺测与近似证据的接受范围：类型、单位、条件与空值无默认",
+        "passed": true
+      },
+      {
+        "name": "配置就绪标准与并行时序：字段可填写且有具体影响",
+        "passed": true
+      },
+      {
+        "name": "配置就绪标准与并行时序：类型、单位、条件与空值无默认",
+        "passed": true
+      },
+      {
+        "name": "基线配置抽检的适用范围：字段可填写且有具体影响",
+        "passed": true
+      },
+      {
+        "name": "基线配置抽检的适用范围：类型、单位、条件与空值无默认",
+        "passed": true
+      },
+      {
+        "name": "邻居缺失与采集失败的区分：字段可填写且有具体影响",
+        "passed": true
+      },
+      {
+        "name": "邻居缺失与采集失败的区分：类型、单位、条件与空值无默认",
+        "passed": true
+      },
+      {
+        "name": "网络健康范围与时钟同步适用性：字段可填写且有具体影响",
+        "passed": true
+      },
+      {
+        "name": "网络健康范围与时钟同步适用性：类型、单位、条件与空值无默认",
+        "passed": true
+      },
+      {
+        "name": "混合结论与工单阻断范围：字段可填写且有具体影响",
+        "passed": true
+      },
+      {
+        "name": "混合结论与工单阻断范围：类型、单位、条件与空值无默认",
+        "passed": true
+      },
+      {
+        "name": "豁免风险在后续步骤中的保留：字段可填写且有具体影响",
+        "passed": true
+      },
+      {
+        "name": "豁免风险在后续步骤中的保留：类型、单位、条件与空值无默认",
+        "passed": true
+      },
+      {
+        "name": "规则长窗口与 ECN 边界未被表单改写",
+        "passed": true
+      },
+      {
+        "name": "确认不会自动签发豁免",
+        "passed": true
+      }
+    ]
+  },
   "walkthrough": {
     "passed": true,
     "cards": 45,
@@ -482,17 +605,18 @@
     ],
     "scope": "有限模拟数据与事件模型；未连接硬件，未实现生产 CMDB，未运行 TLC。"
   },
-  "reading_version": "1.4-actions",
+  "reading_version": "1.5-decisions",
   "definition_sha256": {
-    "build_artifacts.py": "189b840460231a282a8ecb46a579c5d196819522bd0ffe40a8178ca15764c975",
-    "collection.py": "361e46942c838ead8153f5e749697dbd62028230a3039b9c7df872dc8765ed3e",
-    "walkthrough.py": "7b5a51b42968031f1bde7a3a36e1601440b319169bcea5cd1edb3a5022932410",
+    "build_artifacts.py": "78a07e679c89019c671a70ae6abc25fd10e8ba214fbed2d7df32dbf0732d19ae",
+    "decision_forms.py": "7dfa43247ec1c9b3ee7a3abdb97e03dd4eaa32cbec35fa4c75bcfcc337f5d763",
+    "collection.py": "9689ce9e3729d790f382c7d5ab5e429fedf84e1134af0cf80734891a9f5e1916",
+    "walkthrough.py": "55be2ce8f34f84711e7d6dea95fd06b2934629afdab56db3335cf696b0cdf467",
     "collection_model.py": "e1b50335efbaad024265e632556bf2e9df11515bff0495545432ddec7a936daa",
     "verify_walkthrough.py": "87a26a0dee95e254aca87c4488b061d1896b8aaa95f0bc1fdf51715643adb212",
-    "verify_contracts.py": "d952dc52f877bda471cac795bf2e2581a6add5bb35ba0dcd3ba4e98b11aabd50",
+    "verify_contracts.py": "d7b8d95552830a6a29ca81eb2ebc067408fb1d062baa7329bbce66d948119911",
     "acceptance-cases.json": "026bc69fb88c1367fcd79945bf27e2054868b5f383d46bcff2c2941b8db53d38",
     "collection-event.schema.json": "dc68cad255d561f95397cd587435725182c32671b14b7cf0f6d09760ffffafc7",
-    "DEVELOPMENT-REQUIREMENTS.md": "8b816ec3a4ce61ca0ca6c96f2e9299a074d445935f964d9d72f0b1fa931d5f91"
+    "DEVELOPMENT-REQUIREMENTS.md": "527fffae9da9e32669d81df069de6dca526e77c901cd43801db6bf467cbf966e"
   },
   "structural_checks": [
     {

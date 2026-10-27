@@ -1,7 +1,7 @@
 'use strict';
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const READING_VERSION = '1.4-actions';
+const READING_VERSION = '1.5-decisions';
 let model, report, selected = 'F01', view = 'contracts', zoom = 1, diagram = 0;
 let detailMode = 'action', dataSide = 'outputs', dataArtifact = null;
 const flow = id => model.flows.find(f => f.id === id);
@@ -195,7 +195,7 @@ function renderDetail() {
   const ordered = model.flows.filter(x => x.stage !== '0');
   const at = ordered.findIndex(x => x.id === f.id);
   const readingNav = at < 0 ? '' : `<div class="reading-nav">${at > 0 ? `<button class="button small" data-flow="${ordered[at - 1].id}">← 阅读 ${ordered[at - 1].code}</button>` : '<span></span>'}${at < ordered.length - 1 ? `<button class="button small" data-flow="${ordered[at + 1].id}">阅读 ${ordered[at + 1].code} →</button>` : '<span></span>'}</div>`;
-  $('flow-detail').innerHTML = `<div class="detail-top"><div class="row"><span class="tag p">${f.stage === '0' ? '贯穿五步 · 公共流程' : `第 ${f.stage} 步 · ${esc(stageName(f.stage))}`}</span><span class="flow-id">${esc(f.code)}</span></div><h3>${esc(label(f))}</h3><p>${esc(f.purpose)}</p>${f.id === 'H04' ? '<button class="button primary small sample-entry" data-go="wiring">阅读 3.3 完整样板 ↗</button>' : ''}</div><div class="detail-switch" role="group" aria-label="详细信息类别"><button data-detail-mode="action" aria-controls="action-information" aria-pressed="false">动作与数据 <small>案例 / 比对</small></button><button data-detail-mode="contract" aria-controls="contract-information" aria-pressed="false">流程契约</button><button data-detail-mode="data" aria-controls="data-information" aria-pressed="false">信息类别 <small>ID / 格式</small></button></div><section id="action-information" aria-label="现场动作与数据对比">${renderActionInformation(f)}</section><section id="data-information" aria-label="信息类别与数据格式"></section><section id="contract-information" aria-label="流程契约"><dl class="contract-fields">${fields.map(([k, v]) => `<div class="field"><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>${substeps}${checks}</section>${f.note || f.decisions.length ? `<div class="detail-note">${f.note ? `<p>${esc(f.note)}</p>` : ''}${f.decisions.length ? `<strong>这些业务细节仍待确认</strong><div class="decision-links">${decisionLinks(f.decisions)}</div>` : ''}</div>` : ''}${readingNav}`;
+  $('flow-detail').innerHTML = `<div class="detail-top"><div class="row"><span class="tag p">${f.stage === '0' ? '贯穿五步 · 公共流程' : `第 ${f.stage} 步 · ${esc(stageName(f.stage))}`}</span><span class="flow-id">${esc(f.code)}</span></div><h3>${esc(label(f))}</h3><p>${esc(f.purpose)}</p><div id="decision-flow-summary" data-flow-context="${esc(f.id)}"></div>${f.id === 'H04' ? '<button class="button primary small sample-entry" data-go="wiring">阅读 3.3 完整样板 ↗</button>' : ''}</div><div class="detail-switch" role="group" aria-label="详细信息类别"><button data-detail-mode="action" aria-controls="action-information" aria-pressed="false">动作与数据 <small>案例 / 比对</small></button><button data-detail-mode="contract" aria-controls="contract-information" aria-pressed="false">流程契约</button><button data-detail-mode="data" aria-controls="data-information" aria-pressed="false">信息类别 <small>ID / 格式</small></button></div><section id="action-information" aria-label="现场动作与数据对比">${renderActionInformation(f)}</section><section id="data-information" aria-label="信息类别与数据格式"></section><section id="contract-information" aria-label="流程契约"><dl class="contract-fields">${fields.map(([k, v]) => `<div class="field"><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>${substeps}${checks}</section>${f.note || f.decisions.length ? `<div class="detail-note">${f.note ? `<p>${esc(f.note)}</p>` : ''}${f.decisions.length ? `<div id="decision-flow-impact" data-flow-context="${esc(f.id)}"></div>` : ''}</div>` : ''}${readingNav}`;
   renderDataContracts(); setDetailMode(detailMode);
 }
 function renderArtifact() {
@@ -210,7 +210,7 @@ const diagramDescriptions = [
   ['5.1～5.8 展开通信组预检、测试、报告、溯源与评审。5.3 包含机内、跨机和全目标三个子步骤。失败后整组创建新尝试；最终评审只解锁退出流程。', ['N01', 'N02', 'N03', 'N04', 'N05', 'N06', 'N07', 'N08']],
 ];
 diagramDescriptions.push(['0.2 对所有流程产物及原始观测逐条建索引。各来源独立同步，源表保持权威；清理已核验事件才触发归档与维护态。', ['H07', 'H02', 'C01', 'R01']]);
-function renderDiagram() {
+function renderDiagram(fit = false) {
   const viewport = document.querySelector('.diagram-viewport');
   viewport.scrollTop = 0;
   viewport.scrollLeft = 0;
@@ -226,6 +226,7 @@ function renderDiagram() {
   const [text, ids] = diagramDescriptions[diagram];
   $('diagram-explanation').innerHTML = `<p>${esc(text)}</p><div>${ids.map(flowButton).join('')}</div>`;
   $('diagram-error').hidden = true;
+  document.dispatchEvent(new CustomEvent('ui:diagram', { detail: { diagram, zoom, fit } }));
 }
 function renderLayer(id = 'T01') {
   const f = flow(id);
@@ -234,7 +235,7 @@ function renderLayer(id = 'T01') {
     b.classList.toggle('active', active);
     b.setAttribute('aria-pressed', String(active));
   });
-  $('layer-detail').innerHTML = `<span class="flow-id">第 4 步 · 网络测试</span><h3>${esc(label(f))}</h3><p>${esc(f.purpose)}</p><div class="layer-fields">${[['输入与资源', f.resources], ['执行内容', f.actions], ['通过与产物', f.post], ['失败与证明不足', f.failure]].map(([k, v]) => `<div><h4>${k}</h4><p>${esc(v)}</p></div>`).join('')}</div><div class="decision-links">${decisionLinks(f.decisions)}</div>${flowButton(f.id)}`;
+  $('layer-detail').innerHTML = `<span class="flow-id">第 4 步 · 网络测试</span><h3>${esc(label(f))}</h3><p>${esc(f.purpose)}</p><div class="layer-fields">${[['输入与资源', f.resources], ['执行内容', f.actions], ['通过与产物', f.post], ['失败与证明不足', f.failure]].map(([k, v]) => `<div><h4>${k}</h4><p>${esc(v)}</p></div>`).join('')}</div><div id="decision-layer-impact" data-flow-context="${esc(f.id)}"></div>${flowButton(f.id)}`;
 }
 function renderDemo() {
   const flags = Object.fromEntries(['path', 'version', 'stale', 'unknown', 'waiver', 'auth'].map(k => [k, $('demo-' + k).checked]));
@@ -249,13 +250,13 @@ function renderDemo() {
 }
 function renderVerification() {
   const s = report.summary;
-  $('verification-stats').innerHTML = [[s.passed_cases + '/' + s.cases, '固定用例通过', '准入、接线、无损与通信组'], [s.structural_checks, '结构检查', '输入摘要、引用、依赖与图文件'], [s.killed_mutations + '/' + s.mutations, '注入错误被发现', '检查成功与失败边界'], [model.decisions.length, '业务待确认', '模型通过不会自动解决缺口']].map(([n, t, d]) => `<div class="stat"><b>${n}</b><span>${t}</span><small>${d}</small></div>`).join('');
+  $('verification-stats').innerHTML = [[s.passed_cases + '/' + s.cases, '固定用例通过', '准入、接线、无损与通信组'], [s.structural_checks, '结构检查', '输入摘要、引用、依赖与图文件'], [s.killed_mutations + '/' + s.mutations, '注入错误被发现', '检查成功与失败边界'], [model.decisions.length, '业务确认主题', '填写与确认进度见下方方案']].map(([n, t, d]) => `<div class="stat"><b>${n}</b><span>${t}</span><small>${d}</small></div>`).join('');
   document.querySelector('.action-verification')?.remove();
   if (report.walkthrough) $('verification-stats').insertAdjacentHTML('afterend', `<details class="action-verification"><summary>动作数据与 CMDB：${report.walkthrough.checks.filter(c => c.passed).length}/${report.walkthrough.checks.length} 项有限检查 · ${report.walkthrough.cards} 张卡片</summary><p>${esc(report.walkthrough.scope)}</p><ul>${report.walkthrough.checks.map(c => `<li>${c.passed ? '✓' : '✕'} ${esc(c.name)}</li>`).join('')}</ul></details>`);
   $('race-detail').textContent = `在 ${report.version_race.states} 个可达状态、${report.version_race.transitions} 条转移的有限模型中，保留版本复核时未发现旧版本被错误放行；移除后得到上面的反例。`;
   $('cases-count').textContent = `${report.cases.length} 个用例`;
-  $('case-table').innerHTML = report.cases.map((c, i) => `<tr><td>${String(i + 1).padStart(2, '0')}</td><td>${esc(model.case_names[c.id])}</td><td><span class="${c.status === 'pass' ? 'pass' : 'failed'}">${c.status === 'pass' ? '✓ 通过' : '✕ 未通过'}</span></td><td>${c.invariants.map(id => esc(model.invariants[id])).join('<br>')}</td></tr>`).join('');
-  $('decisions').innerHTML = model.decisions.map(d => `<article id="decision-${esc(d.id)}" class="decision" tabindex="-1"><span class="tag q">待确认</span><div><h3>${esc(d.topic)}</h3><p>${esc(d.recommendation)}</p><p><strong>未决边界：</strong>${esc(d.boundary)}</p><div>${d.flows.map(flowButton).join('')}</div></div><aside>建议责任人<b>${esc(d.owner)}</b></aside></article>`).join('');
+  $('case-table').innerHTML = report.cases.map((c, i) => `<tr><td>${String(i + 1).padStart(2, '0')}</td><td>${esc(model.case_names[c.id])}</td><td><span class="${c.status === 'pass' ? 'pass' : 'failed'}">${c.status === 'pass' ? '✓ 通过' : '✕ 未通过'}</span></td><td>${c.invariants.map(id => esc(model.invariants[id])).join('<br>')}</td><td>${[...new Set(c.invariants.flatMap(id => model.invariant_flows[id] || []))].map(flowButton).join('')}</td></tr>`).join('');
+  document.dispatchEvent(new CustomEvent('ui:decisions-model', { detail: { model, report } }));
 }
 function restoreHash() {
   const [requested, code] = location.hash.slice(1).split('/');
@@ -269,7 +270,9 @@ function restoreHash() {
     if (f) { focusFlow(f.id, false); return; }
   }
   showView(requested || 'contracts', false);
+  if (requested === 'verification' && code) document.dispatchEvent(new CustomEvent('ui:decision-select', { detail: code }));
   if (requested === 'wiring' && code) {
+    document.dispatchEvent(new CustomEvent('ui:wiring-section', { detail: code }));
     const target = $('wiring-' + code);
     if (target?.matches('h3')) { target.scrollIntoView({ block: 'start' }); target.focus({ preventScroll: true }); }
   }
@@ -295,6 +298,7 @@ async function init() {
     renderFlows(); renderArtifact(); renderDiagram(); renderLayer(); renderDemo(); renderVerification(); renderWiringSample(); restoreHash();
   } catch (error) {
     model = undefined; report = undefined;
+    document.dispatchEvent(new CustomEvent('ui:decisions-model', { detail: { model: null, report: null } }));
     $('load-error').hidden = false;
     $('load-error-text').textContent = error.message;
     $('flow-list').innerHTML = '<div class="empty">讲解资料暂不可用，请重试加载。</div>';
@@ -309,6 +313,7 @@ async function init() {
 document.addEventListener('click', e => {
   const b = e.target.closest('button,a');
   if (!b || !model) return;
+  if (b.closest('[data-ui-owned]')) return;
   if (b.matches('a[href^="#wiring/"]')) {
     e.preventDefault(); writeHash(b.getAttribute('href').slice(1)); restoreHash(); return;
   }
@@ -330,9 +335,9 @@ document.addEventListener('click', e => {
   if (b.dataset.diagram !== undefined) { diagram = Number(b.dataset.diagram); zoom = 1; renderDiagram(); }
   if (b.dataset.layer) renderLayer(b.dataset.layer);
   if (b.dataset.decision) {
-    e.preventDefault(); showView('verification');
-    const target = $('decision-' + b.dataset.decision);
-    target?.scrollIntoView({ block: 'center' }); target?.focus({ preventScroll: true });
+    e.preventDefault(); showView('verification', false);
+    writeHash('verification/' + b.dataset.decision);
+    document.dispatchEvent(new CustomEvent('ui:decision-select', { detail: b.dataset.decision }));
   }
 });
 document.addEventListener('change', e => {
@@ -343,9 +348,13 @@ $('group-filter').addEventListener('change', () => { if (model) renderFlows(); }
 $('artifact-select').addEventListener('change', () => { if (model) renderArtifact(); });
 ['path', 'version', 'stale', 'unknown', 'waiver', 'auth'].forEach(k => $('demo-' + k).addEventListener('change', renderDemo));
 $('demo-reset').addEventListener('click', () => { document.querySelectorAll('.demo-controls input').forEach(i => i.checked = false); renderDemo(); });
-$('zoom-out').onclick = () => { zoom = Math.max(.6, zoom - .2); if (model) renderDiagram(); };
-$('zoom-in').onclick = () => { zoom = Math.min(2.5, zoom + .2); if (model) renderDiagram(); };
-$('zoom-fit').onclick = () => { zoom = 1; if (model) renderDiagram(); };
+$('zoom-out').onclick = () => { zoom = Math.max(.2, zoom - .2); if (model) renderDiagram(); };
+$('zoom-in').onclick = () => { zoom = Math.min(4, zoom + .2); if (model) renderDiagram(); };
+$('zoom-fit').onclick = () => { zoom = 1; if (model) renderDiagram(true); };
+document.addEventListener('ui:diagram-zoom', e => {
+  zoom = e.detail.zoom;
+  if (model) $('diagram-caption').textContent = `${model.diagrams[diagram]} · ${Math.round(zoom * 100)}%`;
+});
 $('diagram-image').onerror = () => { $('diagram-error').hidden = false; };
 $('reload-data').onclick = init;
 window.addEventListener('popstate', () => { if (model) restoreHash(); });
@@ -356,3 +365,20 @@ document.addEventListener('keydown', e => {
   }
 });
 init();
+
+// Presentation adapters call the same controllers as the original controls.
+export const presentation = {
+  data: () => model,
+  state: () => ({ view, selected, detailMode, dataSide, diagram, loaded: Boolean(model) }),
+  act(kind, value) {
+    if (!model) return;
+    if (kind === 'view') showView(value);
+    if (kind === 'decision') { showView('verification', false); writeHash('verification/' + value); }
+    if (kind === 'flow') focusFlow(value);
+    if (kind === 'detail') setDetailMode(value);
+    if (kind === 'side') { dataSide = value; dataArtifact = null; renderDataContracts(); }
+    if (kind === 'scenario') renderWiringScenario(value);
+    if (kind === 'layer') renderLayer(value);
+    if (kind === 'diagram') { diagram = Number(value); zoom = 1; renderDiagram(); }
+  },
+};

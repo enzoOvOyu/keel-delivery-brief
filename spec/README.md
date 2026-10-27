@@ -34,3 +34,7 @@ python3 verify_contracts.py
 ## 动作数据与后续约束
 
 先读 `DEVELOPMENT-REQUIREMENTS.md`。`collection.py` 定义新增采集与 CMDB 关系；`walkthrough.py` 维护 32 流程与 13 内部子步骤的模拟案例。`collection_model.py`、`verify_walkthrough.py` 提供有限反例检查，随 `verify_contracts.py` 执行；它们不连接真实硬件或数据库。`collection-event.schema.json` 只约束同步事件封装。所有 Markdown 与示例从相同源定义发布。
+
+## 可填写的业务规则确认
+
+`decision_forms.py` 保留 12 项原有问题，定义量化字段、条件必填、单位、已知边界和流程影响；生成到阅读模型、讲解与交付包。表单不提供未经确认的默认业务阈值。确认策略仍需实测执行，不会将旧报告改为通过。浏览器内确认历史及导入／导出由前端维护，见根目录 README；填写值不写回本目录的发布基线。

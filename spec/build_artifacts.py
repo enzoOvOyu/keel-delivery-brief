@@ -156,6 +156,8 @@ add('R01','受控修复与定向重验','恢复闭环','§8.2、§8.3','让失�
 
 from collection import extend
 extend(flows, add)
+from decision_forms import link_flows
+link_flows(flows)
 
 decisions=[
  ('Q1','G5层间调度与停止粒度','DE＋研发负责人','T00/T01～T05','明确逐层串行或按路径调度；L5观测需覆盖负载而不是结束后补采。','可先实现计划／调度接口与仿真，不发布未经定义的跳层逻辑。'),

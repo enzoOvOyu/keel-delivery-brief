@@ -28,7 +28,7 @@ def main():
     shutil.copytree(ROOT / "diagrams", output / "diagrams", dirs_exist_ok=True)
     files = [
         "README.md", "acceptance-cases.json", "build_artifacts.py", "contract-model.json",
-        "reading.py", "guide.py", "collection.py", "walkthrough.py", "collection_model.py", "verify_walkthrough.py", "collection-event.schema.json", "DEVELOPMENT-REQUIREMENTS.md", "data_contracts.py", "reading-model.json", "traceability.json", "publish.py",
+        "reading.py", "decision_forms.py", "guide.py", "collection.py", "walkthrough.py", "collection_model.py", "verify_walkthrough.py", "collection-event.schema.json", "DEVELOPMENT-REQUIREMENTS.md", "data_contracts.py", "reading-model.json", "traceability.json", "publish.py",
         "keel-delivery.drawio", "keel-developer-contracts.md", "narrative.md",
         "validation-notes.md", "render_diagrams.py", "verify_contracts.py",
         "verification-report.json", "verification-report.md", "source/keel-delivery-fishbone.md",

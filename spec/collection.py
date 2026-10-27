@@ -17,7 +17,11 @@ def extend(flows, add):
     flows.insert(next(i for i, f in enumerate(flows) if f['id'] == 'H01') + 1, inventory)
     validation = next(f for f in flows if f['id'] == 'H02')
     validation['inputs'].append('inventory')
-    validation['actions'] = '复用装机硬件清单，按 BOM 与独立型号核对数量、身份、版本与质量；仅补采缺失或过期字段，保留来源差异。'
+    validation['resources'] += ' BMC 固件清单、nvidia-smi 只读查询、ethtool -i、已加载模块与软件包清单；实际能力按 OEM 和操作系统版本确认。'
+    validation['actions'] = '复用 2.2 硬件清单；只读补采 BMC、BIOS、GPU VBIOS、NIC 固件，以及 NVIDIA GPU、NIC／RDMA 的已加载驱动和实际软件包版本。固件绑定稳定部件 ID；共享驱动按主机、驱动名称与内核去重，并列出覆盖部件。对照批准的 OEM／OS／内核／固件／驱动兼容基线，保存原始回执与分项差异；不安装、升级或改配置。'
+    validation['failure'] += ' 必需固件或驱动版本缺测、读取冲突或批准基线缺失时，受影响项保留 BLOCKED；已确认版本不兼容为 FAIL；不适用必须有能力策略依据。'
+    validation['retry'] += ' 对固件／驱动缺测只读重采并发布新快照；需要升级时转受控变更，核对重启后的实际加载版本，再复验受影响项。'
+    validation['invalidation'] += ' 固件升级、驱动安装或加载版本变化、内核升级与重启使受影响的兼容性结果重新待核验。'
     validation['guards'] += ' 装机采集记录可定位；部分采集不自动通过验机。'
     # All source outputs are individually subscribable. This is an event catalog,
     # not an AND join, and never becomes a prerequisite of the source producers.

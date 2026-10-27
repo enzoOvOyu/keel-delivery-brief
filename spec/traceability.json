@@ -1,5 +1,5 @@
 {
-  "reading_version": "1.4-actions",
+  "reading_version": "1.5-decisions",
   "source": {
     "name": "keel-delivery-fishbone.md",
     "sha256": "450950bfaef536a74d4e93c703e48fb8ea4eafba95d9c9812d63eca1dd26f624"
@@ -344,10 +344,34 @@
       }
     ],
     "definition_sha256": {
-      "collection.py": "361e46942c838ead8153f5e749697dbd62028230a3039b9c7df872dc8765ed3e",
-      "walkthrough.py": "7b5a51b42968031f1bde7a3a36e1601440b319169bcea5cd1edb3a5022932410",
+      "collection.py": "9689ce9e3729d790f382c7d5ab5e429fedf84e1134af0cf80734891a9f5e1916",
+      "walkthrough.py": "55be2ce8f34f84711e7d6dea95fd06b2934629afdab56db3335cf696b0cdf467",
       "collection-event.schema.json": "dc68cad255d561f95397cd587435725182c32671b14b7cf0f6d09760ffffafc7",
-      "DEVELOPMENT-REQUIREMENTS.md": "8b816ec3a4ce61ca0ca6c96f2e9299a074d445935f964d9d72f0b1fa931d5f91"
+      "DEVELOPMENT-REQUIREMENTS.md": "527fffae9da9e32669d81df069de6dca526e77c901cd43801db6bf467cbf966e"
     }
+  },
+  "firmware_driver_collection": {
+    "authority": "用户 2026-10-26 要求在 3.1 的动作、流程契约、信息类别增加固件与驱动采集",
+    "flow": "H02",
+    "artifact": "g1",
+    "definitions": [
+      "collection.py",
+      "walkthrough.py",
+      "data_contracts.py"
+    ],
+    "boundary": "只读采集；批准基线由项目提供，不假定型号即代表某个版本",
+    "references": [
+      "https://docs.nvidia.com/dgx/dgxb300-user-guide/bmc.html",
+      "https://docs.nvidia.com/dgx/dgxb300-user-guide/redfish-api-supp.html",
+      "https://networking-docs.nvidia.com/mlnxofedswum/24070610/ethtool"
+    ]
+  },
+  "decision_forms": {
+    "authority": "用户要求量化 12 项待确认问题，交互填写并回到交付流程",
+    "definition": "decision_forms.py",
+    "kind": "P 表单与计算；未填写或未明确确认的值仍为 Q",
+    "source": "keel-delivery-fishbone.md §10；既有业务边界不变",
+    "fingerprint": "6caf49cffa44fe37fbb36651ac45f5e30c0391e3c33d6722856b20bf301f638a",
+    "boundary": "浏览器内项目规则确认，不是身份认证、生产审批服务或现场验收"
   }
 }

@@ -7,7 +7,7 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 
 ROOT = Path(__file__).resolve().parent
-VERSION = "1.4-actions"
+VERSION = "1.5-decisions"
 STAGES = [
     {"id": "1", "name": "网络底座", "summary": "建立物料、配置与网络证据", "flows": [f"F{i:02}" for i in range(1, 9)]},
     {"id": "2", "name": "装机", "summary": "安装系统、验证通道并收集硬件清单", "flows": ["H01", "H07"]},
@@ -202,7 +202,7 @@ FLOW_TEXT = {
     "F07": {"note": "运行期采集持续进行，观测需要与本次测试关联。具体窗口绑定与采样编排方式仍待确认。"},
     "F08": {"actions": "先确认网络验收证据，再导出设备、端口、连接、地址、状态与配置版本。",
             "post": "逐项引用一致率 100%；豁免保留原始结论。本交付包不是启动物理接线核验的额外总门禁。"},
-    "H02": {"post": "采集字段完整率 100%，永久 MAC 与物料清单一致。光模块遥测不可读时保留降级标记；接受范围仍待确认。"},
+    "H02": {"post": "按批准采集范围核对必需字段完整率 100%，永久 MAC 与物料清单一致；固件与驱动逐项记录版本、来源、质量及兼容基线引用。数量齐备不等于版本兼容；分项缺测或基线缺失不得默认通过。光模块遥测不可读时保留降级标记；接受范围仍待确认。"},
     "H04": {
         "actions": "按下方四个子步骤执行：确认 GPU–NIC 关系 → 采集双侧邻居与 MAC → 三方按物理端口对比对 → 交付组长最终确认。每步保存版本化报告。",
         "post": "3.3.3 的单个端口对通过，只代表该连接已确认；完整四步通过并完成最终确认后，才能进入 3.4 发布已验证映射。",
@@ -248,6 +248,7 @@ def build(model):
                             "flows": [f["id"] for f in model["flows"] if d["id"] in f["decisions"]]}
                            for d in model["decisions"]]
     reader["invariants"] = {i["id"]: plain(i["text"]) for i in model["invariants"]}
+    reader["invariant_flows"] = {i["id"]: i["flows"] for i in model["invariants"]}
     suite = json.loads((ROOT / "acceptance-cases.json").read_text())
     reader["case_names"] = {c["id"]: plain(c["name"]) for c in suite["cases"]}
     from guide import attach
@@ -256,6 +257,8 @@ def build(model):
     attach_data_contracts(reader)
     from walkthrough import attach as attach_walkthrough
     attach_walkthrough(reader)
+    from decision_forms import attach as attach_decisions
+    attach_decisions(reader)
     return reader
 
 def markdown(reader):
@@ -303,6 +306,8 @@ def markdown(reader):
     out.append("\n## 待确认事项\n\n责任角色为建议分工。业务决定不会因模型检查通过而自动关闭。")
     for d in reader["decisions"]:
         out.append(f"\n### {d['topic']}\n\n{d['recommendation']}\n\n未决边界：{d['boundary']}\n\n建议责任人：{d['owner']}。\n\n相关步骤：" + "、".join(flow_label(f) for f in d["flows"]))
+    from decision_forms import markdown as decision_markdown
+    out.append(decision_markdown(reader))
     out.append("\n## 校验范围\n\n交付包提供固定用例、结构检查、错误注入与有限状态枚举。实际结果见随包校验报告；其范围不包含真实设备、生产系统及现场性能验收。")
     return "\n\n".join(out) + "\n"
 
@@ -391,6 +396,9 @@ def report_markdown(report, reader):
     if "walkthrough" in report:
         out += ["## 动作数据与 CMDB 有限检查", report["walkthrough"]["scope"], "| 检查 | 结果 |\n|---|---|"]
         out += ["| " + c["name"] + " | " + ("通过" if c["passed"] else "失败") + " |" for c in report["walkthrough"]["checks"]]
+    if "decision_forms" in report:
+        out += ["## 业务确认表定义检查", report["decision_forms"]["scope"]]
+        out += ["- " + c["name"] + "：" + ("通过" if c["passed"] else "失败") for c in report["decision_forms"]["checks"]]
     race = report["version_race"]
     out += ["## 版本竞争与恢复",
             f"在 {race['states']} 个可达状态、{race['transitions']} 条转移中，保留发布前版本核验时未发现旧结果成为当前有效证明。删除核验后发现：准入 → 完成执行 → 配置变化 → 旧结果发布。",
@@ -417,5 +425,7 @@ def apply(model):
                                "basis": ["PRD.md §3.4.3、§3.4.4、附录 A.1、A.2、A.6、A.7", "keel-delivery-fishbone.md §1.1、§4.2、§8.3"],
                                "artifact_ids": [a["id"] for a in reader["artifacts"]]}
     trace["collection_change"] = {"authority": "用户 2026-10-26 新增装机采集与公共 CMDB，并要求每卡五段动作数据", "flows": ["H07", "C01", "H02"], "basis": "PRD.md §3.3、§3.15", "definitions": ["collection.py", "walkthrough.py", "collection-event.schema.json", "DEVELOPMENT-REQUIREMENTS.md"], "verification": "verify_walkthrough.py", "hardware_sources": reader["hardware_example"]["sources"]}
+    trace["firmware_driver_collection"] = {"authority": "用户 2026-10-26 要求在 3.1 的动作、流程契约、信息类别增加固件与驱动采集", "flow": "H02", "artifact": "g1", "definitions": ["collection.py", "walkthrough.py", "data_contracts.py"], "boundary": "只读采集；批准基线由项目提供，不假定型号即代表某个版本", "references": ["https://docs.nvidia.com/dgx/dgxb300-user-guide/bmc.html", "https://docs.nvidia.com/dgx/dgxb300-user-guide/redfish-api-supp.html", "https://networking-docs.nvidia.com/mlnxofedswum/24070610/ethtool"]}
+    trace["decision_forms"] = {"authority": "用户要求量化 12 项待确认问题，交互填写并回到交付流程", "definition": "decision_forms.py", "kind": "P 表单与计算；未填写或未明确确认的值仍为 Q", "source": "keel-delivery-fishbone.md §10；既有业务边界不变", "fingerprint": reader["decision_forms"]["fingerprint"], "boundary": "浏览器内项目规则确认，不是身份认证、生产审批服务或现场验收"}
     trace["collection_change"]["definition_sha256"] = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in trace["collection_change"]["definitions"]}
     (ROOT / "traceability.json").write_text(json.dumps(trace, ensure_ascii=False, indent=2) + "\n")

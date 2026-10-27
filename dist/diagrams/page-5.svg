@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1400" role="img" aria-label="5 NCCL 测试与评审">
 <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#7560a8"/></marker><marker id="amber" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#b07920"/></marker></defs>
 <rect width="100%" height="100%" fill="#fff"/>
-<g font-family="Arial, PingFang SC, Microsoft YaHei, sans-serif">
+<g font-family="-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, &quot;PingFang SC&quot;, &quot;Microsoft YaHei&quot;, &quot;Noto Sans SC&quot;, &quot;Noto Sans CJK SC&quot;, &quot;WenQuanYi Zen Hei&quot;, sans-serif">
 <polyline points="270.0,300.0 270.0,360.0" fill="none" stroke="#7560a8" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
 <polyline points="270.0,500.0 270.0,560.0" fill="none" stroke="#7560a8" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
 <polyline points="440.0,630.0 550.0,630.0" fill="none" stroke="#7560a8" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
